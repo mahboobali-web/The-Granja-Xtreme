@@ -161,11 +161,11 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           gap: '16px'
         }} className="mobile-drawer">
             <nav style={{ display: 'flex', flexDirection: 'column' }}>
-              <Link to="/" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>Home</Link>
-              <Link to="/fleet" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>Our Fleet</Link>
-              <Link to="/story" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>Our Story</Link>
+              <Link to="/" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>{t('home', 'Home')}</Link>
+              <Link to="/fleet" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>{t('our_fleet', 'Our Fleet')}</Link>
+              <Link to="/story" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>{t('our_story', 'Our Story')}</Link>
 
-              <Link to="/contact" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>Contact Us</Link>
+              <Link to="/contact" onClick={() => setIsOpen(false)} style={{ padding: '16px', fontSize: '18px', fontWeight: 600, color: 'var(--on-background)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>{t('contact_us', 'Contact Us')}</Link>
             </nav>
             
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
@@ -175,10 +175,10 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               {user.role === 'customer' ? (
                 <>
                   <Link to="/profile" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <UserIcon size={18} /> My Profile
+                    <UserIcon size={18} /> {t('profile', 'My Profile')}
                   </Link>
                   <Link to="/dashboard" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <UserIcon size={18} /> My Dashboard
+                    <UserIcon size={18} /> {t('dashboard', 'My Dashboard')}
                   </Link>
                 </>
               ) : (
@@ -200,16 +200,16 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                   padding: '8px 0'
                 }}
               >
-                <LogOut size={18} /> Logout
+                <LogOut size={18} /> {t('logout', 'Logout')}
               </button>
             </>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <Link to="/login" onClick={() => setIsOpen(false)} className="btn btn-secondary" style={{ width: '100%', textAlign: 'center', borderRadius: 'var(--radius-full)' }}>
-                Login
+                {t('login', 'Login')}
               </Link>
               <Link to="/fleet" onClick={() => setIsOpen(false)} className="btn btn-primary" style={{ width: '100%', textAlign: 'center', borderRadius: 'var(--radius-full)' }}>
-                Book Now
+                {t('book_now', 'Book Now')}
               </Link>
             </div>
           )}

@@ -1,4 +1,13 @@
 {
+  "home": "Home",
+  "our_fleet": "Our Fleet",
+  "our_story": "Our Story",
+  "contact_us": "Contact Us",
+  "login": "Login",
+  "book_now": "Book Now",
+  "profile": "Profile",
+  "dashboard": "Dashboard",
+  "logout": "Logout",
   "150": "150",
   "loading_the_granja_xtreme": "Loading The Granja Xtreme...",
   "vehicle_specifications_not_found": "Vehicle Specifications Not Found",
