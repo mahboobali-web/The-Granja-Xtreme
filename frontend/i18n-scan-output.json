@@ -1,0 +1,5337 @@
+[
+  {
+    "file": "src\\App.tsx",
+    "strings": [
+      {
+        "text": "Loading The Granja Xtreme...",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\VehicleDetails.tsx",
+    "strings": [
+      {
+        "text": "Vehicle Specifications Not Found",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The requested quad is not in our registry.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Browse our fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Photos",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Experience",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Dominate the landscape of The Granja Xtreme with a machine built for champions. The",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "combines a high-torque performance engine with a lightweight chassis, offering trail maneuverability that defies its size. Whether you're navigating tight technical forest sections or opening up the throttle on wide open flats, this vehicle provides a visceral, stable connection to the terrain.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Our entire fleet is maintained to the highest safety and reliability standards, ensuring that while your off-road ride is extreme, your safety and the machine's mechanical performance are never in question.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Key Features",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Rules & Check-out requirements",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Safety Information",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your safety is our absolute priority. Every vehicle undergoes a rigorous 40-point inspection prior to your reservation. Furthermore, all reservations include a complimentary guided briefing.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Safety Briefing",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "A 15-minute operational and trail safety briefing is required for all riders, regardless of experience.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Gear Provision",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "DOT-approved helmets and protective eyewear are provided and mandatory while operating the vehicle.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/ day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Best Value",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CHECK-IN DATE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CHECK-OUT DATE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "EXPERIENCE LEVEL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Beginner",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Intermediate / Advanced",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Expert",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "100% Secure Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Free cancellation up to 48 hours",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Licensed Professional Guides",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "This vehicle is currently unavailable (Status:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Checking availability...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Quad is available for these dates!",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Daily Rate ($",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "days)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Trail Access Pass",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Taxes & Fees (10%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Please select rental dates on the calendar to see pricing breakdown.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "You won't be charged yet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Other Elite Vehicles",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Check Dates",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV full screen",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Story.tsx",
+    "strings": [
+      {
+        "text": "Our Legacy of Grit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Where premium engineering meets the untamed wild. Discover the story behind the world's most exclusive off-road experience.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "OUR STORY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Steering Wheel Dashboard",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Architects of Adventure",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Expert guides, technical masters, and safety protocols that set the industry standard.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Glimpses of the Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Explore the landscapes we conquer and the fleet that takes us there.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Join the Xtreme Elite",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Subscribe to our newsletter for exclusive trail access, VIP booking windows, and technical off-road workshops.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your professional email",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "JOIN THE CLUB",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\ResetPassword.tsx",
+    "strings": [
+      {
+        "text": "Set New Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your new password must be different to previously used passwords.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Password reset successful!",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Redirecting you to login...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "New Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Must be at least 6 characters",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Confirm Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Confirm new password",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Register.tsx",
+    "strings": [
+      {
+        "text": "Register ATV Account",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Create an account to book quads",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "First Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone Number",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Create Account",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Google",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Sign up with Google",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Already have an account?",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Log in",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Profile.tsx",
+    "strings": [
+      {
+        "text": "My Profile",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Account",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "First Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email Address (Cannot be changed)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone Number",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Save Changes",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Change Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Ensure your account is using a long, random password to stay secure.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Current Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "New Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Minimum 6 characters",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Update Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Login.tsx",
+    "strings": [
+      {
+        "text": "Portal Access Log-In",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Access your ATV bookings and operations panel",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Sign In",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Google",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Sign in with Google",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Don't have an account?",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Register here",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Forgot Password?",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\InspectionForm.tsx",
+    "strings": [
+      {
+        "text": "Loading checklist parameters...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Reservation not found.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Staff Checklist Forms",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Audit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking ID:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "| Client:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Odometer & Fuel Readings",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Odometer Reading (Miles)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Previous check-out:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "miles.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Fuel Level (%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Current tank level:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Physical Parts Condition Audit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Inspect the ATV and select appropriate status flags. Describe details if scratches/dents/breaks are discovered.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Specify damage coordinates or description (e.g. Scratched left fender shell)",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Final Authorization",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Authorized staff member must sign and verify that the above information is correct and the ATV status is recorded accurately.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Authorized Staff Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Enter your full name",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Staff Digital Signature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Use mouse or touch screen to draw your signature inside the box.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Clear Pad",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancel Audit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Submit Inspection Audit",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Home.tsx",
+    "strings": [
+      {
+        "text": "Explore Our Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Learn More",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Our Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Engineered for Dominance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Choose from our selection of high-performance vehicles, meticulously maintained for safety and luxury.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Full Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No ATVs currently configured in the database.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Go to Fleet Page",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/Day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Capacity:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Fuel Type:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Gas (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select Vehicle",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Unforgettable Stories",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Capture the Thrill",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\ForgotPassword.tsx",
+    "strings": [
+      {
+        "text": "Forgot Password?",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No worries, we'll send you reset instructions.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Reset link sent!",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Please check your email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "for instructions to reset your password. The link will expire in 10 minutes.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Return to Login",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Enter your email",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "← Back to Login",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\FleetManager.tsx",
+    "strings": [
+      {
+        "text": "ATV Brand Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "e.g. Polaris Sportsman 570",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Model Series",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "e.g. Utility Edition",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Model Year",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rate / Day ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rate / Hour ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Displacement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Fuel Tank",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Weight Limit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Image Upload (Select multiple)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Uploading images...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Thumbnail",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle Description",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Write performance specs, trail suitability...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading fleet registry...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Search by model or ID...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "All Vehicles",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Available (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Maintenance (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rented (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ID:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Model",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Edit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Service",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No vehicles match the selected criteria.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Register New ATV Quad",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Save Quad to Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Edit ATV Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Available",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rented (Out on Trail)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Maintenance (In Shop)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Decommissioned (Retired)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Save Changes",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Log Service Maintenance Record",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Service Type",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Oil Change",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Tire Replacement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Engine Tuning",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Brake Adjustment",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Body Repair",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Service Cost ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Service Description Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "e.g. Changed air filter, flushed brake lines...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Log Service Event",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Fleet.tsx",
+    "strings": [
+      {
+        "text": "Our Elite Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "High-performance machines engineered for the rugged terrain of the wild.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Choose your partner for the ultimate adventure.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Search models...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "VEHICLE TYPE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "All Types",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Available",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rented",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Maintenance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "SORT BY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Popularity",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Price: Low → High",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Price: High → Low",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Newest First",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No vehicles found matching your criteria.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/hr",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "STARTING AT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\CustomersList.tsx",
+    "strings": [
+      {
+        "text": "Loading customer data...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Search by name, email or phone...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Status: All",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Premium/VIP",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Confirmed",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Pending",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date Joined: Any",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "This Month",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last 6 Months",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "This Year",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Customer",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Join Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Rentals",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No customers found.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ID: #",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Showing",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "to",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "of",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "customers",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "First Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone Number",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancel",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\CustomerDetails.tsx",
+    "strings": [
+      {
+        "text": "Loading customer profile...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer Profile",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Detailed view and booking history",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Joined",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Spend (LTV)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Rentals",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking History",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No bookings found for this customer.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\CustomerDashboard.tsx",
+    "strings": [
+      {
+        "text": "Welcome back,",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your next adventure is just around the corner.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Book New Adventure",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Last Contract",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Bookings",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Upcoming Trips",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Spent",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Upcoming Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Booking",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "UPCOMING",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Granja Xtreme Headquarters",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "DAYS LEFT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "DATE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "STATUS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "VEHICLE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Complete Digital Signature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your signature is required to finalize this reservation.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "You have no upcoming bookings.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Book an ATV Now",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Recent Activity",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking Created",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No recent activity.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View All Activity",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "My Bookings",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Manage your active and upcoming adventures.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Out on the Trails",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Model:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Agreement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Upcoming Reservations",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "You don't have any upcoming reservations scheduled.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Complete Signature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Invoice Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking History",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Review your current and past adventures at The Granja Xtreme.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Search by vehicle or ID...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Filters",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "You haven't made any bookings yet.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Book Your First Adventure",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "VIP Experience",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ID: #GRX-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total: $",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipt",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rebook Expedition",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipt Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print Receipt",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipts >",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "TGX-RCP-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "THE GRANJA",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "XTREME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Calle Los Hidalgos, Sector Majagual",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Sánchez, Samaná, Dominican Republic",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "tgranjaxtreme065@gmail.com",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CANCELLED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PAID",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "UNPAID",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipt #TGX-RCP-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date & Time:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CUSTOMER DETAILS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Passport / ID:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "RENTAL SUMMARY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Assigned:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Pickup:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Return:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Duration:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Description",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Qty",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Unit Price",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Rental -",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Includes standard equipment and safety gear.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Rental (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Luxury Tax (10%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security Deposit (Refundable)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Grand Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount Paid (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "REMAINING BALANCE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer Signature",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Signed:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "TXN-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "-A7F2 • OFFICIAL RECEIPT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contract #TGX-CTR-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Granja Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Agreement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "DATE:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CONTRACT ID:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "#TGX-CTR-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "STATUS:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "APPROVED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "I. CUSTOMER INFORMATION",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Primary Renter",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact Email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "II. VEHICLE SPECIFICATIONS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "VIN: 4XP2024-TR-90112",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PREMIUM CLASS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "GPS TRACKED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "III. RENTAL AGREEMENT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer receives the ATV in good condition.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer must have a valid driver’s license.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer must wear a helmet and safety equipment.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No driving under the influence of alcohol or drugs.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer is responsible for any traffic violations or fines.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer is responsible for damages caused by negligence or misuse.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer may not lend, transfer, or sub-rent the ATV to another person.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV must be returned on the agreed date and time.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Late returns may result in additional charges.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Granja Xtreme is not responsible for lost personal belongings.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer acknowledges and accepts the risks associated with ATV riding.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "In case of an accident, customer must notify Granja Xtreme immediately.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security deposit amount (if applicable).",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV number and vehicle information.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "IV. INSURANCE AND CUSTOMER RESPONSIBILITY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer understands and agrees that any insurance available for the ATV provides coverage only as required by law and subject to the limits, conditions, and exclusions of the insurance policy.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer acknowledges that such insurance may not cover all damages to the ATV, nor all property damage, bodily injury, or losses caused to third parties.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer shall be fully responsible for any damage, loss, broken parts, mechanical damage, rollover, accident, misuse, negligence, reckless operation, or violation of this rental agreement occurring during the rental period.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer shall also be responsible for any deductible, repair costs, loss of use, towing charges, recovery expenses, administrative fees, or any other costs not covered by the insurance policy.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "If damages or injuries caused to third parties exceed the insurance coverage limits or are excluded from coverage, the customer shall be solely responsible for such damages, claims, expenses, legal fees, and liabilities.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer agrees to operate the ATV at their own risk and releases Granja Xtreme, its owners, employees, and representatives from liability for accidents, injuries, damages, or losses resulting from the customer’s negligence, misuse, violation of safety rules, or breach of this rental agreement.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Admin Signature",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Company Representative Signature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print Invoice",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipts & Invoices >",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Invoice",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Due Date:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "INVOICE SUMMARY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Reference:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Charge Type:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Subtotal",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount Paid",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Balance Due",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Thank you for your business! Please remit payment by the due date.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Download your official documentation.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No documents available.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Document Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Associated Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date Issued",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Action",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Rental Contract",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Liability Waiver",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Invoice Receipt",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Proof",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Additional Charge",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Granja",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Welcome back",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Manage your adventure",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Need Help?",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Complete Your Reservation",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\Contact.tsx",
+    "strings": [
+      {
+        "text": "Get in Touch",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Ready for your next adventure? Our team is here to help you craft the perfect off-road experience in the heart of nature.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Send us a Message",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "NAME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your full name",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "PHONE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "(555) 000-0000",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "EMAIL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "email@example.com",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "SUBJECT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking Inquiry",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Group Reservation",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Fleet Information",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Custom Trail Route",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "General Question",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "MESSAGE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "How can we help you?",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Inquiry sent successfully! Our staff will email you shortly.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Send Message",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Visit Our Ranch",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "LOCATION",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Business Hours",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Frequently Asked Questions",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\CmsManager.tsx",
+    "strings": [
+      {
+        "text": "Saved!",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading CMS panel...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Hero Title",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Hero Subtitle",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Description Body Text",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Hero Banner Image",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Image URL",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Uploading...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Hero Banner",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Value (e.g. 10k+)",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Label",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Stat",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Section Title",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Section Subtitle",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Icon",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ShieldCheck",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Eye",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Lock",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Star",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Compass",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Mountain",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Zap",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Title",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Description",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Feature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Role",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Stars",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Initials",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Quote",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Testimonial",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Alt text",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Image",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Document Contract Header",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Waiver Release Terms Body Copy",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Story Headline",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Story Body Text",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Story Quote",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Team Members",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Team Member",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Physical Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Directions",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Facebook URL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Instagram URL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Twitter/X URL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Question",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Answer",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add FAQ",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Footer Slogan/Text",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\CheckoutSuccess.tsx",
+    "strings": [
+      {
+        "text": "Finalizing...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Adventure Secured!",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your reservation has been received. Payment will be collected when you arrive.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking Reference",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Reservation Summary",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Experience",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date & Time",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Due on Arrival",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Dashboard →",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Contract",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Receipt",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Trailhead",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "North Ridge Trailhead",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Meeting Point",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Base Camp Zulu",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Arrival required 30m prior",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "A confirmation email has been sent to your registered address. Please ensure you have your digital contract ready on your mobile device when arriving at the base camp.",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\CheckoutConfirm.tsx",
+    "strings": [
+      {
+        "text": "Loading summary...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Secure Checkout",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking Summary",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Review your adventure details before finalizing the reservation. Our all-terrain experiences are designed for maximum thrill and safety.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Edit Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "PREMIUM SELECTION",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The pinnacle of off-road engineering. Premium performance shocks, and intelligent Throttle Control (iTC). Model:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Duration",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Half-Day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Capacity",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "2 Persons",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Reservation Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Location",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The North Ridge Basecamp",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Essential Information",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Please arrive 30 minutes early for the safety briefing and gear fitting. Remember to bring a valid driver's license and wear closed-toe shoes.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Summary",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Base Rate (Half-Day)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Equipment Insurance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Safety Gear Bundle",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "FREE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Environmental Fee",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Subtotal",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Taxes (10%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Method",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "(On Arrival)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment will be collected manually at the trailhead.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Cost",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Liability Waiver Agreement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "I hereby acknowledge that operating an All-Terrain Vehicle (ATV) is a high-risk activity. I agree to wear a helmet at all times, follow all safety instructions, and assume full financial responsibility for any damages caused to the vehicle. I release The Granja Xtreme from any liability for personal injuries sustained during the rental duration. Helmets are mandatory. Operation is prohibited under the influence of drugs or alcohol. All riders must strictly stay within authorized zones.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "I have read and agree to the Liability Waiver, Terms of Service, and Cancellation Policy.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Your waiver acceptance is digitally recorded and legally binding.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Complete Your Reservation",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\BookingSummary.tsx",
+    "strings": [
+      {
+        "text": "Loading checkout...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select ATV",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Dates",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Finish",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "First Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Passport / ID Number",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone Number",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Country of Residence",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Preference",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "We collect payment on arrival. Please select how you prefer to pay when you arrive at the trailhead.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "← Back to Dates",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Confirm Details →",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "BEST SELLER",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Experience Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Base Rental",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Premium Insurance / Pass",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking Fees & Taxes",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "INCLUDES ALL LOCAL TAXES",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancellation Policy:",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminUpcomingBookings.tsx",
+    "strings": [
+      {
+        "text": "Search by customer name or Booking ID...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking ID",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Schedule",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Actions",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading operations...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No bookings match the current filter.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Check-In",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Check-Out",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Check-In Workflow",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Process the customer arrival and hand over the ATV.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Actual Start Time:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Pre-Ride Notes",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "E.g. Verified license and waiver.",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancel",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Confirm Check-In",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Check-Out Workflow",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Process the customer return and log any extra charges.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Actual Check-In",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Actual Check-Out",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Extra Charges",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Remove",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Damage",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Maintenance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cleaning",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Fuel",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Late Return",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Extended Tour",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Other",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Description...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Complete Check-Out",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminSettings.tsx",
+    "strings": [
+      {
+        "text": "General",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Notifications",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Backups",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Parameters",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Base Tax Rate (%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Default Security Deposit ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Currency",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "USD ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "EUR (€)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "GBP (£)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CAD ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Business Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Business Email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Business Phone",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancellation Policy",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Operating Hours",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Business Days",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "e.g. Monday to Sunday",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Opening Time",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Closing Time",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "System Alerts",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "New Order Alerts",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Get notified when a customer makes a new booking reservation.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "New Message Alerts",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Get notified when someone submits an inquiry via the Contact form.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security Controls",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Audit logs and active security controls for the Admin panel.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Auto-Logout Idle Timeout (Minutes)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "If an admin is inactive for this long, they will be automatically logged out.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Authentication Audit Log",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading logs...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Time",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Event",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "IP Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No recent login activity.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Database Export",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Download a secure, encrypted copy of your entire core database, including all customers, bookings, ATVs, invoices, and settings.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Download Full Database",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Save Configuration",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminPayments.tsx",
+    "strings": [
+      {
+        "text": "Outstanding Balance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Requires attention",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Today's Collections",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Processed today",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Monthly Collections",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Current month total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Unpaid Invoices",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Pending resolution",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Search by invoice #, customer, or phone...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Invoice #",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV / Type",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Balance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Method",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Actions",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No invoices match the current filter.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Details",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Collect Payment",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "View & Print Receipt",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminMessages.tsx",
+    "strings": [
+      {
+        "text": "Search messages...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No messages found.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Message from",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Read",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "From",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Message",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Reply via Gmail",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Delete",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No Message Selected",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select a message from the list to view its details.",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminLogs.tsx",
+    "strings": [
+      {
+        "text": "Search",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Search action or user...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Event Type",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "All Events",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Info",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Success",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Warning",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Error",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Start Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "End Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Event",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "User",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "IP Address",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Timestamp",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading logs...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No activity logs found.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Showing",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "to",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "of",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "logs",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminEmployees.tsx",
+    "strings": [
+      {
+        "text": "Search employees by name, email, role, or position...",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Employee",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading employees directory...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No Employees Found",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Employee",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Role & Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Activity",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Actions",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Joined:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last Login:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Edit Employee",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Reset Password",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Remove Employee",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "First Name *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last Name *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Position / Job Title",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "System Role *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Staff (Limited Access)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Administrator (Full Access)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Account Status *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Active",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Inactive",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Suspended",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Initial Password *",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancel",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "New Password",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Remove Employee?",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Are you sure you want to permanently remove this employee account? They will lose all access immediately. This action cannot be undone.",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminDashboard.tsx",
+    "strings": [
+      {
+        "text": "Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total ATVs",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Ready",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Available ATVs",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "On Trail",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Active Rentals",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Growth",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Customers",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Overall",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Revenue",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Revenue Trend (Last 30 Days)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Daily revenue performance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Fleet Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Current vehicle availability",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminBookings.tsx",
+    "strings": [
+      {
+        "text": "All Vehicles",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "All Statuses",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Month",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Week",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "more",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Selected",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No bookings for this date.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PENDING APPROVAL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Meta Expedition Package",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Approve",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CONFIRMED FOR TODAY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Paid in full",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Mark as Paid ($",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CANCELLED FOR TODAY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CANCELLED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Details / Receipt",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle Health",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "% Ready",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Staffing",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Active Guides",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "JD",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "SM",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "TS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Maintenance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Due for Service",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Schedule Fleet Check",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\pages\\AdminAnalytics.tsx",
+    "strings": [
+      {
+        "text": "Revenue Collected",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total payments received",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Outstanding Revenue",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Pending unpaid invoices",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Monthly Revenue",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Collected this month",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Damage Charges",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total assessed damages",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Active Rentals",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Currently on trails",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Available ATVs",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Ready for booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Customers",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Registered users",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Revenue Report",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Earnings from all bookings (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Full Statement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking Status Trends",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No booking data available.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Most Rented Vehicles",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Detailed tracking of vehicle performance.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generate PDF Report",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle Model",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Rentals",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No data available",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "times",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\SignatureModal.tsx",
+    "strings": [
+      {
+        "text": "Clear",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Complete Reservation",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\Header.tsx",
+    "strings": [
+      {
+        "text": "The Granja Xtreme Logo",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "THE GRANJA",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "XTREME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Our Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Our Story",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact Us",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Profile",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Dashboard",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Logout",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Login",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Book Now",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Home",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "My Profile",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "My Dashboard",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\Footer.tsx",
+    "strings": [
+      {
+        "text": "THE GRANJA",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "XTREME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Quick Links",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Our ATV Fleet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Our Story & Gallery",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact Support",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer & Staff Portal",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Guidelines",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Must be 18+ to sign waivers",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Helmets provided & required at all times",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security deposits required for check-out",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "All trail rides are subject to weather",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Granja Xtreme. All rights reserved.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Privacy Policy",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Terms of Service",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\FleetCheckModal.tsx",
+    "strings": [
+      {
+        "text": "Schedule Fleet Check",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select ATV",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "-- Choose ATV --",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Service Description",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "e.g. 500mi Service, Oil Change",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Mechanic Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "John Doe",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Estimated Cost ($)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "150",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Scheduled Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\AdminRevenueReport.tsx",
+    "strings": [
+      {
+        "text": "Close",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Last 30 Days",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print Statement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generating Statement...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "THE GRANJA",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "XTREME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "OFFICIAL REVENUE STATEMENT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generated:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generated By: Admin System",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Revenue",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Active Days",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Average Daily",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Daily Revenue",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "% of Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No revenue data for this period.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "TOTAL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PREPARED FOR",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "EXECUTIVE MANAGEMENT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Granja Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "REPORT AUTHENTICITY HASH",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "REV-",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\AdminLayout.tsx",
+    "strings": [
+      {
+        "text": "The Granja Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ADMIN PANEL",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Back to Website",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Notifications",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No new notifications",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Daily",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Weekly",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Monthly",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Yearly",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "New Reservation",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Add New ATV",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Admin User",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Operation Lead",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Admin",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\AdminFleetReport.tsx",
+    "strings": [
+      {
+        "text": "Close",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print Report",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generating Report...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "THE GRANJA",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "XTREME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "FLEET UTILIZATION REPORT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Current Operations Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generated:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Generated By: Admin System",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Fleet Size",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Currently Rented",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "In Maintenance",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Operational %",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Most Rented Vehicles",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle Model / Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total All-Time Rentals",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No vehicle data available.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "times",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PREPARED FOR",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "FLEET MANAGEMENT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The Granja Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "REPORT AUTHENTICITY HASH",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "FLT-",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\AdminCollectPaymentModal.tsx",
+    "strings": [
+      {
+        "text": "Collect Payment",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount to Collect",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Remaining Balance:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Method",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancel",
+        "category": "UI Text",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\AdminBookingModal.tsx",
+    "strings": [
+      {
+        "text": "New Reservation",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select Customer",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "-- Choose a customer --",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Next Step",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select Vehicle",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "-- Choose a vehicle --",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Select Dates",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Back",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Review & Confirm",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Price (inc. Tax)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Admin Notes (Optional)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Walk-in, phone booking, etc.",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  },
+  {
+    "file": "src\\components\\AdminBookingDetailsModal.tsx",
+    "strings": [
+      {
+        "text": "Back to Details",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print Receipt",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipts >",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "TGX-RCP-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "THE GRANJA",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "XTREME",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Calle Los Hidalgos, Sector Majagual",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Sánchez, Samaná, Dominican Republic",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "tgranjaxtreme065@gmail.com",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CANCELLED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PAID",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "UNPAID",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Receipt #TGX-RCP-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Date & Time:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CUSTOMER DETAILS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Passport / ID:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "RENTAL SUMMARY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Assigned:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Pickup:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Return:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Duration:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Description",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Qty",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Unit Price",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Rental -",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Includes standard equipment and safety gear.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV Rental (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Luxury Tax (10%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security Deposit (Refundable)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Grand Total",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount Paid (",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "REMAINING BALANCE",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer Signature",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "TXN-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "-A7F2 • OFFICIAL RECEIPT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contract #TGX-CTR-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Print",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Granja Xtreme",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rental Agreement",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "DATE:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "CONTRACT ID:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "#TGX-CTR-",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "STATUS:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "APPROVED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "I. CUSTOMER INFORMATION",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Primary Renter",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Contact Email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "II. VEHICLE SPECIFICATIONS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "VIN: 4XP2024-TR-90112",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "PREMIUM CLASS",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "GPS TRACKED",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "III. RENTAL AGREEMENT",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer receives the ATV in good condition.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer must have a valid driver’s license.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer must wear a helmet and safety equipment.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "No driving under the influence of alcohol or drugs.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer is responsible for any traffic violations or fines.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer is responsible for damages caused by negligence or misuse.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer may not lend, transfer, or sub-rent the ATV to another person.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV must be returned on the agreed date and time.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Late returns may result in additional charges.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Granja Xtreme is not responsible for lost personal belongings.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer acknowledges and accepts the risks associated with ATV riding.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "In case of an accident, customer must notify Granja Xtreme immediately.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security deposit amount (if applicable).",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "ATV number and vehicle information.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "IV. INSURANCE AND CUSTOMER RESPONSIBILITY",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer understands and agrees that any insurance available for the ATV provides coverage only as required by law and subject to the limits, conditions, and exclusions of the insurance policy.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer acknowledges that such insurance may not cover all damages to the ATV, nor all property damage, bodily injury, or losses caused to third parties.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer shall be fully responsible for any damage, loss, broken parts, mechanical damage, rollover, accident, misuse, negligence, reckless operation, or violation of this rental agreement occurring during the rental period.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer shall also be responsible for any deductible, repair costs, loss of use, towing charges, recovery expenses, administrative fees, or any other costs not covered by the insurance policy.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "If damages or injuries caused to third parties exceed the insurance coverage limits or are excluded from coverage, the customer shall be solely responsible for such damages, claims, expenses, legal fees, and liabilities.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "The customer agrees to operate the ATV at their own risk and releases Granja Xtreme, its owners, employees, and representatives from liability for accidents, injuries, damages, or losses resulting from the customer’s negligence, misuse, violation of safety rules, or breach of this rental agreement.",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Admin Signature",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      },
+      {
+        "text": "Company Representative",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Loading Details...",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Created",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Receipt / Invoice",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "View Contract/Waiver",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Cancel Booking",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Customer Information",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Name",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Email",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Phone",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Vehicle Assigned",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Model",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Rate",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "/day",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Schedule",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "to",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Financial Breakdown",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Base Rate",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Tax (10%)",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Security Deposit",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Discount",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Total Cost",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Status",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Paid in Full",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Payment Cancelled",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Unpaid",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Method",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Amount Paid",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Balance Remaining",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Collect Payment Manually",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Digital Signatures",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Signed:",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Awaiting Customer Signature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Representative Signature",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Not Signed Yet",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Approve & Sign",
+        "category": "UI Text",
+        "risk": "LOW"
+      },
+      {
+        "text": "Company Representative Signature",
+        "category": "Input Placeholder/Attribute",
+        "risk": "LOW"
+      }
+    ]
+  }
+]
