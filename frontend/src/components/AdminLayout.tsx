@@ -10,7 +10,12 @@ interface AdminLayoutProps {
 }
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isEnglish = i18n.language?.startsWith('en') ?? true;
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(isEnglish ? 'es' : 'en');
+  };
   const location = useLocation();
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -141,8 +146,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
   const sidebarLinks = [
     { name: t('Overview'), path: '/admin', icon: LayoutDashboard },
     { name: t('Customers'), path: '/admin/customers', icon: Users },
-    { name: t('Operations'), path: '/admin/upcoming-bookings', icon: CalendarDays },
     { name: t('Bookings'), path: '/admin/bookings', icon: CalendarDays },
+    { name: t('Operations'), path: '/admin/upcoming-bookings', icon: CalendarDays },
     { name: t('Fleet'), path: '/admin/fleet', icon: Truck },
     { name: t('Analytics'), path: '/admin/analytics', icon: LayoutDashboard },
     { name: t('Payments'), path: '/admin/payments', icon: DollarSign },
@@ -333,6 +338,25 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
 
+            {/* Language Toggle */}
+            <button 
+              onClick={toggleLanguage} 
+              style={{ 
+                padding: '6px 12px', 
+                fontSize: '14px', 
+                borderRadius: '16px', 
+                minWidth: 'auto', 
+                whiteSpace: 'nowrap',
+                backgroundColor: 'transparent',
+                border: '1px solid #e2e8f0',
+                color: '#64748b',
+                cursor: 'pointer',
+                fontWeight: 600
+              }} 
+              title="Toggle Language"
+            >
+              {isEnglish ? '🇪🇸 ES' : '🇺🇸 EN'}
+            </button>
             
             {/* Bell */}
             <div style={{ position: 'relative' }} ref={notifRef}>

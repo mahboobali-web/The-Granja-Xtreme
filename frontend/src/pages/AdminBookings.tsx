@@ -26,6 +26,9 @@ export const AdminBookings: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date(2024, 10, 1)); 
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
+  const [statusFilter, setStatusFilter] = useState('All Statuses');
+  const [vehicleFilter, setVehicleFilter] = useState('All Vehicles');
+  const [atvs, setAtvs] = useState<any[]>([]);
   const [showAddBooking, setShowAddBooking] = useState(false);
   const [showFleetCheck, setShowFleetCheck] = useState(false);
   const [selectedBookingForDetails, setSelectedBookingForDetails] = useState<string | null>(null);
@@ -41,6 +44,7 @@ export const AdminBookings: React.FC = () => {
         fetchAPI('/employees').catch(() => []) // Fallback if no permission
       ]);
       setBookings(bData);
+      setAtvs(aData);
       
       const total = aData.length;
       const maintenance = aData.filter((a: any) => a.status === 'MAINTENANCE' || a.status === 'Maintenance').length;
@@ -111,10 +115,27 @@ export const AdminBookings: React.FC = () => {
     t('adminBookings.days.sat', 'SAT')
   ];
 
+  const uniqueVehicles = Array.from(new Set(atvs.map(a => `${a.name} ${a.model}`.trim())));
+
   const getBookingsForDate = (dateNum: number) => {
     return bookings.filter(b => {
       const bDate = new Date(b.startDate);
-      return bDate.getDate() === dateNum && bDate.getMonth() === currentDate.getMonth() && bDate.getFullYear() === currentDate.getFullYear();
+      const isDateMatch = bDate.getDate() === dateNum && bDate.getMonth() === currentDate.getMonth() && bDate.getFullYear() === currentDate.getFullYear();
+      if (!isDateMatch) return false;
+
+      if (vehicleFilter !== 'All Vehicles') {
+        const atvName = `${b.atvId?.name || ''} ${b.atvId?.model || ''}`.trim();
+        if (atvName !== vehicleFilter) return false;
+      }
+
+      if (statusFilter === 'All Statuses') return true;
+      if (statusFilter === 'Pending') return ['Pending', 'Pending Signature', 'Customer Signed'].includes(b.status);
+      if (statusFilter === 'Confirmed/Approved') return ['Reserved', 'Upcoming'].includes(b.status as string);
+      if (statusFilter === 'Checked In' || statusFilter === 'In Progress (Rental Active)') return b.status === 'Active';
+      if (statusFilter === 'Checked Out / Completed') return b.status === 'Completed';
+      if (statusFilter === 'Cancelled') return b.status === 'Cancelled';
+      
+      return true;
     });
   };
 
@@ -129,11 +150,20 @@ export const AdminBookings: React.FC = () => {
       {/* Filter / Navigation Bar */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f8fafc', padding: '16px 24px', borderRadius: '16px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}>
-          <select style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', backgroundColor: 'white', fontSize: '13px', fontWeight: 600, color: '#334155', outline: 'none', whiteSpace: 'nowrap' }}>
-            <option>{t('adminBookings.allVehicles', 'All Vehicles')}</option>
+          <select value={vehicleFilter} onChange={(e) => setVehicleFilter(e.target.value)} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', backgroundColor: 'white', fontSize: '13px', fontWeight: 600, color: '#334155', outline: 'none', whiteSpace: 'nowrap' }}>
+            <option value="All Vehicles">{t('adminBookings.allVehicles', 'All Vehicles')}</option>
+            {uniqueVehicles.map(v => (
+              <option key={v} value={v}>{v}</option>
+            ))}
           </select>
-          <select style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', backgroundColor: 'white', fontSize: '13px', fontWeight: 600, color: '#334155', outline: 'none', whiteSpace: 'nowrap' }}>
-            <option>{t('adminBookings.allStatuses', 'All Statuses')}</option>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', backgroundColor: 'white', fontSize: '13px', fontWeight: 600, color: '#334155', outline: 'none', whiteSpace: 'nowrap' }}>
+            <option value="All Statuses">{t('adminBookings.allStatuses', 'All Statuses')}</option>
+            <option value="Pending">{t('adminBookings.status.pending', 'Pending')}</option>
+            <option value="Confirmed/Approved">{t('adminBookings.status.confirmed', 'Confirmed/Approved')}</option>
+            <option value="Checked In">{t('adminBookings.status.checkedIn', 'Checked In')}</option>
+            <option value="In Progress (Rental Active)">{t('adminBookings.status.inProgress', 'In Progress (Rental Active)')}</option>
+            <option value="Checked Out / Completed">{t('adminBookings.status.completed', 'Checked Out / Completed')}</option>
+            <option value="Cancelled">{t('adminBookings.status.cancelled', 'Cancelled')}</option>
           </select>
           <div style={{ display: 'flex', backgroundColor: '#e2e8f0', borderRadius: '8px', padding: '4px' }}>
             <button onClick={() => setViewMode('month')} style={{ border: 'none', backgroundColor: viewMode === 'month' ? 'white' : 'transparent', padding: '6px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: viewMode === 'month' ? 700 : 600, color: viewMode === 'month' ? '#0f172a' : '#64748b', boxShadow: viewMode === 'month' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>{t('adminBookings.month', 'Month')}</button>
