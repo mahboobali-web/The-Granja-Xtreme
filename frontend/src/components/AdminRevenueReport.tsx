@@ -16,10 +16,6 @@ export const AdminRevenueReport: React.FC<AdminRevenueReportProps> = ({ onClose 
   // Format: YYYY-MM. Default to empty (last 30 days)
   const [selectedMonth, setSelectedMonth] = useState<string>('');
 
-  useEffect(() => {
-    loadData();
-  }, [selectedMonth]);
-
   const loadData = async () => {
     setLoading(true);
     try {
@@ -36,6 +32,10 @@ export const AdminRevenueReport: React.FC<AdminRevenueReportProps> = ({ onClose 
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadData();
+  }, [selectedMonth]);
 
   const getReportTitle = () => {
     if (!selectedMonth) return t('adminAnalytics.last30DaysRev', 'Last 30 Days Revenue Statement');

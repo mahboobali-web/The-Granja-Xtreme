@@ -23,9 +23,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const [showAdminSignatureModal, setShowAdminSignatureModal] = useState(false);
   const [showCustomerSignatureModal, setShowCustomerSignatureModal] = useState(false);
 
-  useEffect(() => {
-    loadBooking();
-  }, [bookingId]);
+
 
   const handleCollectPayment = async () => {
     try {
@@ -117,6 +115,10 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadBooking();
+  }, [bookingId]);
 
   const handleCancel = async () => {
     if (!window.confirm(t('Are you sure you want to cancel this booking? This action cannot be undone.'))) return;

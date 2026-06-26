@@ -28,16 +28,12 @@ export const uploadImage = async (file: File, folder: string): Promise<string> =
 };
 
 export const uploadBase64Image = async (base64Image: string, folder: string): Promise<string> => {
-  try {
-    const response = await fetchAPI('/upload', {
-      method: 'POST',
-      body: { image: base64Image, folder },
-    });
-    if (response.url) {
-      return response.url;
-    }
-    throw new Error('No URL returned from server');
-  } catch (err: any) {
-    throw err;
+  const response = await fetchAPI('/upload', {
+    method: 'POST',
+    body: { image: base64Image, folder },
+  });
+  if (response.url) {
+    return response.url;
   }
+  throw new Error('No URL returned from server');
 };

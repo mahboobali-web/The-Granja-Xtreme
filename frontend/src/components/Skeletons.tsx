@@ -24,7 +24,7 @@ const baseStyle: React.CSSProperties = {
   backgroundSize: '1000px 100%',
 };
 
-export const SkeletonBox: React.CSSProperties = {
+const SkeletonBox: React.CSSProperties = {
   ...baseStyle,
   borderRadius: '8px',
 };

@@ -12,10 +12,6 @@ export const AdminFleetReport: React.FC<AdminFleetReportProps> = ({ onClose }) =
   const [loading, setLoading] = useState(false);
   const [fleetData, setFleetData] = useState<any>(null);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   const loadData = async () => {
     setLoading(true);
     try {
@@ -28,6 +24,10 @@ export const AdminFleetReport: React.FC<AdminFleetReportProps> = ({ onClose }) =
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const getStatusCount = (status: string) => {
     if (!fleetData || !fleetData.fleetStatus) return 0;

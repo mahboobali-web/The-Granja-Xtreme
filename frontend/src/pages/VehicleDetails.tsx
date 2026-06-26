@@ -177,7 +177,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   const getDisabledDates = () => {
     const dates: Date[] = [];
     bookedDates.forEach(booking => {
-      let current = new Date(booking.startDate);
+      const current = new Date(booking.startDate);
       const end = new Date(booking.endDate);
       // Ensure we start at beginning of day
       current.setHours(0, 0, 0, 0);
