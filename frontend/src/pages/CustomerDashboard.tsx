@@ -494,11 +494,13 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
     const baseRate = days * (b.atvId?.ratePerDay || 0);
     const tax = Math.round(baseRate * 0.1 * 100) / 100; // 10% tax
     const securityDeposit = 150; // Flat deposit
-    const total = baseRate + tax + securityDeposit;
+    const accessoriesSum = b.accessories ? b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
+    const extraChargesSum = b.extraCharges ? b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
+    const total = baseRate + tax + securityDeposit + accessoriesSum + extraChargesSum;
 
     const isPaid = b.payment?.status === 'Paid';
-    const amountPaid = b.payment?.amountPaid || 0;
-    const remainingBalance = total - amountPaid;
+    const amountPaid = b.payment?.amountPaid !== undefined ? b.payment.amountPaid : (isPaid ? total : 0);
+    const remainingBalance = b.payment?.remainingAmount !== undefined ? b.payment.remainingAmount : (total - amountPaid);
 
     const durationText = days === 1 ? '1 Day' : `${days} Days`;
 
@@ -632,6 +634,28 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(b.atvId?.ratePerDay || 0).toFixed(2)}</td>
                 <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${baseRate.toFixed(2)}</td>
               </tr>
+              {b.accessories && b.accessories.length > 0 && b.accessories.map((acc: any, index: number) => (
+                <tr key={`acc-${index}`}>
+                  <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
+                    <div style={{ fontWeight: 600, color: '#111827', fontSize: '14px', marginBottom: '4px' }}>{t(acc.name || '')}</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280' }}>{t("Accessory")}</div>
+                  </td>
+                  <td style={{ padding: '24px', textAlign: 'center', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>{acc.quantity || 1}</td>
+                  <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(acc.price || 0).toFixed(2)}</td>
+                  <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${((acc.price || 0) * (acc.quantity || 1)).toFixed(2)}</td>
+                </tr>
+              ))}
+              {b.extraCharges && b.extraCharges.length > 0 && b.extraCharges.map((charge: any, index: number) => (
+                <tr key={`charge-${index}`}>
+                  <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
+                    <div style={{ fontWeight: 600, color: '#111827', fontSize: '14px', marginBottom: '4px' }}>{t(charge.reason || '')}</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280' }}>{charge.description ? t(charge.description) : ''}</div>
+                  </td>
+                  <td style={{ padding: '24px', textAlign: 'center', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>1</td>
+                  <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(Number(charge.amount) || 0).toFixed(2)}</td>
+                  <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${(Number(charge.amount) || 0).toFixed(2)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
 </div>
@@ -647,6 +671,18 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 <span>{t("Luxury Tax (10%)")}</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
+              {b.accessories && b.accessories.length > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
+                  <span>{t("Accessories")}</span>
+                  <span>${b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
+                </div>
+              )}
+              {b.extraCharges && b.extraCharges.length > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
+                  <span>{t("Extra Charges")}</span>
+                  <span>${b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0).toFixed(2)}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563', borderBottom: '1px solid #e5e7eb' }}>
                 <span>{t("Security Deposit (Refundable)")}</span>
                 <span>${securityDeposit.toFixed(2)}</span>
@@ -656,7 +692,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 <span>${total.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '14px', color: '#4b5563' }}>
-                <span>{t("Amount Paid")} ({b.payment?.method || t('Card/Cash')})</span>
+                <span>{t("Amount Paid")} ({t(b.payment?.method || 'Card/Cash')})</span>
                 <span style={{ color: '#059669', fontWeight: 600 }}>-${amountPaid.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0 0', fontSize: '20px', fontWeight: 800, color: remainingBalance > 0 ? '#b91c1c' : '#3f6212', borderTop: '2px solid #e5e7eb', marginTop: '8px' }}>

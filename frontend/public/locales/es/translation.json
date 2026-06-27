@@ -600,8 +600,8 @@
   "Damage": "Daño",
   "Cleaning": "Limpieza",
   "Fuel": "Combustible",
-  "Late Return": "Devolución tardía",
-  "Extended Tour": "Tour extendido",
+  "Late Return": "Devolución Tardía",
+  "Extended Tour": "Tour Extendido",
   "Other": "Otro",
   "Description...": "Descripción...",
   "Amount": "Monto",
@@ -1159,5 +1159,8 @@
   "Descripción en español...": "Descripción en español...",
   "Unlimited": "Ilimitado",
   "Are you sure you want to delete this accessory?": "¿Está seguro de que desea eliminar este accesorio?",
-  "Add Accessories": "Añadir Accesorios"
+  "Add Accessories": "Añadir Accesorios",
+  "Rental Charge": "Cargo de Alquiler",
+  "Damage Charge": "Cargo por Daños",
+  "Accessory": "Accesorio"
 }

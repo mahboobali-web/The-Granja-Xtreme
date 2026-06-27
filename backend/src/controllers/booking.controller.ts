@@ -795,23 +795,31 @@ export const checkoutBooking = async (req: AuthenticatedRequest, res: Response):
     if (extraCharges && Array.isArray(extraCharges) && extraCharges.length > 0) {
       booking.extraCharges = extraCharges;
       const extrasSum = extraCharges.reduce((acc, charge) => acc + Number(charge.amount), 0);
-      booking.finalTotal = extrasSum; // Plus base fee if needed later
+      booking.finalTotal = (booking.finalTotal || 0) + extrasSum;
       
-      for (const charge of extraCharges) {
+      const mainInvoice = await Invoice.findOne({ bookingId: booking._id, invoiceType: 'Rental Charge' });
+      
+      if (mainInvoice) {
+        mainInvoice.amount += extrasSum;
+        mainInvoice.balance += extrasSum;
+        mainInvoice.status = mainInvoice.balance > 0 ? (mainInvoice.amount > mainInvoice.balance ? 'Partially Paid' : 'Unpaid') : 'Paid';
+        
+        const extraDetails = extraCharges.map(c => `[${c.reason}] ${c.description} ($${Number(c.amount).toFixed(2)})`).join(', ');
+        mainInvoice.description = `${mainInvoice.description}\n+ Extra Charges: ${extraDetails}`;
+        
+        await mainInvoice.save();
+      } else {
         const invoiceNumber = await getNextTgxNumber('invoice');
         
-        let typeToUse = 'Extra Charge';
-        if (charge.reason === 'Damage') typeToUse = 'Damage Charge';
-
         await Invoice.create({
           invoiceNumber,
           bookingId: booking._id,
           customerId: booking.customerId,
           atvId: booking.atvId,
-          invoiceType: typeToUse,
-          description: `[${charge.reason}] ${charge.description}`,
-          amount: charge.amount,
-          balance: charge.amount,
+          invoiceType: 'Extra Charge',
+          description: `Extra Charges: ${extraCharges.map(c => `[${c.reason}] ${c.description} ($${Number(c.amount).toFixed(2)})`).join(', ')}`,
+          amount: extrasSum,
+          balance: extrasSum,
           status: 'Unpaid',
           dueDate: new Date()
         });

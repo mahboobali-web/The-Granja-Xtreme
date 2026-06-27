@@ -216,7 +216,7 @@ export function AdminPayments() {
                   </td>
                   <td style={{ padding: '1rem' }}>
                     <div>{inv.atvId?.name} {inv.atvId?.model}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{inv.invoiceType}</div>
+                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{t(inv.invoiceType || '')}</div>
                   </td>
                   <td style={{ padding: '1rem', fontWeight: '500' }}>${inv.amount.toFixed(2)}</td>
                   <td style={{ padding: '1rem', color: inv.balance > 0 ? '#ef4444' : '#111827', fontWeight: '500' }}>
@@ -242,10 +242,10 @@ export function AdminPayments() {
                         return String(pid) === String(iid);
                       });
                       if (invPayments.length > 0) {
-                        return invPayments[0].paymentMethod || 'Paid';
+                        return t(invPayments[0].paymentMethod || 'Paid');
                       }
                       if (inv.bookingId?.payment?.method) {
-                        return inv.bookingId.payment.method;
+                        return t(inv.bookingId.payment.method);
                       }
                       return inv.status === 'Unpaid' || inv.status === 'Draft' ? t('adminPayments.onArrival', 'On Arrival') : t('adminPayments.unknown', 'Unknown');
                     })()}

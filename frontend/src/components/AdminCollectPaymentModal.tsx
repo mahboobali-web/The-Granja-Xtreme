@@ -132,7 +132,7 @@ export const AdminCollectPaymentModal: React.FC<AdminCollectPaymentModalProps> =
               required
             >
               {paymentMethods.map(m => (
-                <option key={m} value={m}>{m}</option>
+                <option key={m} value={m}>{t(m)}</option>
               ))}
             </select>
           </div>
