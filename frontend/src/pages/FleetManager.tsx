@@ -413,12 +413,12 @@ export const FleetManager: React.FC = () => {
       <div style={{
         backgroundColor: 'white',
         borderRadius: '16px',
-        padding: '24px',
+        padding: '16px 24px',
         boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
       }}>
-        <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '12px', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
           
-          <div style={{ position: 'relative', flex: 1, maxWidth: '350px' }}>
+          <div style={{ position: 'relative', flex: '0 1 350px' }}>
             <Search size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
             <input 
               type="text" 
@@ -426,9 +426,37 @@ export const FleetManager: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                width: '100%', padding: '12px 16px 12px 40px', borderRadius: '8px', border: 'none', backgroundColor: '#f8fafc', fontSize: '14px', color: '#334155', outline: 'none'
+                width: '100%', padding: '10px 16px 10px 40px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', fontSize: '14px', color: '#334155', outline: 'none'
               }}
             />
+          </div>
+
+          {/* Filter Tabs */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', flex: 1, justifyContent: 'center' }}>
+            <button 
+              onClick={() => setFilter('ALL')}
+              style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'ALL' ? '#4d7c0f' : '#f8fafc', color: filter === 'ALL' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
+            >
+              {t('fleetManager.filterAll', 'All Vehicles')}
+            </button>
+            <button 
+              onClick={() => setFilter('AVAILABLE')}
+              style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'AVAILABLE' ? '#4d7c0f' : '#f8fafc', color: filter === 'AVAILABLE' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
+            >
+              {t('fleetManager.filterAvailable', 'Available')} ({countByStatus('AVAILABLE')})
+            </button>
+            <button 
+              onClick={() => setFilter('MAINTENANCE')}
+              style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'MAINTENANCE' ? '#4d7c0f' : '#f8fafc', color: filter === 'MAINTENANCE' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
+            >
+              {t('fleetManager.filterMaintenance', 'Maintenance')} ({countByStatus('MAINTENANCE')})
+            </button>
+            <button 
+              onClick={() => setFilter('RENTED')}
+              style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'RENTED' ? '#4d7c0f' : '#f8fafc', color: filter === 'RENTED' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
+            >
+              {t('fleetManager.filterRented', 'Rented')} ({countByStatus('RENTED')})
+            </button>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -447,34 +475,6 @@ export const FleetManager: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
-
-        {/* Filter Tabs */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-          <button 
-            onClick={() => setFilter('ALL')}
-            style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'ALL' ? '#4d7c0f' : '#f8fafc', color: filter === 'ALL' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
-          >
-            {t('fleetManager.filterAll', 'All Vehicles')}
-          </button>
-          <button 
-            onClick={() => setFilter('AVAILABLE')}
-            style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'AVAILABLE' ? '#4d7c0f' : '#f8fafc', color: filter === 'AVAILABLE' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
-          >
-            {t('fleetManager.filterAvailable', 'Available')} ({countByStatus('AVAILABLE')})
-          </button>
-          <button 
-            onClick={() => setFilter('MAINTENANCE')}
-            style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'MAINTENANCE' ? '#4d7c0f' : '#f8fafc', color: filter === 'MAINTENANCE' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
-          >
-            {t('fleetManager.filterMaintenance', 'Maintenance')} ({countByStatus('MAINTENANCE')})
-          </button>
-          <button 
-            onClick={() => setFilter('RENTED')}
-            style={{ padding: '8px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', border: 'none', backgroundColor: filter === 'RENTED' ? '#4d7c0f' : '#f8fafc', color: filter === 'RENTED' ? 'white' : '#64748b', whiteSpace: 'nowrap' }}
-          >
-            {t('fleetManager.filterRented', 'Rented')} ({countByStatus('RENTED')})
-          </button>
         </div>
       </div>
 

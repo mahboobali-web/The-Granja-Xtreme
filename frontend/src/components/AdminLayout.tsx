@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CalendarDays, Truck, Bell, Plus, Users, FileEdit, Settings, UserCog, ShieldAlert, MessageSquare, Globe, DollarSign, Menu, X } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Truck, Package, Bell, Plus, Users, FileEdit, Settings, UserCog, ShieldAlert, MessageSquare, Globe, DollarSign, Menu, X } from 'lucide-react';
 import { fetchAPI } from '../utils/api';
 import { auth } from '../config/firebase';
 import { useTranslation } from 'react-i18next';
@@ -148,9 +148,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
     { name: t('Customers'), path: '/admin/customers', icon: Users },
     { name: t('Bookings'), path: '/admin/bookings', icon: CalendarDays },
     { name: t('Operations'), path: '/admin/upcoming-bookings', icon: CalendarDays },
-    { name: t('Fleet'), path: '/admin/fleet', icon: Truck },
-    { name: t('Analytics'), path: '/admin/analytics', icon: LayoutDashboard },
     { name: t('Payments'), path: '/admin/payments', icon: DollarSign },
+    { name: t('Fleet'), path: '/admin/fleet', icon: Truck },
+    { name: t('Accessories & Other Items'), path: '/admin/accessories', icon: Package },
+    { name: t('Analytics'), path: '/admin/analytics', icon: LayoutDashboard },
     { name: t('Messages'), path: '/admin/messages', icon: MessageSquare }
   ];
 
@@ -168,6 +169,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
       case '/admin': return { title: t('Dashboard'), subtitle: t('Overview') };
       case '/admin/customers': return { title: t('Customer'), subtitle: t('Management') };
       case '/admin/fleet': return { title: t('Fleet Management'), subtitle: t('Oversee and maintain your high-performance ATV inventory.') };
+      case '/admin/accessories': return { title: t('Accessories & Other Items'), subtitle: t('Manage additional items and add-ons for your rentals.') };
       case '/admin/bookings': return { title: t('Booking Management'), subtitle: t('Monitor your fleet performance and handle upcoming guest expeditions from a centralized calendar view.') };
       case '/admin/upcoming-bookings': return { title: t('Check-In & Check-Out'), subtitle: t('Manage customer arrivals and returns.') };
       case '/admin/analytics': return { title: t('Reports & Analytics'), subtitle: t('Real-time performance tracking and fleet intelligence.') };

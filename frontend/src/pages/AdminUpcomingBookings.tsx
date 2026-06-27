@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchAPI } from '../utils/api';
-import { Calendar, Truck, User, ArrowRight, CheckCircle, Search, FileText } from 'lucide-react';
+import { Calendar, Truck, User, ArrowRight, CheckCircle, Search, FileText, Package } from 'lucide-react';
 import { AdminBookingDetailsModal } from '../components/AdminBookingDetailsModal';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,13 @@ interface ExtraCharge {
   reason: string;
   description: string;
   amount: number;
+}
+
+interface Accessory {
+  _id: string;
+  name: string;
+  nameEs?: string;
+  price: number;
 }
 
 interface Booking {
@@ -25,7 +32,7 @@ interface Booking {
 }
 
 export const AdminUpcomingBookings: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'All' | 'Upcoming' | 'Active'>('All');
@@ -42,7 +49,19 @@ export const AdminUpcomingBookings: React.FC = () => {
   const [chargeDescription, setChargeDescription] = useState('');
   const [chargeAmount, setChargeAmount] = useState('');
 
+  const [availableAccessories, setAvailableAccessories] = useState<Accessory[]>([]);
+  const [selectedAccessories, setSelectedAccessories] = useState<{ accessoryId: string; name: string; quantity: number; price: number }[]>([]);
+
   const [detailsModalOpen, setDetailsModalOpen] = useState<string | null>(null);
+
+  const loadAccessories = async () => {
+    try {
+      const data = await fetchAPI('/accessories');
+      setAvailableAccessories(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const loadBookings = async () => {
     try {
@@ -58,11 +77,13 @@ export const AdminUpcomingBookings: React.FC = () => {
 
   useEffect(() => {
     loadBookings();
+    loadAccessories();
   }, []);
 
   const openCheckIn = (b: Booking) => {
     setActiveBooking(b);
     setCheckInNotes(b.notes || '');
+    setSelectedAccessories([]);
     setCheckInModalOpen(true);
   };
 
@@ -86,9 +107,18 @@ export const AdminUpcomingBookings: React.FC = () => {
   const handleCheckIn = async () => {
     if (!activeBooking) return;
     try {
+      const mappedAccessories = selectedAccessories.map(acc => ({
+        ...acc,
+        accessoryId: acc.accessoryId // Make sure the backend expects accessoryId mapping properly
+      }));
+
       await fetchAPI(`/bookings/${activeBooking._id}/checkin`, {
         method: 'POST',
-        body: { actualCheckInTime: new Date().toISOString(), notes: checkInNotes }
+        body: { 
+          actualCheckInTime: new Date().toISOString(), 
+          notes: checkInNotes,
+          accessories: mappedAccessories.length > 0 ? mappedAccessories : undefined
+        }
       });
       setCheckInModalOpen(false);
       loadBookings();
@@ -287,6 +317,68 @@ export const AdminUpcomingBookings: React.FC = () => {
                 placeholder={t("E.g. Verified license and waiver.")}
               />
             </div>
+
+            {/* Accessories Section */}
+            {availableAccessories.length > 0 && (
+              <div style={{ marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#334155', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Package size={16} /> {t("Add Accessories")}
+                </h3>
+                
+                {selectedAccessories.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                    {selectedAccessories.map((acc, index) => (
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f1f5f9', padding: '8px 12px', borderRadius: '6px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 600 }}>{acc.name} - ${acc.price.toFixed(2)}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <span style={{ fontSize: '12px', color: '#64748b' }}>{t("Qty:")}</span>
+                            <input 
+                              type="number" 
+                              min="1" 
+                              value={acc.quantity} 
+                              onChange={(e) => {
+                                const newQty = Math.max(1, parseInt(e.target.value) || 1);
+                                setSelectedAccessories(selectedAccessories.map((a, i) => i === index ? { ...a, quantity: newQty } : a));
+                              }}
+                              style={{ width: '50px', padding: '4px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '12px' }}
+                            />
+                          </div>
+                          <span style={{ fontSize: '13px', fontWeight: 700, minWidth: '50px', textAlign: 'right' }}>${(acc.price * acc.quantity).toFixed(2)}</span>
+                          <button onClick={() => setSelectedAccessories(selectedAccessories.filter((_, i) => i !== index))} style={{ border: 'none', background: 'none', color: '#ef4444', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>{t("Remove")}</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <select 
+                    onChange={(e) => {
+                      if (!e.target.value) return;
+                      const accessory = availableAccessories.find(a => a._id === e.target.value);
+                      if (accessory) {
+                        const exists = selectedAccessories.find(a => a.accessoryId === accessory._id);
+                        if (exists) {
+                          setSelectedAccessories(selectedAccessories.map(a => a.accessoryId === accessory._id ? { ...a, quantity: a.quantity + 1 } : a));
+                        } else {
+                          const accName = i18n.language === 'es' ? (accessory.nameEs || accessory.name) : accessory.name;
+                          setSelectedAccessories([...selectedAccessories, { accessoryId: accessory._id, name: accName, price: accessory.price, quantity: 1 }]);
+                        }
+                      }
+                      e.target.value = "";
+                    }}
+                    style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px' }}
+                  >
+                    <option value="">{t("-- Select Accessory --")}</option>
+                    {availableAccessories.map(a => {
+                      const accName = i18n.language === 'es' ? (a.nameEs || a.name) : a.name;
+                      return <option key={a._id} value={a._id}>{accName} (${a.price.toFixed(2)})</option>;
+                    })}
+                  </select>
+                </div>
+              </div>
+            )}
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button onClick={() => setCheckInModalOpen(false)} style={{ padding: '10px 16px', backgroundColor: 'transparent', border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>{t("Cancel")}</button>

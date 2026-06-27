@@ -13,6 +13,12 @@ export interface IBooking {
     description: string;
     amount: number;
   }[];
+  accessories?: {
+    accessoryId: Types.ObjectId;
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
   finalTotal?: number;
   status: 'Pending' | 'Pending Signature' | 'Customer Signed' | 'Upcoming' | 'Active' | 'Completed' | 'Cancelled';
   signedWaiverId?: Types.ObjectId;
@@ -40,6 +46,12 @@ const bookingSchema = new Schema<IBooking>(
       reason: { type: String, required: true },
       description: { type: String, required: true },
       amount: { type: Number, required: true }
+    }],
+    accessories: [{
+      accessoryId: { type: Schema.Types.ObjectId, ref: 'Accessory', required: true },
+      name: { type: String, required: true },
+      quantity: { type: Number, required: true },
+      price: { type: Number, required: true }
     }],
     finalTotal: { type: Number },
     status: {  

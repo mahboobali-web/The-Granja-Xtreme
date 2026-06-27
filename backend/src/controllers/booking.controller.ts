@@ -723,7 +723,7 @@ export const collectPayment = async (req: AuthenticatedRequest, res: Response): 
 export const checkinBooking = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { actualCheckInTime, notes } = req.body;
+    const { actualCheckInTime, notes, accessories } = req.body;
     
     const booking = await Booking.findById(id).populate('atvId');
     if (!booking) { res.status(404).json({message: 'Booking not found.'}); return; }
@@ -731,6 +731,42 @@ export const checkinBooking = async (req: AuthenticatedRequest, res: Response): 
     booking.status = 'Active';
     booking.actualCheckInTime = actualCheckInTime ? new Date(actualCheckInTime) : new Date();
     if (notes) booking.notes = notes;
+
+    if (accessories && Array.isArray(accessories) && accessories.length > 0) {
+      booking.accessories = accessories;
+      
+      const accessoriesSum = accessories.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      
+      if (accessoriesSum > 0) {
+        const mainInvoice = await Invoice.findOne({ bookingId: booking._id, invoiceType: 'Rental Charge' });
+        
+        if (mainInvoice) {
+          mainInvoice.amount += accessoriesSum;
+          mainInvoice.balance += accessoriesSum;
+          mainInvoice.status = mainInvoice.balance > 0 ? (mainInvoice.amount > mainInvoice.balance ? 'Partially Paid' : 'Unpaid') : 'Paid';
+          
+          const accessoryDetails = accessories.map(a => `${a.quantity}x ${a.name} ($${(a.price * a.quantity).toFixed(2)})`).join(', ');
+          mainInvoice.description = `${mainInvoice.description}\n+ Accessories: ${accessoryDetails}`;
+          
+          await mainInvoice.save();
+        } else {
+          // Fallback if main invoice is somehow missing
+          const invoiceNumber = await getNextTgxNumber('invoice');
+          await Invoice.create({
+            invoiceNumber,
+            bookingId: booking._id,
+            customerId: booking.customerId,
+            atvId: booking.atvId,
+            invoiceType: 'Extra Charge',
+            description: `Accessories: ${accessories.map(a => `${a.quantity}x ${a.name} ($${(a.price * a.quantity).toFixed(2)})`).join(', ')}`,
+            amount: accessoriesSum,
+            balance: accessoriesSum,
+            status: 'Unpaid',
+            dueDate: new Date()
+          });
+        }
+      }
+    }
 
     const atv = booking.atvId as any;
     if (atv) {

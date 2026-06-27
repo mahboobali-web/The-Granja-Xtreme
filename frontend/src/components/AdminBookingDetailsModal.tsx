@@ -294,6 +294,17 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                   <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(b.atvId?.ratePerDay || 0).toFixed(2)}</td>
                   <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${baseRate.toFixed(2)}</td>
                 </tr>
+                {b.accessories && b.accessories.length > 0 && b.accessories.map((acc: any, index: number) => (
+                  <tr key={`acc-${index}`}>
+                    <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
+                      <div style={{ fontWeight: 600, color: '#111827', fontSize: '14px', marginBottom: '4px' }}>{acc.name}</div>
+                      <div style={{ fontSize: '12px', color: '#6b7280' }}>{t("Accessory")}</div>
+                    </td>
+                    <td style={{ padding: '24px', textAlign: 'center', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>{acc.quantity || 1}</td>
+                    <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(acc.price || 0).toFixed(2)}</td>
+                    <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${((acc.price || 0) * (acc.quantity || 1)).toFixed(2)}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -309,6 +320,12 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <span>{t("Luxury Tax (10%)")}</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
+              {b.accessories && b.accessories.length > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
+                  <span>{t("Accessories")}</span>
+                  <span>${b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563', borderBottom: '1px solid #e5e7eb' }}>
                 <span>{t("Security Deposit (Refundable)")}</span>
                 <span>${securityDeposit.toFixed(2)}</span>
@@ -645,6 +662,9 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Base Rate")}</span> <span>${baseRate.toFixed(2)}</span></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Tax (10%)")}</span> <span>${tax.toFixed(2)}</span></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Security Deposit")}</span> <span>${securityDeposit.toFixed(2)}</span></div>
+                {booking.accessories && booking.accessories.length > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Accessories")}</span> <span>${booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span></div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Discount")}</span> <span style={{ color: '#10b981' }}>-$0.00</span></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', paddingTop: '12px', borderTop: '1px dashed #cbd5e1', fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
                   <span>{t("Total Cost")}</span> <span>${total.toFixed(2)}</span>
