@@ -16,7 +16,19 @@ import { getNextTgxNumber } from '../utils/counter.utils';
 
 export const adminCreateBooking = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { atvId, customerId, startDate, endDate, notes } = req.body;
+    let { atvId, customerId, startDate, endDate, notes } = req.body;
+    
+    if (typeof startDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(startDate)) {
+      startDate = new Date(`${startDate}T12:00:00-04:00`);
+    } else {
+      startDate = new Date(startDate);
+    }
+
+    if (typeof endDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+      endDate = new Date(`${endDate}T12:00:00-04:00`);
+    } else {
+      endDate = new Date(endDate);
+    }
     
     const atv = await Atv.findById(atvId);
     if (!atv) {
@@ -81,8 +93,14 @@ import { logActivity } from './logs.controller';
 
 const createBookingSchema = z.object({
   atvId: z.string(),
-  startDate: z.string().transform((val) => new Date(val)),
-  endDate: z.string().transform((val) => new Date(val)),
+  startDate: z.string().transform((val) => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return new Date(`${val}T12:00:00-04:00`);
+    return new Date(val);
+  }),
+  endDate: z.string().transform((val) => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return new Date(`${val}T12:00:00-04:00`);
+    return new Date(val);
+  }),
   notes: z.string().optional()
 });
 
