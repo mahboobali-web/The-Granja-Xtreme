@@ -326,7 +326,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
             }}
           >
             <LogOut size={18} />
-            {t("Logout")}
+            {t("logout")}
           </button>
         </div>
       </aside>
