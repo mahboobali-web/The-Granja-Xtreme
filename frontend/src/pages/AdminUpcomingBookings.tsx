@@ -239,8 +239,8 @@ export const AdminUpcomingBookings: React.FC = () => {
                     <td style={{ padding: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: '#334155' }}>
                         <Calendar size={16} color="#94a3b8" /> 
-                        {new Date(b.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        {new Date(b.startDate).toDateString() !== new Date(b.endDate).toDateString() && ` - ${new Date(b.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
+                        {new Date(b.startDate).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        {new Date(b.startDate).toDateString() !== new Date(b.endDate).toDateString() && ` - ${new Date(b.endDate).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                       </div>
                     </td>
                     <td style={{ padding: '16px' }}>

@@ -17,7 +17,7 @@ interface Customer {
 }
 
 export const CustomersList: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,7 +66,7 @@ export const CustomersList: React.FC = () => {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', {
       year: 'numeric',
       month: 'short',
       day: '2-digit'

@@ -69,8 +69,11 @@ export const CmsManager: React.FC = () => {
 
   // Story Content
   const [storyTitle, setStoryTitle] = useState('');
+  const [storyTitleEs, setStoryTitleEs] = useState('');
   const [storyText, setStoryText] = useState('');
+  const [storyTextEs, setStoryTextEs] = useState('');
   const [storyQuote, setStoryQuote] = useState('');
+  const [storyQuoteEs, setStoryQuoteEs] = useState('');
   const [storyTeam, setStoryTeam] = useState<TeamMember[]>([]);
 
   // Contact Info
@@ -126,9 +129,12 @@ export const CmsManager: React.FC = () => {
 
         const storyData = await fetchAPI('/cms/story_content');
         if (storyData?.value) {
-          setStoryTitle(storyData.value.title);
-          setStoryText(storyData.value.text);
-          setStoryQuote(storyData.value.quote);
+          setStoryTitle(storyData.value.title || '');
+          setStoryTitleEs(storyData.value.titleEs || '');
+          setStoryText(storyData.value.text || '');
+          setStoryTextEs(storyData.value.textEs || '');
+          setStoryQuote(storyData.value.quote || '');
+          setStoryQuoteEs(storyData.value.quoteEs || '');
           if (storyData.value.team) setStoryTeam(storyData.value.team);
         }
 
@@ -480,16 +486,28 @@ export const CmsManager: React.FC = () => {
         {sectionCard(<>
           {sectionTitle(t('adminCms.storyTitle', 'Story & About'), t('adminCms.storyDesc', 'Content and Team members for the About page.'))}
           <div className="form-group">
-            <label className="form-label">{t('adminCms.storyHeadline', 'Story Headline')}</label>
+            <label className="form-label">{t('adminCms.storyHeadline', 'Story Headline')} (EN)</label>
             <input type="text" value={storyTitle} onChange={(e) => setStoryTitle(e.target.value)} className="form-input" required />
           </div>
           <div className="form-group">
-            <label className="form-label">{t('adminCms.storyBodyText', 'Story Body Text')}</label>
+            <label className="form-label">{t('adminCms.storyHeadlineEs', 'Story Headline (Spanish)')}</label>
+            <input type="text" value={storyTitleEs} onChange={(e) => setStoryTitleEs(e.target.value)} className="form-input" />
+          </div>
+          <div className="form-group">
+            <label className="form-label">{t('adminCms.storyBodyText', 'Story Body Text')} (EN)</label>
             <textarea value={storyText} onChange={(e) => setStoryText(e.target.value)} className="form-input" rows={4} required />
           </div>
           <div className="form-group">
-            <label className="form-label">{t('adminCms.storyQuote', 'Story Quote')}</label>
+            <label className="form-label">{t('adminCms.storyBodyTextEs', 'Story Body Text (Spanish)')}</label>
+            <textarea value={storyTextEs} onChange={(e) => setStoryTextEs(e.target.value)} className="form-input" rows={4} />
+          </div>
+          <div className="form-group">
+            <label className="form-label">{t('adminCms.storyQuote', 'Story Quote')} (EN)</label>
             <textarea value={storyQuote} onChange={(e) => setStoryQuote(e.target.value)} className="form-input" rows={2} required />
+          </div>
+          <div className="form-group">
+            <label className="form-label">{t('adminCms.storyQuoteEs', 'Story Quote (Spanish)')}</label>
+            <textarea value={storyQuoteEs} onChange={(e) => setStoryQuoteEs(e.target.value)} className="form-input" rows={2} />
           </div>
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)', margin: '16px 0' }} />
           <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>{t('adminCms.teamMembers', 'Team Members')}</h3>
@@ -506,7 +524,7 @@ export const CmsManager: React.FC = () => {
             </div>
           ))}
           <button onClick={addTeam} className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 14px' }}><Plus size={14} /> {t('adminCms.addTeamMember', 'Add Team Member')}</button>
-          <SaveButton cmsKey="story_content" label={t('adminCms.saveStory', 'Save Story Content')} onClick={() => saveCms('story_content', { title: storyTitle, text: storyText, quote: storyQuote, team: storyTeam })} />
+          <SaveButton cmsKey="story_content" label={t('adminCms.saveStory', 'Save Story Content')} onClick={() => saveCms('story_content', { title: storyTitle, titleEs: storyTitleEs, text: storyText, textEs: storyTextEs, quote: storyQuote, quoteEs: storyQuoteEs, team: storyTeam })} />
         </>)}
 
         {/* ====== 8. Contact Info ====== */}

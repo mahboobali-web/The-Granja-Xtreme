@@ -14,7 +14,7 @@ interface BookingDetailsProps {
 }
 
 export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookingId, onClose, onUpdate, initialTab }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'details' | 'receipt' | 'contract'>(initialTab || 'details');
@@ -143,7 +143,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    return new Date(dateString).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   const renderReceiptView = () => {
@@ -176,7 +176,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
 
     const formatDateOnly = (dateString: string) => {
       if (!dateString) return 'N/A';
-      return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      return new Date(dateString).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     };
 
     const pickupText = b.actualCheckInTime ? formatDateTime(b.actualCheckInTime) : formatDateOnly(b.startDate);
@@ -379,7 +379,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 {b.customerSignature ? <img src={b.customerSignature} style={{ maxHeight: '50px' }} alt="Customer Signature" /> : null}
               </div>
               <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', fontWeight: 600 }}>
-                {t("Customer Signature")} {b.customerSignedAt ? `(${t("Signed:")} ${new Date(b.customerSignedAt).toLocaleDateString()})` : ''}
+                {t("Customer Signature")} {b.customerSignedAt ? `(${t("Signed:")} ${new Date(b.customerSignedAt).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')})` : ''}
               </div>
             </div>
             <div>
@@ -513,7 +513,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 {booking.customerSignature ? <img src={booking.customerSignature} style={{ maxHeight: '50px' }} alt="Customer Signature" /> : null}
               </div>
               <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', fontWeight: 600 }}>
-                {t("Customer Signature")} {booking.customerSignedAt ? `(${t("Signed:")} ${new Date(booking.customerSignedAt).toLocaleDateString()})` : ''}
+                {t("Customer Signature")} {booking.customerSignedAt ? `(${t("Signed:")} ${new Date(booking.customerSignedAt).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')})` : ''}
               </div>
             </div>
             <div>
@@ -521,7 +521,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 {booking.adminSignature ? <img src={booking.adminSignature} style={{ maxHeight: '50px' }} alt="Admin Signature" /> : null}
               </div>
               <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', fontWeight: 600 }}>
-                {t("Company Representative")} {booking.adminSignedAt ? `(${t("Signed:")} ${new Date(booking.adminSignedAt).toLocaleDateString()})` : ''}
+                {t("Company Representative")} {booking.adminSignedAt ? `(${t("Signed:")} ${new Date(booking.adminSignedAt).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')})` : ''}
               </div>
             </div>
           </div>
@@ -671,11 +671,11 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Schedule")}</span> 
                   <strong style={{ textAlign: 'right' }}>
                     {booking.actualCheckInTime 
-                      ? `${new Date(booking.actualCheckInTime).toLocaleDateString()} ${new Date(booking.actualCheckInTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${t("(Checked-In)")}`
-                      : `${new Date(booking.startDate).toLocaleDateString()} ${t("(Scheduled Start)")}`} <br/>
+                      ? `${new Date(booking.actualCheckInTime).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')} ${new Date(booking.actualCheckInTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${t("(Checked-In)")}`
+                      : `${new Date(booking.startDate).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')} ${t("(Scheduled Start)")}`} <br/>
                     to {booking.actualCheckOutTime 
-                      ? `${new Date(booking.actualCheckOutTime).toLocaleDateString()} ${new Date(booking.actualCheckOutTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${t("(Checked-Out)")}`
-                      : `${new Date(booking.endDate).toLocaleDateString()} ${t("(Scheduled End)")}`}
+                      ? `${new Date(booking.actualCheckOutTime).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')} ${new Date(booking.actualCheckOutTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${t("(Checked-Out)")}`
+                      : `${new Date(booking.endDate).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')} ${t("(Scheduled End)")}`}
                   </strong>
                 </div>
               </div>

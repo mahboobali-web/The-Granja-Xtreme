@@ -21,7 +21,7 @@ interface CustomerMetrics {
 }
 
 export const CustomerDetails: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
@@ -117,7 +117,7 @@ export const CustomerDetails: React.FC = () => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <Calendar size={16} color="#94a3b8" />
-                <div style={{ fontSize: '13px', color: '#334155', fontWeight: 500 }}>{t("Joined")} {new Date(customer.createdAt).toLocaleDateString()}</div>
+                <div style={{ fontSize: '13px', color: '#334155', fontWeight: 500 }}>{t("Joined")} {new Date(customer.createdAt).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')}</div>
               </div>
             </div>
           </div>

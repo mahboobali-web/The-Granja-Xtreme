@@ -8,7 +8,7 @@ interface AdminRevenueReportProps {
 }
 
 export const AdminRevenueReport: React.FC<AdminRevenueReportProps> = ({ onClose }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -137,7 +137,7 @@ export const AdminRevenueReport: React.FC<AdminRevenueReportProps> = ({ onClose 
                     data.map((row, idx) => (
                       <tr key={row._id} style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: idx % 2 === 0 ? 'white' : '#f8fafc' }}>
                         <td style={{ padding: '12px 16px', fontSize: '14px', color: '#0f172a', fontWeight: 600 }}>
-                          {new Date(row._id).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                          {new Date(row._id).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                         </td>
                         <td style={{ padding: '12px 16px', fontSize: '14px', color: '#16a34a', fontWeight: 700, textAlign: 'right' }}>
                           ${row.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

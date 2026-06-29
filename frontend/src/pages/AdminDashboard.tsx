@@ -6,7 +6,7 @@ import { SkeletonGrid } from '../components/Skeletons';
 import { useTranslation } from 'react-i18next';
 
 export const AdminDashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   
@@ -33,7 +33,7 @@ export const AdminDashboard: React.FC = () => {
         
         // Map revenue data to Recharts format
         const formattedRev = revRes.map((r: any) => ({
-          name: new Date(r._id).toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase(),
+          name: new Date(r._id).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short' }).toUpperCase(),
           value: r.total
         }));
         

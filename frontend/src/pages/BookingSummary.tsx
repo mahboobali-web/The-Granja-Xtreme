@@ -115,7 +115,7 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
   };
 
   const formatDateShort = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric'
@@ -123,7 +123,7 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
   };
   
   const formatDateDayOnly = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', {
       month: 'short',
       day: 'numeric'
     });

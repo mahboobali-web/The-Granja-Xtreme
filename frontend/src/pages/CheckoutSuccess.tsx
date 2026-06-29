@@ -28,7 +28,7 @@ interface Booking {
 export const CheckoutSuccess: React.FC = () => {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
@@ -61,7 +61,7 @@ export const CheckoutSuccess: React.FC = () => {
 
   const formatDateTime = (dateStr: string) => {
     const d = new Date(dateStr);
-    return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • 09:00 AM`;
+    return `${d.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • 09:00 AM`;
   };
 
   const calculatePricing = () => {

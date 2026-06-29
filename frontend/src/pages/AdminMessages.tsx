@@ -15,7 +15,7 @@ interface ContactMessage {
 }
 
 export const AdminMessages: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -157,7 +157,7 @@ export const AdminMessages: React.FC = () => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                         <span style={{ fontWeight: m.status === 'read' ? 600 : 700, color: 'var(--on-surface)' }}>{m.firstName} {m.lastName}</span>
                         <span style={{ fontSize: '12px', color: 'var(--on-surface-variant)' }}>
-                          {new Date(m.createdAt).toLocaleDateString()}
+                          {new Date(m.createdAt).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')}
                         </span>
                       </div>
                       <div style={{ fontWeight: m.status === 'read' ? 400 : 600, fontSize: '14px', marginBottom: '4px' }}>{m.email}</div>

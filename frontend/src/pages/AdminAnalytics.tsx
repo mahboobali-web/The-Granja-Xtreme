@@ -9,7 +9,7 @@ import { AdminRevenueReport } from '../components/AdminRevenueReport';
 import { AdminFleetReport } from '../components/AdminFleetReport';
 
 export const AdminAnalytics: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   
@@ -47,17 +47,17 @@ export const AdminAnalytics: React.FC = () => {
           if (analyticsFilter === 'Yearly') {
             const [y, m] = r._id.split('-');
             const d = new Date(parseInt(y), parseInt(m) - 1, 1);
-            dayLabel = d.toLocaleDateString('en-US', { month: 'short' });
+            dayLabel = d.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short' });
           } else if (analyticsFilter === 'Daily') {
             const parts = r._id.split(' ');
             if (parts.length > 1) dayLabel = parts[1];
           } else if (analyticsFilter === 'Monthly') {
             // To prevent off-by-one errors with UTC timezone, we can extract from YYYY-MM-DD
             const [y, m, day] = r._id.split('-');
-            if (day) dayLabel = `${new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+            if (day) dayLabel = `${new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric' })}`;
           } else {
             const [y, m, day] = r._id.split('-');
-            if (day) dayLabel = new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+            if (day) dayLabel = new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short' }).toUpperCase();
           }
           return { day: dayLabel, value: r.total };
         });

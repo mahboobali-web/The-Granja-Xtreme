@@ -56,7 +56,7 @@ interface CustomerDashboardProps {
 
 export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +134,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
   };
 
   const formatDate = (dateStr: string) =>
-    new Date(dateStr).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    new Date(dateStr).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
   /* ─── SIDEBAR (shared across all tabs) ─── */
   const sidebarTabs = [
@@ -515,7 +515,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
 
     const formatDateOnly = (dateString: string) => {
       if (!dateString) return 'N/A';
-      return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      return new Date(dateString).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     };
 
     const pickupText = b.actualCheckInTime ? formatDateTime(b.actualCheckInTime) : formatDateOnly(b.startDate);
@@ -932,8 +932,8 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 Invoice {inv.invoiceNumber}
               </div>
               <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.6 }}>
-                Date: <strong>{new Date(inv.createdAt).toLocaleDateString()}</strong><br />
-                Due Date: <strong style={{ color: '#b91c1c' }}>{new Date(inv.dueDate).toLocaleDateString()}</strong><br />
+                Date: <strong>{new Date(inv.createdAt).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')}</strong><br />
+                Due Date: <strong style={{ color: '#b91c1c' }}>{new Date(inv.dueDate).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')}</strong><br />
               </div>
             </div>
           </div>

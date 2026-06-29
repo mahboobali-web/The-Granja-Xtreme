@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { fetchAPI } from '../utils/api';
 
 export const Story: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('All Photos');
   const filters = ['All Photos', 'Adventure', 'Fleet', 'Team'];
 
@@ -11,8 +11,11 @@ export const Story: React.FC = () => {
 
   const [content, setContent] = useState({
     title: 'Born from the Mud, Refined for the Elite.',
+    titleEs: '',
     text: 'Founded in 2012 by a group of engineers and extreme sports enthusiasts...',
+    textEs: '',
     quote: '"Our mission is to provide an uncompromising adventure..."',
+    quoteEs: '',
     team: [
       { name: 'Marcus Thorne', role: 'CHIEF EXPEDITIONIST', img: '/images/hero_home.jpeg' }
     ]
@@ -72,12 +75,12 @@ export const Story: React.FC = () => {
           <div className="about-story-grid">
             <div>
               <span className="about-label">{t('story_label', 'OUR STORY')}</span>
-              <h2 className="about-title">{t(content.title, content.title)}</h2>
+              <h2 className="about-title">{i18n.language?.startsWith('es') ? (content.titleEs || t(content.title, content.title)) : t(content.title, content.title)}</h2>
               <p className="about-text">
-                {t(content.text, content.text)}
+                {i18n.language?.startsWith('es') ? (content.textEs || t(content.text, content.text)) : t(content.text, content.text)}
               </p>
               <div className="about-quote">
-                <p>{t(content.quote, content.quote)}</p>
+                <p>{i18n.language?.startsWith('es') ? (content.quoteEs || t(content.quote, content.quote)) : t(content.quote, content.quote)}</p>
               </div>
             </div>
             <div className="about-story-image">

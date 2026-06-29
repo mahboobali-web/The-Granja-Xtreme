@@ -18,7 +18,7 @@ interface Employee {
 }
 
 export const AdminEmployees: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -183,7 +183,7 @@ export const AdminEmployees: React.FC = () => {
 
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return 'Never';
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', {
       year: 'numeric', month: 'short', day: '2-digit'
     });
   };

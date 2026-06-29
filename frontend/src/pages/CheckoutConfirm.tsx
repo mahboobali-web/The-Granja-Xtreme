@@ -29,7 +29,7 @@ interface Booking {
 export const CheckoutConfirm: React.FC = () => {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const preferredMethod = queryParams.get('method') || 'Cash';
@@ -119,7 +119,7 @@ export const CheckoutConfirm: React.FC = () => {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', {
       weekday: 'long',
       month: 'short',
       day: 'numeric',

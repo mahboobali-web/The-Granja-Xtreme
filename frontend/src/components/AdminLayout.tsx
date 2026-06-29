@@ -29,7 +29,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
 
   const getFilterDateString = () => {
     const now = new Date();
-    const format = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const format = (d: Date) => d.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     
     if (analyticsFilter === 'Daily') return format(now);
     if (analyticsFilter === 'Weekly') {
@@ -37,7 +37,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
       past.setDate(past.getDate() - 7);
       return `${format(past)} - ${format(now)}`;
     }
-    if (analyticsFilter === 'Monthly') return now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    if (analyticsFilter === 'Monthly') return now.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'long', year: 'numeric' });
     if (analyticsFilter === 'Yearly') return now.getFullYear().toString();
     return format(now);
   };
