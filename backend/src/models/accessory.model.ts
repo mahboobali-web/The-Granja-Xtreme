@@ -6,7 +6,7 @@ export interface IAccessory {
   description: string;
   descriptionEs?: string;
   price: number;
-  quantity?: number;
+  quantity: number;
   images?: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -19,7 +19,7 @@ const accessorySchema = new Schema<IAccessory>(
     description: { type: String, required: true },
     descriptionEs: { type: String },
     price: { type: Number, required: true },
-    quantity: { type: Number }, // Optional quantity for tracking
+    quantity: { type: Number, required: true, default: 0 }, // Quantity for tracking
     images: [{ type: String }]
   },
   { timestamps: true }

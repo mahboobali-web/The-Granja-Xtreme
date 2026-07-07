@@ -105,7 +105,7 @@ export const AccessoryModal: React.FC<AccessoryModalProps> = ({ accessory, onClo
       description,
       descriptionEs,
       price: Number(price),
-      quantity: quantity ? Number(quantity) : undefined,
+      quantity: Number(quantity),
       images
     };
 
@@ -214,8 +214,8 @@ export const AccessoryModal: React.FC<AccessoryModalProps> = ({ accessory, onClo
               <input type="number" step="0.01" value={price} onChange={e => setPrice(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }} placeholder="0.00" />
             </div>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px' }}>{t("Quantity (Optional)")}</label>
-              <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }} placeholder={t("Unlimited")} />
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px' }}>{t("Quantity *")}</label>
+              <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }} placeholder="0" />
             </div>
           </div>
 

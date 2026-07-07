@@ -159,7 +159,7 @@ export const AdminAccessories: React.FC = () => {
                 <th style={{ padding: '16px 24px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t("Name")}</th>
                 <th style={{ padding: '16px 24px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t("Description")}</th>
                 <th style={{ padding: '16px 24px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t("Price")}</th>
-                <th style={{ padding: '16px 24px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t("Quantity (Optional)")}</th>
+                <th style={{ padding: '16px 24px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t("Quantity")}</th>
                 <th style={{ padding: '16px 24px', fontSize: '13px', fontWeight: 700, color: '#475569', textAlign: 'right' }}>{t("Actions")}</th>
               </tr>
             </thead>

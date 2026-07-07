@@ -13,7 +13,7 @@ import { isAtvBooked } from './atv.controller';
 import { z } from 'zod';
 import { Types } from 'mongoose';
 import { getNextTgxNumber } from '../utils/counter.utils';
-
+import { Accessory } from '../models/accessory.model';
 export const adminCreateBooking = async (req: Request, res: Response): Promise<void> => {
   try {
     let { atvId, customerId, startDate, endDate, notes } = req.body;
@@ -920,14 +920,43 @@ export const checkinBooking = async (req: AuthenticatedRequest, res: Response): 
     const booking = await Booking.findById(id).populate('atvId');
     if (!booking) { res.status(404).json({message: 'Booking not found.'}); return; }
 
+    if (booking.status === 'Active') {
+      res.status(400).json({ message: 'Booking is already checked in.' });
+      return;
+    }
+
     booking.status = 'Active';
     booking.actualCheckInTime = actualCheckInTime ? new Date(actualCheckInTime) : new Date();
     if (notes) booking.notes = notes;
 
     if (accessories && Array.isArray(accessories) && accessories.length > 0) {
+      for (const item of accessories) {
+        if (item.accessoryId || item._id) {
+          const accId = item.accessoryId || item._id;
+          const accessoryDoc = await Accessory.findById(accId);
+          if (!accessoryDoc) {
+            res.status(404).json({ message: `Accessory ${item.name} not found.` });
+            return;
+          }
+          if (accessoryDoc.quantity < item.quantity) {
+            res.status(400).json({ message: `Insufficient quantity for ${item.name}. Available: ${accessoryDoc.quantity}` });
+            return;
+          }
+        }
+      }
+
+      for (const item of accessories) {
+        if (item.accessoryId || item._id) {
+          const accId = item.accessoryId || item._id;
+          await Accessory.findByIdAndUpdate(accId, {
+            $inc: { quantity: -Number(item.quantity) }
+          });
+        }
+      }
+
       booking.accessories = accessories;
       
-      const accessoriesSum = accessories.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      const accessoriesSum = accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
       
       if (accessoriesSum > 0) {
         const mainInvoice = await Invoice.findOne({ bookingId: booking._id, invoiceType: 'Rental Charge' });

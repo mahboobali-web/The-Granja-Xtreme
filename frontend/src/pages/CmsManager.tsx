@@ -36,7 +36,9 @@ interface FaqItem {
 
 interface TeamMember {
   name: string;
+  nameEs?: string;
   role: string;
+  roleEs?: string;
   img: string;
 }
 
@@ -254,7 +256,7 @@ export const CmsManager: React.FC = () => {
     updated[index][field] = value;
     setStoryTeam(updated);
   };
-  const addTeam = () => setStoryTeam([...storyTeam, { name: '', role: '', img: '' }]);
+  const addTeam = () => setStoryTeam([...storyTeam, { name: '', nameEs: '', role: '', roleEs: '', img: '' }]);
   const removeTeam = (i: number) => setStoryTeam(storyTeam.filter((_, idx) => idx !== i));
   const handleTeamUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -512,15 +514,21 @@ export const CmsManager: React.FC = () => {
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)', margin: '16px 0' }} />
           <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>{t('adminCms.teamMembers', 'Team Members')}</h3>
           {storyTeam.map((tItem, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr auto', gap: '10px', alignItems: 'center', marginBottom: '12px' }}>
-              <input type="text" value={tItem.name} onChange={(e) => updateTeam(i, 'name', e.target.value)} className="form-input" placeholder={t('adminCms.name', 'Name')} style={{ padding: '8px 12px' }} />
-              <input type="text" value={tItem.role} onChange={(e) => updateTeam(i, 'role', e.target.value)} className="form-input" placeholder={t('adminCms.role', 'Role')} style={{ padding: '8px 12px' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div key={i} style={{ border: '1px solid var(--border-light)', borderRadius: '8px', padding: '12px', marginBottom: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr auto', gap: '12px', alignItems: 'start' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <input type="text" value={tItem.name} onChange={(e) => updateTeam(i, 'name', e.target.value)} className="form-input" placeholder={t('adminCms.name', 'Name')} style={{ padding: '8px 12px' }} />
+                <input type="text" value={tItem.nameEs || ''} onChange={(e) => updateTeam(i, 'nameEs', e.target.value)} className="form-input" placeholder={t('adminCms.nameEs', 'Name (Spanish)')} style={{ padding: '8px 12px' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <input type="text" value={tItem.role} onChange={(e) => updateTeam(i, 'role', e.target.value)} className="form-input" placeholder={t('adminCms.role', 'Role')} style={{ padding: '8px 12px' }} />
+                <input type="text" value={tItem.roleEs || ''} onChange={(e) => updateTeam(i, 'roleEs', e.target.value)} className="form-input" placeholder={t('adminCms.roleEs', 'Role (Spanish)')} style={{ padding: '8px 12px' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <input type="text" value={tItem.img} onChange={(e) => updateTeam(i, 'img', e.target.value)} className="form-input" placeholder={t('adminCms.imageUrl', 'Image URL')} style={{ padding: '8px 12px' }} />
                 <input type="file" accept="image/*" onChange={(e) => handleTeamUpload(i, e)} disabled={uploadingTeam === i} style={{ fontSize: '12px' }} />
                 {uploadingTeam === i && <span style={{ fontSize: '12px', color: 'var(--primary)' }}>{t('adminCms.uploading', 'Uploading...')}</span>}
               </div>
-              <button onClick={() => removeTeam(i)} className="btn btn-danger" style={{ padding: '6px 10px', fontSize: '12px' }}><Trash2 size={14} /></button>
+              <button onClick={() => removeTeam(i)} className="btn btn-danger" style={{ padding: '6px 10px', fontSize: '12px', height: 'fit-content' }}><Trash2 size={14} /></button>
             </div>
           ))}
           <button onClick={addTeam} className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 14px' }}><Plus size={14} /> {t('adminCms.addTeamMember', 'Add Team Member')}</button>

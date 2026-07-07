@@ -17,7 +17,7 @@ export const Story: React.FC = () => {
     quote: '"Our mission is to provide an uncompromising adventure..."',
     quoteEs: '',
     team: [
-      { name: 'Marcus Thorne', role: 'CHIEF EXPEDITIONIST', img: '/images/hero_home.jpeg' }
+      { name: 'Marcus Thorne', nameEs: '', role: 'CHIEF EXPEDITIONIST', roleEs: '', img: '/images/hero_home.jpeg' }
     ]
   });
 
@@ -97,11 +97,11 @@ export const Story: React.FC = () => {
           <p className="about-text" style={{ textAlign: 'center' }}>{t('story_team_desc', 'Expert guides, technical masters, and safety protocols that set the industry standard.')}</p>
           
           <div className="about-team-grid">
-            {content.team.map((member, idx) => (
+            {content.team.map((member: any, idx) => (
               <div key={idx} className="team-card">
                 <img src={member.img} alt={member.name} />
-                <h3>{t(member.name, member.name)}</h3>
-                <p>{t(member.role, member.role)}</p>
+                <h3>{i18n.language?.startsWith('es') ? (member.nameEs || t(member.name, member.name)) : t(member.name, member.name)}</h3>
+                <p>{i18n.language?.startsWith('es') ? (member.roleEs || t(member.role, member.role)) : t(member.role, member.role)}</p>
               </div>
             ))}
           </div>
