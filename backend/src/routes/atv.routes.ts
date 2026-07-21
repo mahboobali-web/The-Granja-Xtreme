@@ -6,6 +6,7 @@ import {
   updateAtv,
   deleteAtv,
   checkAtvAvailability,
+  checkBatchAvailability,
   addMaintenance,
   addDamage,
   getAtvBookedDates
@@ -16,6 +17,7 @@ const router = Router();
 
 // Public routes
 router.get('/', getAllAtvs as any);
+router.post('/batch-availability', checkBatchAvailability as any);
 router.get('/:id', getAtvById as any);
 router.get('/:id/availability', checkAtvAvailability as any);
 router.get('/:id/booked-dates', getAtvBookedDates as any);

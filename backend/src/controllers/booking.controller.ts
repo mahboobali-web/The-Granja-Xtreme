@@ -16,8 +16,21 @@ import { getNextTgxNumber } from '../utils/counter.utils';
 import { Accessory } from '../models/accessory.model';
 export const adminCreateBooking = async (req: Request, res: Response): Promise<void> => {
   try {
-    let { atvId, customerId, startDate, endDate, notes } = req.body;
+    let { atvId, atvIds, customerId, startDate, endDate, notes } = req.body;
     
+    // Normalize to array of ATV IDs
+    let selectedAtvIds: string[] = [];
+    if (Array.isArray(atvIds) && atvIds.length > 0) {
+      selectedAtvIds = atvIds;
+    } else if (atvId) {
+      selectedAtvIds = [atvId];
+    }
+
+    if (selectedAtvIds.length === 0) {
+      res.status(400).json({ message: 'At least one ATV must be selected.' });
+      return;
+    }
+
     if (typeof startDate === 'string') {
       const datePart = startDate.split('T')[0];
       startDate = new Date(`${datePart}T12:00:00-04:00`);
@@ -37,58 +50,83 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     } else {
       endDate = new Date(endDate);
     }
-    
-    const atv = await Atv.findById(atvId);
-    if (!atv) {
-      res.status(404).json({ message: 'ATV not found' });
-      return;
-    }
-    if (atv.status === 'MAINTENANCE' || atv.status === 'DECOMMISSIONED') {
-      res.status(400).json({ message: `This ATV is currently under maintenance or decommissioned.` });
-      return;
-    }
-    
-    // Check overlapping
-    const overlapping = await isAtvBooked(atvId, startDate, endDate);
 
-    if (overlapping) {
-      res.status(400).json({ message: 'ATV is already booked for these dates' });
+    const atvs = await Atv.find({ _id: { $in: selectedAtvIds } });
+    if (atvs.length !== selectedAtvIds.length) {
+      res.status(404).json({ message: 'One or more selected ATVs were not found.' });
+      return;
+    }
+
+    // Check availability for all selected ATVs
+    const conflictingAtvNames: string[] = [];
+    for (const atv of atvs) {
+      if (atv.status === 'MAINTENANCE' || atv.status === 'DECOMMISSIONED') {
+        const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
+        conflictingAtvNames.push(`${label} (Under ${atv.status.toLowerCase()})`);
+        continue;
+      }
+
+      const overlapping = await isAtvBooked(atv._id.toString(), startDate, endDate);
+      if (overlapping) {
+        const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
+        conflictingAtvNames.push(label);
+      }
+    }
+
+    if (conflictingAtvNames.length > 0) {
+      res.status(400).json({ 
+        message: `Double booking conflict: The following vehicle(s) are already booked or unavailable for the selected dates: ${conflictingAtvNames.join(', ')}`,
+        conflictingAtvs: conflictingAtvNames
+      });
       return;
     }
 
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
     const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 3600 * 24)));
-    const baseRate = durationDays * atv.ratePerDay;
-    const tax = Math.round(baseRate * 0.1 * 100) / 100; // 10% tax
-    const securityDeposit = 150; // Flat deposit
-    const total = baseRate + tax + securityDeposit;
 
-    const bookingNumber = await getNextTgxNumber('booking');
-    const booking = await Booking.create({
-      bookingNumber,
-      atvId,
-      customerId,
-      startDate,
-      endDate,
-      status: 'Upcoming',
-      notes
+    const createdBookings = [];
+    const createdInvoices = [];
+
+    for (const atv of atvs) {
+      const baseRate = durationDays * atv.ratePerDay;
+      const tax = Math.round(baseRate * 0.1 * 100) / 100; // 10% tax
+      const securityDeposit = 150; // Flat deposit
+      const total = baseRate + tax + securityDeposit;
+
+      const bookingNumber = await getNextTgxNumber('booking');
+      const booking = await Booking.create({
+        bookingNumber,
+        atvId: atv._id,
+        customerId,
+        startDate,
+        endDate,
+        status: 'Upcoming',
+        notes
+      });
+
+      const invoiceNumber = await getNextTgxNumber('invoice');
+      const invoice = await Invoice.create({
+        invoiceNumber,
+        bookingId: booking._id,
+        customerId,
+        atvId: atv._id,
+        invoiceType: 'Rental Charge',
+        description: `Admin created reservation for ${atv.name}`,
+        amount: total,
+        balance: total,
+        status: 'Unpaid',
+        dueDate: new Date(startDate)
+      });
+
+      createdBookings.push(booking);
+      createdInvoices.push(invoice);
+    }
+
+    res.status(201).json({
+      _id: createdBookings[0]._id, // First booking ID for signature association
+      bookings: createdBookings,
+      invoices: createdInvoices
     });
-
-    const invoiceNumber = await getNextTgxNumber('invoice');
-    await Invoice.create({
-      invoiceNumber,
-      bookingId: booking._id,
-      customerId,
-      atvId,
-      invoiceType: 'Rental Charge',
-      description: 'Admin created reservation',
-      amount: total,
-      balance: total,
-      status: 'Unpaid',
-      dueDate: new Date(startDate)
-    });
-
-    res.status(201).json(booking);
   } catch (error) {
     res.status(500).json({ message: 'Failed to create reservation', error: (error as Error).message });
   }

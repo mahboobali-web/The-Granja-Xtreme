@@ -199,6 +199,82 @@ export const checkAtvAvailability = async (req: Request, res: Response): Promise
   }
 };
 
+export const checkBatchAvailability = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { atvIds, start, end } = req.body;
+    if (!start || !end) {
+      res.status(400).json({ message: 'Start and end dates are required.' });
+      return;
+    }
+
+    let startDate: Date;
+    let endDate: Date;
+
+    if (typeof start === 'string') {
+      const datePart = start.split('T')[0];
+      startDate = new Date(`${datePart}T12:00:00-04:00`);
+    } else {
+      startDate = new Date(start);
+    }
+
+    if (typeof end === 'string') {
+      const datePart = end.split('T')[0];
+      endDate = new Date(`${datePart}T12:00:00-04:00`);
+    } else {
+      endDate = new Date(end);
+    }
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      res.status(400).json({ message: 'Invalid start or end date format.' });
+      return;
+    }
+
+    let targetAtvs;
+    if (Array.isArray(atvIds) && atvIds.length > 0) {
+      targetAtvs = await Atv.find({ _id: { $in: atvIds } });
+    } else {
+      targetAtvs = await Atv.find();
+    }
+
+    const results = await Promise.all(
+      targetAtvs.map(async (atv) => {
+        if (atv.status === 'MAINTENANCE' || atv.status === 'DECOMMISSIONED') {
+          return {
+            atvId: atv._id.toString(),
+            atvName: atv.name,
+            model: atv.model,
+            unitNumber: atv.unitNumber,
+            available: false,
+            reason: `ATV is under maintenance/decommissioned`
+          };
+        }
+
+        const booked = await isAtvBooked(atv._id.toString(), startDate, endDate);
+        return {
+          atvId: atv._id.toString(),
+          atvName: atv.name,
+          model: atv.model,
+          unitNumber: atv.unitNumber,
+          available: !booked,
+          reason: booked ? 'Already reserved for selected dates' : 'Available'
+        };
+      })
+    );
+
+    const allAvailable = results.every(r => r.available);
+    const conflicting = results.filter(r => !r.available);
+
+    res.status(200).json({
+      allAvailable,
+      conflictingAtvs: conflicting,
+      details: results
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Batch availability check error.', error: (error as Error).message });
+  }
+};
+
+
 export const addMaintenance = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
