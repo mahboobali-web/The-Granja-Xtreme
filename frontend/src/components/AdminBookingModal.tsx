@@ -441,7 +441,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        justify: 'space-between',
+                        justifyContent: 'space-between',
                         padding: '10px 14px',
                         backgroundColor: rowBg,
                         border: `1px solid ${borderColor}`,
