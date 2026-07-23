@@ -609,8 +609,8 @@ export const signWaiver = async (req: AuthenticatedRequest, res: Response): Prom
     await Invoice.create({
       invoiceNumber,
       bookingId: booking._id,
-      customerId: booking.customerId._id,
-      atvId: booking.atvId._id,
+      customerId: (booking.customerId as any)._id,
+      atvId: (booking.atvId as any)?._id || (booking.atvIds && booking.atvIds.length > 0 ? (booking.atvIds[0] as any)._id : undefined),
       invoiceType: 'Rental Charge',
       description: 'Standard ATV Rental',
       amount: total,
@@ -801,10 +801,13 @@ export const updateBookingStatus = async (req: AuthenticatedRequest, res: Respon
     }
 
     if (status === 'Upcoming' || status === 'Active') {
-      const isOverlapping = await isAtvBooked(booking.atvId.toString(), booking.startDate, booking.endDate, booking._id.toString());
-      if (isOverlapping) {
-        res.status(400).json({ message: 'Cannot update status. The ATV is already booked for these dates.' });
-        return;
+      const atvsToCheck = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+      for (const id of atvsToCheck) {
+        const isOverlapping = await isAtvBooked(id.toString(), booking.startDate, booking.endDate, booking._id.toString());
+        if (isOverlapping) {
+          res.status(400).json({ message: 'Cannot update status. One or more ATVs are already booked for these dates.' });
+          return;
+        }
       }
     }
 
@@ -813,16 +816,22 @@ export const updateBookingStatus = async (req: AuthenticatedRequest, res: Respon
 
     // Sync ATV state when booking status is updated manually
     if (status === 'Cancelled' || status === 'Completed') {
-      const atv = await Atv.findById(booking.atvId);
-      if (atv && atv.status === 'RENTED') {
-        atv.status = 'AVAILABLE';
-        await atv.save();
+      const atvsToUpdate = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+      for (const id of atvsToUpdate) {
+        const atv = await Atv.findById(id);
+        if (atv && atv.status === 'RENTED') {
+          atv.status = 'AVAILABLE';
+          await atv.save();
+        }
       }
     } else if (status === 'Active') {
-      const atv = await Atv.findById(booking.atvId);
-      if (atv && atv.status === 'AVAILABLE') {
-        atv.status = 'RENTED';
-        await atv.save();
+      const atvsToUpdate = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+      for (const id of atvsToUpdate) {
+        const atv = await Atv.findById(id);
+        if (atv && atv.status === 'AVAILABLE') {
+          atv.status = 'RENTED';
+          await atv.save();
+        }
       }
     }
 
