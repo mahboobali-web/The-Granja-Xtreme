@@ -24,6 +24,7 @@ interface Booking {
     ratePerDay: number;
     images?: string[];
   };
+  atvIds?: any[];
 }
 
 export const CheckoutConfirm: React.FC = () => {
@@ -143,8 +144,6 @@ export const CheckoutConfirm: React.FC = () => {
     const total = baseRate + passesFee + tax;
     return { baseRate, passesFee, tax, total, atvs };
   };
-
-  const pricing = calculatePricing();
 
   const pricing = calculatePricing();
 

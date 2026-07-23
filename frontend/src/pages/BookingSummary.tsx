@@ -28,6 +28,7 @@ interface Booking {
     ratePerDay: number;
     images?: string[];
   };
+  atvIds?: any[];
 }
 
 export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {

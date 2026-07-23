@@ -19,6 +19,7 @@ interface Booking {
     currentOdometer: number;
     currentFuelLevel: number;
   };
+  atvIds?: any[];
 }
 
 export const InspectionForm: React.FC = () => {
@@ -216,7 +217,7 @@ export const InspectionForm: React.FC = () => {
             ATV {type === 'CHECK_OUT' ? 'Check-Out Departure' : 'Return Check-In'} Audit
           </h2>
           <p style={{ color: 'var(--on-surface-variant)', fontSize: '14px', marginTop: '6px' }}>
-            Booking ID: <strong>{booking._id}</strong> | ATV: <strong>{booking.atvIds?.length > 1 ? `${booking.atvIds.length} ATVs` : formatAtvName(booking.atvIds?.[0] || booking.atvId)}</strong> | Client: <strong>{booking.customerId.firstName} {booking.customerId.lastName}</strong>
+            Booking ID: <strong>{booking._id}</strong> | ATV: <strong>{(booking.atvIds?.length || 0) > 1 ? `${booking.atvIds!.length} ATVs` : formatAtvName(booking.atvIds?.[0] || booking.atvId)}</strong> | Client: <strong>{booking.customerId.firstName} {booking.customerId.lastName}</strong>
           </p>
         </div>
 

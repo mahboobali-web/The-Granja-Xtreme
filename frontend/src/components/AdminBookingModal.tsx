@@ -165,7 +165,6 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
 
     let totalBase = 0;
     let totalTax = 0;
-    let totalDeposit = 0;
 
     const items = selectedAtvIds.map(id => {
       const atv = atvs.find(a => a._id === id);
