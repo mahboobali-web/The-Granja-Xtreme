@@ -50,6 +50,7 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [cancellationPolicy, setCancellationPolicy] = useState('Free cancellation 48 hours prior.');
+  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
 
   // Form State
   const [firstName, setFirstName] = useState(user?.firstName || '');
@@ -91,8 +92,11 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
           fetchAPI('/settings').catch(() => null)
         ]);
         setBooking(bookingData);
-        if (settingsData?.cancellationPolicy) {
-          setCancellationPolicy(settingsData.cancellationPolicy);
+        if (settingsData) {
+          setSettings(settingsData);
+          if (settingsData.cancellationPolicy) {
+            setCancellationPolicy(settingsData.cancellationPolicy);
+          }
         }
       } catch (e: any) {
         console.error(e);
@@ -130,15 +134,16 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
   };
 
   const calculatePricing = () => {
-    if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0 };
+    if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0, atvs: [], days: 0 };
     const start = new Date(booking.startDate);
     const end = new Date(booking.endDate);
     const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
-    const baseRate = days * (booking.atvId.ratePerDay || 0);
-    const passesFee = 45;
-    const tax = Math.round((baseRate + passesFee) * 0.1 * 100) / 100;
+    const atvs = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+    const baseRate = days * atvs.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
+    const passesFee = 45 * atvs.length;
+    const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
     const total = baseRate + passesFee + tax;
-    return { baseRate, passesFee, tax, total };
+    return { baseRate, passesFee, tax, total, atvs, days };
   };
 
   const pricing = calculatePricing();
@@ -336,7 +341,7 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px' }}>
-            <Link to={`/atv/${booking.atvId._id}`} style={{ color: '#4b5563', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Link to={`/`} style={{ color: '#4b5563', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <span dangerouslySetInnerHTML={{ __html: t('&larr; Back to Dates') }} />
             </Link>
             <button type="submit" style={{
@@ -369,11 +374,11 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
             top: '24px'
           }}>
             <div style={{ position: 'relative', height: '200px' }}>
-              <img src={booking.atvId.images?.[0] || "/images/vasile-valcan-1HqixV1agUw-unsplash.jpg"} alt="ATV" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={pricing.atvs[0]?.images?.[0] || "/images/vasile-valcan-1HqixV1agUw-unsplash.jpg"} alt="ATV" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}></div>
               <div style={{ position: 'absolute', bottom: '20px', left: '24px', color: 'white' }}>
                 <span style={{ backgroundColor: '#fef08a', color: '#854d0e', fontSize: '10px', fontWeight: 800, padding: '4px 8px', borderRadius: '4px', display: 'inline-block', marginBottom: '8px' }}>{t("BEST SELLER")}</span>
-                <h3 style={{ fontSize: '20px', fontWeight: 700 }}>{formatAtvName(booking.atvId)}</h3>
+                <h3 style={{ fontSize: '20px', fontWeight: 700 }}>{pricing.atvs.map((a: any) => formatAtvName(a)).join(', ')}</h3>
               </div>
             </div>
 

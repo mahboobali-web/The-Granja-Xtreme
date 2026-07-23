@@ -94,8 +94,8 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   const [bookingError, setBookingError] = useState<string>('');
   const [submitting, setSubmitting] = useState(false);
   const [bookedDates, setBookedDates] = useState<{startDate: string, endDate: string}[]>([]);
+  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
   
-
   
   // Custom states
   const [activeImgIndex, setActiveImgIndex] = useState(0);
@@ -132,6 +132,12 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
         if (Array.isArray(allAtvs)) {
           const filtered = allAtvs.filter((item: ATV) => item._id !== id && item.status === 'AVAILABLE').slice(0, 3);
           setRelatedAtvs(filtered);
+        }
+
+        // Fetch global settings
+        const settingsData = await fetchAPI('/settings').catch(() => null);
+        if (settingsData) {
+          setSettings(settingsData);
         }
       } catch (e) {
         console.error(e);
@@ -226,8 +232,8 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
     const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
     const baseRate = days * atv.ratePerDay;
     const passesFee = 45.00; // Trail pass
-    const tax = Math.round((baseRate + passesFee) * 0.1 * 100) / 100;
-    const securityDeposit = 150.00;
+    const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
+    const securityDeposit = settings.securityDeposit || 150.00;
     const total = baseRate + passesFee + tax;
     return { days, baseRate, passesFee, tax, securityDeposit, total };
   };

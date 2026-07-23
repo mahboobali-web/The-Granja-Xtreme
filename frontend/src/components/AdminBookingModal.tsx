@@ -39,6 +39,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
   const [step, setStep] = useState(1);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [atvs, setAtvs] = useState<ATV[]>([]);
+  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
   
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [selectedAtvIds, setSelectedAtvIds] = useState<string[]>([]);
@@ -57,12 +58,14 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [cData, aData] = await Promise.all([
+        const [cData, aData, sData] = await Promise.all([
           fetchAPI('/auth/customers'),
-          fetchAPI('/atvs')
+          fetchAPI('/atvs'),
+          fetchAPI('/settings').catch(() => null)
         ]);
         setCustomers(cData);
         setAtvs(aData);
+        if (sData) setSettings(sData);
       } catch (e) {
         console.error(e);
       }
@@ -169,13 +172,12 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
       if (!atv) return null;
 
       const baseRate = days * atv.ratePerDay;
-      const tax = Math.round(baseRate * 0.1 * 100) / 100;
-      const securityDeposit = 150;
-      const itemTotal = baseRate + tax + securityDeposit;
+      const tax = Math.round(baseRate * (settings.baseTaxRate / 100) * 100) / 100;
+      const securityDeposit = 0; // Deposit is added once for the whole booking, not per item
+      const itemTotal = baseRate + tax;
 
       totalBase += baseRate;
       totalTax += tax;
-      totalDeposit += securityDeposit;
 
       return {
         atv,
@@ -187,6 +189,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
       };
     }).filter(Boolean);
 
+    const totalDeposit = settings.securityDeposit || 150;
     const grandTotal = totalBase + totalTax + totalDeposit;
     return { items, grandTotal, totalBase, totalTax, totalDeposit };
   };
@@ -197,6 +200,12 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
 
     if (selectedAtvIds.length === 0) {
       setError('Please select at least one vehicle.');
+      setLoading(false);
+      return;
+    }
+
+    if (!selectedCustomerId) {
+      setError('Please select a customer or create a new one first.');
       setLoading(false);
       return;
     }
@@ -538,12 +547,12 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
                   <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalBase.toFixed(2)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>{t('tax_10', 'Tax (10%):')}</span>
+                  <span>{t('tax_label', `Tax (${settings.baseTaxRate}%):`)}</span>
                   <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalTax.toFixed(2)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>{t('refundable_security_deposit', 'Refundable Security Deposit')} (${150} × {selectedAtvIds.length}):</span>
-                  <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalDeposit.toFixed(2)}</span>
+                  <span>{t('refundable_security_deposit', 'Refundable Security Deposit')}:</span>
+                  <span style={{ fontWeight: 600 }}>${totals.totalDeposit.toFixed(2)}</span>
                 </div>
               </div>
 

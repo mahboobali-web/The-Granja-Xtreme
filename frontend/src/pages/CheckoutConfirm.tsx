@@ -50,12 +50,17 @@ export const CheckoutConfirm: React.FC = () => {
   });
 
   const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
 
   useEffect(() => {
     const loadBooking = async () => {
       try {
-        const data = await fetchAPI(`/bookings/${bookingId}`);
+        const [data, settingsData] = await Promise.all([
+          fetchAPI(`/bookings/${bookingId}`),
+          fetchAPI('/settings').catch(() => null)
+        ]);
         setBooking(data);
+        if (settingsData) setSettings(settingsData);
         if (data.status === 'Pending Signature') {
           setAgreedToTerms(true);
           setShowSignatureModal(true);
@@ -130,13 +135,16 @@ export const CheckoutConfirm: React.FC = () => {
   const durationDays = booking ? Math.max(1, Math.ceil((new Date(booking.endDate).getTime() - new Date(booking.startDate).getTime()) / (1000 * 60 * 60 * 24))) : 1;
 
   const calculatePricing = () => {
-    if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0 };
-    const baseRate = durationDays * (booking.atvId.ratePerDay || 0);
-    const passesFee = 45; // Just combining the 35 + 10 into 45 or keeping the breakdown
-    const tax = Math.round((baseRate + passesFee) * 0.1 * 100) / 100;
+    if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0, atvs: [] };
+    const atvs = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+    const baseRate = durationDays * atvs.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
+    const passesFee = 45 * atvs.length; // Just combining the 35 + 10 into 45 or keeping the breakdown
+    const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
     const total = baseRate + passesFee + tax;
-    return { baseRate, passesFee, tax, total };
+    return { baseRate, passesFee, tax, total, atvs };
   };
+
+  const pricing = calculatePricing();
 
   const pricing = calculatePricing();
 
@@ -192,44 +200,46 @@ export const CheckoutConfirm: React.FC = () => {
         {/* Left Pane */}
         <div style={{ flex: '1.4', display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
-          {/* ATV Card */}
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            display: 'flex',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-          }}>
-            <div style={{ position: 'relative', width: '40%', minHeight: '220px' }}>
-              <img src={booking.atvId.images?.[0] || "/images/vasile-valcan-1HqixV1agUw-unsplash.jpg"} alt="ATV" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{ position: 'absolute', top: '16px', left: '16px', backgroundColor: '#fef08a', color: '#854d0e', fontSize: '10px', fontWeight: 800, padding: '4px 10px', borderRadius: '4px' }}>
-                {t("PREMIUM SELECTION")}
-              </div>
-            </div>
-            <div style={{ width: '60%', padding: '24px', display: 'flex', flexDirection: 'column' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>{formatAtvName(booking.atvId)}</h2>
-              <p style={{ color: '#64748b', fontSize: '13px', lineHeight: '1.6', marginBottom: '24px', flex: 1 }}>
-                {t("The pinnacle of off-road engineering. Premium performance shocks, and intelligent Throttle Control (iTC). Model: ")}{booking.atvId.model}.
-              </p>
-              
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <div style={{ backgroundColor: '#eff6ff', borderRadius: '8px', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Clock size={16} style={{ color: '#3b82f6' }} />
-                  <div>
-                    <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>{t("Duration")}</div>
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>{durationDays === 1 ? t("Full Day (8am - 6pm)") : `${durationDays} ${t("Days")}`}</div>
-                  </div>
-                </div>
-                <div style={{ backgroundColor: '#eff6ff', borderRadius: '8px', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Users size={16} style={{ color: '#3b82f6' }} />
-                  <div>
-                    <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>{t("Capacity")}</div>
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>{t("2 Persons")}</div>
-                  </div>
+          {pricing.atvs.map((atv: any, index: number) => (
+            <div key={atv._id || index} style={{
+              backgroundColor: 'white',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              display: 'flex',
+              boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
+              marginBottom: index < pricing.atvs.length - 1 ? '16px' : '0'
+            }}>
+              <div style={{ position: 'relative', width: '40%', minHeight: '220px' }}>
+                <img src={atv.images?.[0] || "/images/vasile-valcan-1HqixV1agUw-unsplash.jpg"} alt="ATV" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', top: '16px', left: '16px', backgroundColor: '#fef08a', color: '#854d0e', fontSize: '10px', fontWeight: 800, padding: '4px 10px', borderRadius: '4px' }}>
+                  {t("PREMIUM SELECTION")}
                 </div>
               </div>
+              <div style={{ width: '60%', padding: '24px', display: 'flex', flexDirection: 'column' }}>
+                <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>{formatAtvName(atv)}</h2>
+                <p style={{ color: '#64748b', fontSize: '13px', lineHeight: '1.6', marginBottom: '24px', flex: 1 }}>
+                  {t("The pinnacle of off-road engineering. Premium performance shocks, and intelligent Throttle Control (iTC). Model: ")}{atv.model}.
+                </p>
+                
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <div style={{ backgroundColor: '#eff6ff', borderRadius: '8px', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Clock size={16} style={{ color: '#3b82f6' }} />
+                    <div>
+                      <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>{t("Duration")}</div>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>{durationDays === 1 ? t("Full Day (8am - 6pm)") : `${durationDays} ${t("Days")}`}</div>
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: '#eff6ff', borderRadius: '8px', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Users size={16} style={{ color: '#3b82f6' }} />
+                    <div>
+                      <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>{t("Capacity")}</div>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>{t("2 Persons")}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
 
           {/* Reservation Details Card */}
           <div style={{
@@ -313,7 +323,7 @@ export const CheckoutConfirm: React.FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '13px', color: '#475569', marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>{t("Subtotal")}</span>
-                <span style={{ fontWeight: 600, color: '#0f172a' }}>${(pricing.baseRate + 45.00).toFixed(2)}</span>
+                <span style={{ fontWeight: 600, color: '#0f172a' }}>${(pricing.baseRate + pricing.passesFee).toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>{t("Taxes (10%)")}</span>

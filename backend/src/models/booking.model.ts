@@ -3,7 +3,8 @@ import { Schema, model, Types } from 'mongoose';
 export interface IBooking {
   bookingNumber: string;
   customerId: Types.ObjectId;
-  atvId: Types.ObjectId;
+  atvId?: Types.ObjectId;
+  atvIds?: Types.ObjectId[];
   startDate: Date;
   endDate: Date;
   actualCheckInTime?: Date;
@@ -39,7 +40,8 @@ const bookingSchema = new Schema<IBooking>(
   {
     bookingNumber: { type: String, required: true, unique: true },
     customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    atvId: { type: Schema.Types.ObjectId, ref: 'Atv', required: true },
+    atvId: { type: Schema.Types.ObjectId, ref: 'Atv' },
+    atvIds: [{ type: Schema.Types.ObjectId, ref: 'Atv' }],
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     actualCheckInTime: { type: Date },

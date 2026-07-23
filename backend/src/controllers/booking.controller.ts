@@ -84,48 +84,47 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
     const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 3600 * 24)));
 
-    const createdBookings = [];
-    const createdInvoices = [];
-
+    let totalBase = 0;
     for (const atv of atvs) {
-      const baseRate = durationDays * atv.ratePerDay;
-      const tax = Math.round(baseRate * 0.1 * 100) / 100; // 10% tax
-      const securityDeposit = 150; // Flat deposit
-      const total = baseRate + tax + securityDeposit;
-
-      const bookingNumber = await getNextTgxNumber('booking');
-      const booking = await Booking.create({
-        bookingNumber,
-        atvId: atv._id,
-        customerId,
-        startDate,
-        endDate,
-        status: 'Upcoming',
-        notes
-      });
-
-      const invoiceNumber = await getNextTgxNumber('invoice');
-      const invoice = await Invoice.create({
-        invoiceNumber,
-        bookingId: booking._id,
-        customerId,
-        atvId: atv._id,
-        invoiceType: 'Rental Charge',
-        description: `Admin created reservation for ${atv.name}`,
-        amount: total,
-        balance: total,
-        status: 'Unpaid',
-        dueDate: new Date(startDate)
-      });
-
-      createdBookings.push(booking);
-      createdInvoices.push(invoice);
+      totalBase += durationDays * atv.ratePerDay;
     }
 
+    const settings = await Settings.findOne();
+    const taxRate = settings ? settings.baseTaxRate : 10;
+    const depositPerAtv = settings ? settings.securityDeposit : 150;
+
+    const tax = Math.round(totalBase * (taxRate / 100) * 100) / 100;
+    const securityDeposit = depositPerAtv; // Flat fee per booking
+    const total = totalBase + tax + securityDeposit;
+
+    const bookingNumber = await getNextTgxNumber('booking');
+    const booking = await Booking.create({
+      bookingNumber,
+      atvIds: atvs.map(a => a._id),
+      customerId,
+      startDate,
+      endDate,
+      status: 'Upcoming',
+      notes
+    });
+
+    const invoiceNumber = await getNextTgxNumber('invoice');
+    const invoice = await Invoice.create({
+      invoiceNumber,
+      bookingId: booking._id,
+      customerId,
+      invoiceType: 'Rental Charge',
+      description: `Admin created reservation for ${atvs.length} vehicle(s)`,
+      amount: total,
+      balance: total,
+      status: 'Unpaid',
+      dueDate: new Date(startDate)
+    });
+
     res.status(201).json({
-      _id: createdBookings[0]._id, // First booking ID for signature association
-      bookings: createdBookings,
-      invoices: createdInvoices
+      _id: booking._id,
+      bookings: [booking],
+      invoices: [invoice]
     });
   } catch (error) {
     res.status(500).json({ message: 'Failed to create reservation', error: (error as Error).message });
@@ -266,6 +265,7 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response): P
       bookingNumber,
       customerId: req.user._id,
       atvId: new Types.ObjectId(atvId),
+      atvIds: [new Types.ObjectId(atvId)],
       startDate,
       endDate,
       status: 'Pending', // PENDING waiver signature and payment
@@ -420,7 +420,7 @@ export const getMyBookings = async (req: AuthenticatedRequest, res: Response): P
     }
 
     const bookings = await Booking.find({ customerId: req.user._id, status: { $ne: 'Pending' } })
-      .populate('atvId')
+      .populate(['atvId', 'atvIds'])
       .sort({ createdAt: -1 })
       .lean();
 
@@ -454,7 +454,7 @@ export const getBookingById = async (req: AuthenticatedRequest, res: Response): 
   try {
     const { id } = req.params;
     const booking = await Booking.findById(id)
-      .populate('atvId')
+      .populate(['atvId', 'atvIds'])
       .populate('customerId', 'firstName lastName email phone passport')
       .populate('signedWaiverId')
       .populate('checkOutLogId')
@@ -512,7 +512,7 @@ export const getBookingById = async (req: AuthenticatedRequest, res: Response): 
 export const getAllBookings = async (_req: Request, res: Response): Promise<void> => {
   try {
     const bookings = await Booking.find({ status: { $ne: 'Pending' } })
-      .populate('atvId')
+      .populate(['atvId', 'atvIds'])
       .populate('customerId', 'firstName lastName email phone passport')
       .sort({ createdAt: -1 })
       .lean();
@@ -553,7 +553,7 @@ export const signWaiver = async (req: AuthenticatedRequest, res: Response): Prom
 
     const { customerName, agreedToTerms, termsVersion, passport, firstName, lastName, email, phone } = parsed.data;
 
-    const booking = await Booking.findById(id).populate('atvId').populate('customerId');
+    const booking = await Booking.findById(id).populate(['atvId', 'atvIds']).populate('customerId');
     if (!booking) {
       res.status(404).json({ message: 'Booking not found.' });
       return;
@@ -640,7 +640,7 @@ export const uploadCustomerSignature = async (req: AuthenticatedRequest, res: Re
       return;
     }
 
-    const booking = await Booking.findById(id).populate('atvId').populate('customerId');
+    const booking = await Booking.findById(id).populate(['atvId', 'atvIds']).populate('customerId');
     if (!booking) {
       res.status(404).json({ message: 'Booking not found.' });
       return;
@@ -837,7 +837,7 @@ export const updateBookingStatus = async (req: AuthenticatedRequest, res: Respon
 export const getWaiverPDF = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const booking = await Booking.findById(id).populate('atvId').populate('customerId');
+    const booking = await Booking.findById(id).populate(['atvId', 'atvIds']).populate('customerId');
     if (!booking) {
       res.status(404).json({ message: 'Booking not found.' });
       return;
@@ -870,7 +870,7 @@ export const getWaiverPDF = async (req: AuthenticatedRequest, res: Response): Pr
 export const getReceiptPDF = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const booking = await Booking.findById(id).populate('atvId').populate('customerId');
+    const booking = await Booking.findById(id).populate(['atvId', 'atvIds']).populate('customerId');
     if (!booking) {
       res.status(404).json({ message: 'Booking not found.' });
       return;
@@ -955,7 +955,7 @@ export const checkinBooking = async (req: AuthenticatedRequest, res: Response): 
     const { id } = req.params;
     const { actualCheckInTime, notes, accessories } = req.body;
     
-    const booking = await Booking.findById(id).populate('atvId');
+    const booking = await Booking.findById(id).populate(['atvId', 'atvIds']);
     if (!booking) { res.status(404).json({message: 'Booking not found.'}); return; }
 
     if (booking.status === 'Active') {
@@ -1045,7 +1045,7 @@ export const checkoutBooking = async (req: AuthenticatedRequest, res: Response):
     const { id } = req.params;
     const { actualCheckOutTime, extraCharges, processRefund } = req.body;
 
-    const booking = await Booking.findById(id).populate('atvId');
+    const booking = await Booking.findById(id).populate(['atvId', 'atvIds']);
     if (!booking) { res.status(404).json({message: 'Booking not found.'}); return; }
 
     booking.status = 'Completed';

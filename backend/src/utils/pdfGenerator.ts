@@ -58,7 +58,10 @@ export const generateWaiverPDF = async (booking: any, waiver: any, language: 'EN
     doc.text(`Contract No: ${waiver.contractNumber}`);
     doc.text(`Booking No: ${booking.bookingNumber}`);
     doc.text(`Customer Name: ${clientName}`);
-    doc.text(`ATV Model: ${formatAtvName(booking.atvId)}`);
+    const atvs = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+    const atvNames = atvs.map(formatAtvName).join(', ');
+    
+    doc.text(`ATV Model: ${atvNames}`);
     doc.text(`Rental Start: ${formatTZDate(booking.startDate)}`);
     doc.text(`Rental End: ${formatTZDate(booking.endDate)}`);
     
@@ -207,7 +210,10 @@ export const generateReceiptPDF = async (booking: any): Promise<Buffer> => {
     doc.text(`Customer Name: ${clientName}`);
     doc.text(`Passport / ID: ${booking.customerId?.passport || 'N/A'}`);
     doc.text(`Date Issued: ${formatTZDate(new Date())}`);
-    doc.text(`ATV Model: ${formatAtvName(booking.atvId)}`);
+    const atvs = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+    const atvNames = atvs.map(formatAtvName).join(', ');
+    
+    doc.text(`ATV Model: ${atvNames}`);
     doc.text(`Scheduled: ${formatTZDateTime(booking.startDate)} to ${formatTZDateTime(booking.endDate)}`);
     doc.text(`Actual Times: ${booking.actualCheckInTime ? formatTZDateTime(booking.actualCheckInTime) : 'N/A'} to ${booking.actualCheckOutTime ? formatTZDateTime(booking.actualCheckOutTime) : 'N/A'}`);
     

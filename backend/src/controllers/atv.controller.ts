@@ -49,7 +49,7 @@ export const isAtvBooked = async (
   excludeBookingId?: string
 ): Promise<boolean> => {
   const query: any = {
-    atvId,
+    $or: [{ atvId }, { atvIds: atvId }],
     status: { $in: ['Pending', 'Pending Signature', 'Customer Signed', 'Upcoming', 'Active'] },
     startDate: { $lte: endDate },
     endDate: { $gte: startDate }

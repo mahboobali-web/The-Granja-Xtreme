@@ -155,8 +155,9 @@ export const InspectionForm: React.FC = () => {
     e.preventDefault();
     if (!booking) return;
 
-    if (odometer < booking.atvId.currentOdometer) {
-      setErrorMsg(`Odometer cannot be less than previous reading (${booking.atvId.currentOdometer} miles).`);
+    const primaryAtv = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds[0] : booking.atvId;
+    if (primaryAtv && odometer < primaryAtv.currentOdometer) {
+      setErrorMsg(`Odometer cannot be less than previous reading (${primaryAtv.currentOdometer} miles).`);
       return;
     }
 
@@ -215,7 +216,7 @@ export const InspectionForm: React.FC = () => {
             ATV {type === 'CHECK_OUT' ? 'Check-Out Departure' : 'Return Check-In'} Audit
           </h2>
           <p style={{ color: 'var(--on-surface-variant)', fontSize: '14px', marginTop: '6px' }}>
-            Booking ID: <strong>{booking._id}</strong> | ATV: <strong>{formatAtvName(booking.atvId)}</strong> | Client: <strong>{booking.customerId.firstName} {booking.customerId.lastName}</strong>
+            Booking ID: <strong>{booking._id}</strong> | ATV: <strong>{booking.atvIds?.length > 1 ? `${booking.atvIds.length} ATVs` : formatAtvName(booking.atvIds?.[0] || booking.atvId)}</strong> | Client: <strong>{booking.customerId.firstName} {booking.customerId.lastName}</strong>
           </p>
         </div>
 
@@ -233,11 +234,11 @@ export const InspectionForm: React.FC = () => {
                   value={odometer}
                   onChange={(e) => setOdometer(parseInt(e.target.value) || 0)}
                   className="form-input"
-                  min={booking.atvId.currentOdometer}
+                  min={(booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds[0] : booking.atvId)?.currentOdometer || 0}
                   required
                 />
                 <span style={{ fontSize: '11px', color: 'var(--on-surface-variant)', display: 'block', marginTop: '4px' }}>
-                  Previous check-out: {booking.atvId.currentOdometer} miles.
+                  Previous check-out: {(booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds[0] : booking.atvId)?.currentOdometer || 0} miles.
                 </span>
               </div>
 

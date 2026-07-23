@@ -34,12 +34,17 @@ export const CheckoutSuccess: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
+  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
 
   useEffect(() => {
     const loadBooking = async () => {
       try {
-        const data = await fetchAPI(`/bookings/${bookingId}`);
+        const [data, settingsData] = await Promise.all([
+          fetchAPI(`/bookings/${bookingId}`),
+          fetchAPI('/settings').catch(() => null)
+        ]);
         setBooking(data);
+        if (settingsData) setSettings(settingsData);
       } catch (e: any) {
         console.error(e);
         setErrorMsg(e.message || 'Failed to fetch booking details.');
@@ -71,7 +76,7 @@ export const CheckoutSuccess: React.FC = () => {
     const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
     const baseRate = days * (booking.atvId.ratePerDay || 0);
     const passesFee = 45;
-    const tax = Math.round((baseRate + passesFee) * 0.1 * 100) / 100;
+    const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
     const total = baseRate + passesFee + tax;
     return { baseRate, passesFee, tax, total };
   };
