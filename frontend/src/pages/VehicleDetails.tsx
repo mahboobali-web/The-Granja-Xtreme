@@ -229,7 +229,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
     if (!atv || !startDate || !endDate) return null;
     const start = new Date(startDate);
     const end = new Date(endDate);
-    const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
     const baseRate = days * atv.ratePerDay;
     const passesFee = 45.00; // Trail pass
     const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;

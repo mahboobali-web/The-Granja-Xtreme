@@ -82,7 +82,7 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     }
 
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
-    const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 3600 * 24)));
+    const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 3600 * 24)) + 1);
 
     let totalBase = 0;
     for (const atv of atvs) {

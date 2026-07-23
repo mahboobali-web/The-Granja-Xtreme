@@ -493,7 +493,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
   /* ─── DOCUMENTS TAB (Receipts / Contracts) ─── */
   const renderReceiptDetail = (b: any) => {
     const diffTime = Math.abs(new Date(b.endDate).getTime() - new Date(b.startDate).getTime());
-    const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
     
     const atvs = b.atvIds && b.atvIds.length > 0 ? b.atvIds : (b.atvId ? [b.atvId] : []);
 

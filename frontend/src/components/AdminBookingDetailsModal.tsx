@@ -154,7 +154,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const renderReceiptView = () => {
     const b = booking;
     const diffTime = Math.abs(new Date(b.endDate).getTime() - new Date(b.startDate).getTime());
-    const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
     
     const atvs = b.atvIds && b.atvIds.length > 0 ? b.atvIds : (b.atvId ? [b.atvId] : []);
     
@@ -551,7 +551,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   if (!booking) return null;
 
   const diffTime = Math.abs(new Date(booking.endDate).getTime() - new Date(booking.startDate).getTime());
-  const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
   const baseRate = days * (booking.atvId?.ratePerDay || 0);
   const tax = Math.round(baseRate * (settings.baseTaxRate / 100) * 100) / 100;
   const securityDeposit = settings.securityDeposit || 150;

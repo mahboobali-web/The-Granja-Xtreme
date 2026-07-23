@@ -73,7 +73,7 @@ export const CheckoutSuccess: React.FC = () => {
     if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0 };
     const start = new Date(booking.startDate);
     const end = new Date(booking.endDate);
-    const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
     const baseRate = days * (booking.atvId.ratePerDay || 0);
     const passesFee = 45;
     const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;

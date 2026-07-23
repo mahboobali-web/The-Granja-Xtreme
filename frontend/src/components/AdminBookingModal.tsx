@@ -156,7 +156,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
     const e = new Date(endDate);
     const diffTime = e.getTime() - s.getTime();
     if (diffTime < 0) return 0;
-    return Math.max(1, Math.ceil(diffTime / (1000 * 3600 * 24)));
+    return Math.max(1, Math.ceil(diffTime / (1000 * 3600 * 24)) + 1);
   };
 
   const calculateItemizedTotals = () => {
