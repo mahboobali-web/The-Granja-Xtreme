@@ -23,6 +23,13 @@ interface Booking {
     ratePerDay: number;
     images?: string[];
   };
+  atvIds?: {
+    _id: string;
+    name: string;
+    model: string;
+    ratePerDay: number;
+    images?: string[];
+  }[];
 }
 
 export const CheckoutSuccess: React.FC = () => {
