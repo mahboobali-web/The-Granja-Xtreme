@@ -16,6 +16,7 @@ interface Booking {
   finalTotal: number;
   payment?: { status: string; paidAmount: number; remainingAmount: number };
   atvId: { _id: string; name: string; model: string; ratePerDay: number; images: string[] };
+  atvIds?: { _id: string; name: string; model: string; ratePerDay: number; images: string[] }[];
   customerId: { _id: string; firstName: string; lastName: string; email: string; phone: string };
   notes?: string;
 }
@@ -236,7 +237,7 @@ export const AdminBookings: React.FC = () => {
                           backgroundColor: isCancelled ? '#fee2e2' : isPending ? '#fef3c7' : isConfirmed ? '#ecfccb' : '#f1f5f9',
                           color: isCancelled ? '#b91c1c' : isPending ? '#b45309' : isConfirmed ? '#4d7c0f' : '#475569'
                         }}>
-                          {formatAtvName(b.atvId) || 'Booking'}
+                          {b.atvIds && b.atvIds.length > 1 ? `${b.atvIds.length} ${t('adminBookings.vehicles', 'Vehicles')}` : (formatAtvName(b.atvId) || 'Booking')}
                         </div>
                       );
                     })}
@@ -383,7 +384,9 @@ export const AdminBookings: React.FC = () => {
                         </h4>
                         <span style={{ backgroundColor: '#dcfce7', color: '#166534', fontSize: '10px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>{t(`adminBookings.status.${booking.status.toLowerCase().replace(' ', '')}`, booking.status)}</span>
                       </div>
-                      <div style={{ fontSize: '12px', color: '#64748b' }}>{formatAtvName(booking.atvId)}</div>
+                      <div style={{ fontSize: '12px', color: '#64748b' }}>
+                        {booking.atvIds && booking.atvIds.length > 1 ? `${booking.atvIds.length} ${t('adminBookings.vehicles', 'Vehicles')}` : formatAtvName(booking.atvId)}
+                      </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700, color: '#475569', marginTop: '4px' }}>
                         <span>{(booking as any).actualCheckOutTime ? new Date((booking as any).actualCheckOutTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + t('adminBookings.checkoutSuffix', ' Check-out') : (booking as any).actualCheckInTime ? new Date((booking as any).actualCheckInTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + t('adminBookings.checkinSuffix', ' Check-in') : t('adminBookings.scheduledStart', 'Scheduled Start')}</span>
                         {booking.payment?.status === 'Paid' ? (
@@ -417,7 +420,9 @@ export const AdminBookings: React.FC = () => {
                         </h4>
                         <span style={{ backgroundColor: '#fee2e2', color: '#991b1b', fontSize: '10px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>{t('adminBookings.cancelled', 'CANCELLED')}</span>
                       </div>
-                      <div style={{ fontSize: '12px', color: '#b91c1c' }}>{formatAtvName(booking.atvId)}</div>
+                      <div style={{ fontSize: '12px', color: '#b91c1c' }}>
+                        {booking.atvIds && booking.atvIds.length > 1 ? `${booking.atvIds.length} ${t('adminBookings.vehicles', 'Vehicles')}` : formatAtvName(booking.atvId)}
+                      </div>
                       <button 
                         onClick={() => setSelectedBookingForDetails(booking._id)}
                         style={{ marginTop: '8px', backgroundColor: 'white', color: '#991b1b', border: '1px solid #fca5a5', padding: '6px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>
