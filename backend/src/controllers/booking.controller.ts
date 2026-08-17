@@ -100,12 +100,14 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     const bookingNumber = await getNextTgxNumber('booking');
     const booking = await Booking.create({
       bookingNumber,
+      atvId: atvs[0]._id,
       atvIds: atvs.map(a => a._id),
       customerId,
       startDate,
       endDate,
       status: 'Upcoming',
-      notes
+      notes,
+      finalTotal: total
     });
 
     const invoiceNumber = await getNextTgxNumber('invoice');
@@ -113,6 +115,7 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
       invoiceNumber,
       bookingId: booking._id,
       customerId,
+      atvId: atvs[0]._id,
       invoiceType: 'Rental Charge',
       description: `Admin created reservation for ${atvs.length} vehicle(s)`,
       amount: total,
@@ -661,10 +664,11 @@ export const uploadCustomerSignature = async (req: AuthenticatedRequest, res: Re
 
     // Send the email here since booking is now officially confirmed by customer
     const userObj = booking.customerId as any;
-    const atvObj = booking.atvId as any;
+    const atvObj = (booking.atvId || (booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds[0] : null)) as any;
 
     const emailSubject = `Adventure Secured! Booking Confirmed - The Granja Xtreme`;
-    const emailText = `Hi ${userObj.firstName},\n\nYour ATV rental booking for the ${atvObj.name} (${atvObj.model}) has been successfully confirmed!\n\nBooking Details:\n- Booking ID: ${booking._id}\n- Start Date: ${new Date(booking.startDate).toDateString()}\n- End Date: ${new Date(booking.endDate).toDateString()}\n\nYou can access your contract in your dashboard: https://thegranjaxtreme.com/dashboard\n\nSee you on the trails!\n\nBest regards,\nThe Granja Xtreme Team`;
+    const atvName = atvObj ? `${atvObj.name} (${atvObj.model})` : 'ATVs';
+    const emailText = `Hi ${userObj.firstName},\n\nYour ATV rental booking for the ${atvName} has been successfully confirmed!\n\nBooking Details:\n- Booking ID: ${booking._id}\n- Start Date: ${new Date(booking.startDate).toDateString()}\n- End Date: ${new Date(booking.endDate).toDateString()}\n\nYou can access your contract in your dashboard: https://thegranjaxtreme.com/dashboard\n\nSee you on the trails!\n\nBest regards,\nThe Granja Xtreme Team`;
     
     await sendEmail(userObj.email, emailSubject, emailText);
 

@@ -552,7 +552,8 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
 
   const diffTime = Math.abs(new Date(booking.endDate).getTime() - new Date(booking.startDate).getTime());
   const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
-  const baseRate = days * (booking.atvId?.ratePerDay || 0);
+  const atvsList = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
+  const baseRate = days * atvsList.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
   const tax = Math.round(baseRate * (settings.baseTaxRate / 100) * 100) / 100;
   const securityDeposit = settings.securityDeposit || 150;
   const accessoriesSum = booking.accessories ? booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
@@ -675,12 +676,16 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
             {/* ATV Details */}
             <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: '#1e293b', fontWeight: 800, fontSize: '16px' }}>
-                <Truck size={20} color="#10b981" /> {t("Vehicle Assigned")}
+                <Truck size={20} color="#10b981" /> {atvsList.length > 1 ? t("Vehicles Assigned") : t("Vehicle Assigned")}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#334155' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Model")}</span> <strong>{booking.atvId?.name} {booking.atvId?.model}</strong></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Rate")}</span> <strong>${booking.atvId?.ratePerDay}{t("/day")}</strong></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Schedule")}</span> 
+                {atvsList.map((atv: any, index: number) => (
+                  <div key={atv._id || index} style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: index < atvsList.length - 1 ? '12px' : '0', borderBottom: index < atvsList.length - 1 ? '1px dashed #e2e8f0' : 'none' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Model")}</span> <strong style={{ textAlign: 'right' }}>{atv.name} {atv.model}</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Rate")}</span> <strong>${atv.ratePerDay}{t("/day")}</strong></div>
+                  </div>
+                ))}
+                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}><span style={{ color: '#64748b' }}>{t("Schedule")}</span> 
                   <strong style={{ textAlign: 'right' }}>
                     {booking.actualCheckInTime 
                       ? `${new Date(booking.actualCheckInTime).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US')} ${new Date(booking.actualCheckInTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${t("(Checked-In)")}`
