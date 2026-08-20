@@ -8,6 +8,8 @@ export interface IInvoice {
   invoiceType: 'Rental Charge' | 'Damage Charge' | 'Extra Charge';
   description: string;
   amount: number;
+  discountRate?: number;
+  discountAmount?: number;
   balance: number;
   status: 'Draft' | 'Unpaid' | 'Partially Paid' | 'Paid' | 'Void';
   dueDate: Date;
@@ -28,6 +30,8 @@ const invoiceSchema = new Schema<IInvoice>(
     },
     description: { type: String, required: true },
     amount: { type: Number, required: true },
+    discountRate: { type: Number, default: 0 },
+    discountAmount: { type: Number, default: 0 },
     balance: { type: Number, required: true },
     status: { 
       type: String, 

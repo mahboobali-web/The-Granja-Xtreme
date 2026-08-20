@@ -16,7 +16,7 @@ import { getNextTgxNumber } from '../utils/counter.utils';
 import { Accessory } from '../models/accessory.model';
 export const adminCreateBooking = async (req: Request, res: Response): Promise<void> => {
   try {
-    let { atvId, atvIds, customerId, startDate, endDate, notes } = req.body;
+    let { atvId, atvIds, customerId, startDate, endDate, notes, customDiscountRate } = req.body;
     
     // Normalize to array of ATV IDs
     let selectedAtvIds: string[] = [];
@@ -92,10 +92,12 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     const settings = await Settings.findOne();
     const taxRate = settings ? settings.baseTaxRate : 10;
     const depositPerAtv = settings ? settings.securityDeposit : 150;
+    const discountRate = customDiscountRate !== undefined ? Number(customDiscountRate) : (settings?.defaultDiscountRate || 0);
 
-    const tax = Math.round(totalBase * (taxRate / 100) * 100) / 100;
+    const discountAmount = Math.round(totalBase * (discountRate / 100) * 100) / 100;
+    const tax = Math.round((totalBase - discountAmount) * (taxRate / 100) * 100) / 100;
     const securityDeposit = depositPerAtv; // Flat fee per booking
-    const total = totalBase + tax + securityDeposit;
+    const total = totalBase - discountAmount + tax + securityDeposit;
 
     const bookingNumber = await getNextTgxNumber('booking');
     const booking = await Booking.create({
@@ -107,7 +109,9 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
       endDate,
       status: 'Upcoming',
       notes,
-      finalTotal: total
+      finalTotal: total,
+      discountRate,
+      discountAmount
     });
 
     const invoiceNumber = await getNextTgxNumber('invoice');
@@ -119,6 +123,8 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
       invoiceType: 'Rental Charge',
       description: `Admin created reservation for ${atvs.length} vehicle(s)`,
       amount: total,
+      discountRate,
+      discountAmount,
       balance: total,
       status: 'Unpaid',
       dueDate: new Date(startDate)
@@ -258,10 +264,11 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response): P
     const settings = await Settings.findOne();
     const taxRate = settings?.baseTaxRate ? settings.baseTaxRate / 100 : 0.1;
     const securityDeposit = settings?.securityDeposit || 150;
+    const discountRate = settings?.defaultDiscountRate || 0;
 
     const baseRate = durationDays * atv.ratePerDay;
-    const tax = Math.round(baseRate * taxRate * 100) / 100;
-    const discount = 0;
+    const discountAmount = Math.round(baseRate * (discountRate / 100) * 100) / 100;
+    const tax = Math.round((baseRate - discountAmount) * taxRate * 100) / 100;
 
     const bookingNumber = await getNextTgxNumber('booking');
     const newBooking = await Booking.create({
@@ -272,7 +279,9 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response): P
       startDate,
       endDate,
       status: 'Pending', // PENDING waiver signature and payment
-      notes
+      notes,
+      discountRate,
+      discountAmount
     });
 
     const shouldNotify = !settings || !settings.notifications || settings.notifications.newOrder !== false;
@@ -375,10 +384,16 @@ export const createCompleteBooking = async (req: AuthenticatedRequest, res: Resp
     const settings = await Settings.findOne();
     const taxRate = settings?.baseTaxRate ? settings.baseTaxRate / 100 : 0.1;
     const securityDeposit = settings?.securityDeposit || 150;
+    const discountRate = settings?.defaultDiscountRate || 0;
 
     const baseRate = durationDays * atv.ratePerDay;
-    const tax = Math.round(baseRate * taxRate * 100) / 100;
-    const total = baseRate + tax + securityDeposit;
+    const discountAmount = Math.round(baseRate * (discountRate / 100) * 100) / 100;
+    const tax = Math.round((baseRate - discountAmount) * taxRate * 100) / 100;
+    const total = baseRate - discountAmount + tax + securityDeposit;
+
+    newBooking.discountRate = discountRate;
+    newBooking.discountAmount = discountAmount;
+    await newBooking.save();
 
     const invoiceNumber = await getNextTgxNumber('invoice');
     await Invoice.create({
@@ -389,6 +404,8 @@ export const createCompleteBooking = async (req: AuthenticatedRequest, res: Resp
       invoiceType: 'Rental Charge',
       description: 'Standard ATV Rental',
       amount: total,
+      discountRate,
+      discountAmount,
       balance: total,
       status: 'Unpaid',
       dueDate: new Date(startDate)
@@ -603,10 +620,12 @@ export const signWaiver = async (req: AuthenticatedRequest, res: Response): Prom
     const settings = await Settings.findOne();
     const taxRate = settings?.baseTaxRate ? settings.baseTaxRate / 100 : 0.1;
     const securityDeposit = settings?.securityDeposit || 150;
+    const discountRate = booking.discountRate !== undefined ? booking.discountRate : (settings?.defaultDiscountRate || 0);
 
     const baseRate = durationDays * (atv?.ratePerDay || 0);
-    const tax = Math.round(baseRate * taxRate * 100) / 100;
-    const total = baseRate + tax + securityDeposit;
+    const discountAmount = Math.round(baseRate * (discountRate / 100) * 100) / 100;
+    const tax = Math.round((baseRate - discountAmount) * taxRate * 100) / 100;
+    const total = baseRate - discountAmount + tax + securityDeposit;
 
     const invoiceNumber = await getNextTgxNumber('invoice');
     await Invoice.create({
@@ -617,12 +636,18 @@ export const signWaiver = async (req: AuthenticatedRequest, res: Response): Prom
       invoiceType: 'Rental Charge',
       description: 'Standard ATV Rental',
       amount: total,
+      discountRate,
+      discountAmount,
       balance: total,
       status: 'Unpaid',
       dueDate: new Date(booking.startDate)
     });
 
     booking.status = 'Pending Signature';
+    if (booking.discountRate === undefined) {
+      booking.discountRate = discountRate;
+      booking.discountAmount = discountAmount;
+    }
     await booking.save();
 
     await logActivity(`Signed waiver for booking ${booking._id}`, (req as any).user?.email || 'customer', req.ip || '', 'success');

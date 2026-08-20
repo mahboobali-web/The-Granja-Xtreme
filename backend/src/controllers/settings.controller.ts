@@ -11,6 +11,7 @@ import { logActivity } from './logs.controller';
 const settingsUpdateSchema = z.object({
   baseTaxRate: z.number().optional(),
   securityDeposit: z.number().optional(),
+  defaultDiscountRate: z.number().optional(),
   operatingHours: z.object({
     open: z.string(),
     close: z.string()

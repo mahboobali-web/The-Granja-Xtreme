@@ -94,7 +94,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   const [bookingError, setBookingError] = useState<string>('');
   const [submitting, setSubmitting] = useState(false);
   const [bookedDates, setBookedDates] = useState<{startDate: string, endDate: string}[]>([]);
-  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
+  const [settings, setSettings] = useState<any>({ baseTaxRate: 10, securityDeposit: 150 });
   
   
   // Custom states
@@ -232,10 +232,12 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
     const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
     const baseRate = days * atv.ratePerDay;
     const passesFee = 45.00; // Trail pass
-    const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
-    const securityDeposit = settings.securityDeposit || 150.00;
-    const total = baseRate + passesFee + tax;
-    return { days, baseRate, passesFee, tax, securityDeposit, total };
+    const discountRate = settings?.defaultDiscountRate || 0;
+    const discountAmount = Math.round(baseRate * (discountRate / 100) * 100) / 100;
+    const tax = Math.round((baseRate - discountAmount + passesFee) * ((settings?.baseTaxRate || 10) / 100) * 100) / 100;
+    const securityDeposit = settings?.securityDeposit || 150.00;
+    const total = baseRate - discountAmount + passesFee + tax;
+    return { days, baseRate, passesFee, tax, securityDeposit, total, discountAmount, discountRate };
   };
 
   const pricing = calculatePricing();
@@ -776,6 +778,12 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
                           <span style={{ color: 'var(--on-surface-variant)' }}>{t("Daily Rate")} (${atv.ratePerDay} x {pricing.days} {t("days")})</span>
                           <span>${pricing.baseRate.toFixed(2)}</span>
                         </div>
+                        {pricing.discountAmount > 0 && (
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span style={{ color: 'var(--on-surface-variant)' }}>{t("Discount")} ({pricing.discountRate}%)</span>
+                            <span style={{ color: '#ef4444' }}>-${pricing.discountAmount.toFixed(2)}</span>
+                          </div>
+                        )}
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span style={{ color: 'var(--on-surface-variant)' }}>{t("Trail Access Pass")}</span>
                           <span>${pricing.passesFee.toFixed(2)}</span>
@@ -887,7 +895,14 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
                       fontSize: '13px',
                       border: '1px solid var(--border)'
                     }}>
-                      ${item.ratePerDay}/day
+                      {settings?.defaultDiscountRate > 0 ? (
+                        <>
+                          <span style={{ textDecoration: 'line-through', marginRight: '4px', fontSize: '11px', color: '#94a3b8' }}>${item.ratePerDay}</span>
+                          ${Math.round(item.ratePerDay * (1 - settings.defaultDiscountRate / 100))}/day
+                        </>
+                      ) : (
+                        `$${item.ratePerDay}/day`
+                      )}
                     </div>
                   </div>
                   
@@ -927,7 +942,14 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
       <div className="mobile-sticky-booking">
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--on-background)', fontFamily: 'var(--font-headline)' }}>
-            ${atv.ratePerDay}
+            {settings?.defaultDiscountRate > 0 ? (
+              <>
+                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '14px', marginRight: '6px' }}>${atv.ratePerDay}</span>
+                ${Math.round(atv.ratePerDay * (1 - settings.defaultDiscountRate / 100))}
+              </>
+            ) : (
+              `$${atv.ratePerDay}`
+            )}
           </span>
           <span style={{ color: 'var(--on-surface-variant)', fontSize: '13px' }}>/ {t("day")}</span>
         </div>

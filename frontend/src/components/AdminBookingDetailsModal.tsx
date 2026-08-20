@@ -554,12 +554,14 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
   const atvsList = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
   const baseRate = days * atvsList.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
-  const tax = Math.round(baseRate * (settings.baseTaxRate / 100) * 100) / 100;
+  const discountAmount = booking.discountAmount || 0;
+  const discountRate = booking.discountRate || 0;
+  const tax = Math.round((baseRate - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100;
   const securityDeposit = settings.securityDeposit || 150;
   const accessoriesSum = booking.accessories ? booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
   const extraChargesSum = booking.extraCharges ? booking.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
   const refundAmount = booking.depositRefunded ? (booking.depositRefundedAmount || 0) : 0;
-  const total = baseRate + tax + securityDeposit + accessoriesSum + extraChargesSum - refundAmount;
+  const total = baseRate - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum - refundAmount;
 
   const getStatusColor = (status: string) => {
     switch(status) {
@@ -715,7 +717,9 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 {booking.extraCharges && booking.extraCharges.length > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Extra Charges")}</span> <span>${booking.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0).toFixed(2)}</span></div>
                 )}
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Discount")}</span> <span style={{ color: '#10b981' }}>-$0.00</span></div>
+                {discountAmount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Discount")}</span> <span style={{ color: '#10b981' }}>-${discountAmount.toFixed(2)}</span></div>
+                )}
                 {booking.depositRefunded && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#059669', fontWeight: 600 }}>{t("Deposit Refunded")}</span> <span style={{ color: '#059669', fontWeight: 600 }}>-${(booking.depositRefundedAmount || 0).toFixed(2)}</span></div>
                 )}

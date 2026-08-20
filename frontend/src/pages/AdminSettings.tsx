@@ -20,6 +20,7 @@ export const AdminSettings: React.FC = () => {
   const [settings, setSettings] = useState({
     baseTaxRate: 8.5,
     securityDeposit: 500,
+    defaultDiscountRate: 0,
     operatingHours: { days: 'Monday to Sunday', open: '08:00', close: '18:00' },
     currency: 'USD',
     businessEmail: '',
@@ -320,10 +321,14 @@ export const AdminSettings: React.FC = () => {
                   <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     {t('adminSettings.rentalParams', 'Rental Parameters')}
                   </h3>
-                  <div className="checkout-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                  <div className="checkout-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
                     <div className="form-group">
                       <label className="form-label">{t('adminSettings.taxRateLabel', 'Base Tax Rate (%)')}</label>
                       <input type="number" value={settings.baseTaxRate} onChange={(e) => setSettings({ ...settings, baseTaxRate: parseFloat(e.target.value) })} step="0.1" className="form-input" required />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">{t('adminSettings.discountLabel', 'Default Discount Rate (%)')}</label>
+                      <input type="number" value={settings.defaultDiscountRate} onChange={(e) => setSettings({ ...settings, defaultDiscountRate: parseFloat(e.target.value) })} step="0.1" className="form-input" required />
                     </div>
                     <div className="form-group">
                       <label className="form-label">{t('adminSettings.depositLabel', 'Default Security Deposit ($)')}</label>

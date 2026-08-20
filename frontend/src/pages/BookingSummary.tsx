@@ -29,6 +29,8 @@ interface Booking {
     images?: string[];
   };
   atvIds?: any[];
+  discountRate?: number;
+  discountAmount?: number;
 }
 
 export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
@@ -135,16 +137,18 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
   };
 
   const calculatePricing = () => {
-    if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0, atvs: [], days: 0 };
+    if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0, atvs: [], days: 0, discountAmount: 0, discountRate: 0 };
     const start = new Date(booking.startDate);
     const end = new Date(booking.endDate);
     const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
     const atvs = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
     const baseRate = days * atvs.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
+    const discountRate = booking.discountRate || 0;
+    const discountAmount = booking.discountAmount || 0;
     const passesFee = 45 * atvs.length;
-    const tax = Math.round((baseRate + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
-    const total = baseRate + passesFee + tax;
-    return { baseRate, passesFee, tax, total, atvs, days };
+    const tax = Math.round((baseRate - discountAmount + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
+    const total = baseRate - discountAmount + passesFee + tax;
+    return { baseRate, passesFee, tax, total, atvs, days, discountRate, discountAmount };
   };
 
   const pricing = calculatePricing();
@@ -396,6 +400,12 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
                 <span style={{ color: '#6b7280' }}>{t("Base Rental")}</span>
                 <span style={{ color: '#111827', fontWeight: 500 }}>${pricing.baseRate.toFixed(2)}</span>
               </div>
+              {pricing.discountAmount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '13px' }}>
+                  <span style={{ color: '#6b7280' }}>{t("Discount")} ({pricing.discountRate}%)</span>
+                  <span style={{ color: '#ef4444', fontWeight: 500 }}>-${pricing.discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '13px' }}>
                 <span style={{ color: '#6b7280' }}>{t("Premium Insurance / Pass")}</span>
                 <span style={{ color: '#111827', fontWeight: 500 }}>${pricing.passesFee.toFixed(2)}</span>

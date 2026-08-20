@@ -40,6 +40,8 @@ interface Booking {
   actualCheckInTime?: string;
   actualCheckOutTime?: string;
   createdAt?: string;
+  discountRate?: number;
+  discountAmount?: number;
 }
 
 interface User {
@@ -498,11 +500,13 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
     const atvs = b.atvIds && b.atvIds.length > 0 ? b.atvIds : (b.atvId ? [b.atvId] : []);
 
     const baseRate = days * atvs.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
-    const tax = Math.round(baseRate * (settings.baseTaxRate / 100) * 100) / 100; 
+    const discountRate = b.discountRate || 0;
+    const discountAmount = b.discountAmount || 0;
+    const tax = Math.round((baseRate - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100; 
     const securityDeposit = (settings.securityDeposit || 150); 
     const accessoriesSum = b.accessories ? b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
     const extraChargesSum = b.extraCharges ? b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
-    const total = baseRate + tax + securityDeposit + accessoriesSum + extraChargesSum;
+    const total = baseRate - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum;
 
     const isPaid = b.payment?.status === 'Paid';
     const amountPaid = b.payment?.amountPaid !== undefined ? b.payment.amountPaid : (isPaid ? total : 0);
@@ -678,6 +682,12 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 <span>{t("ATV Rental -")} ({days} {days > 1 ? t('Days') : t('Day')})</span>
                 <span>${baseRate.toFixed(2)}</span>
               </div>
+              {discountAmount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
+                  <span>{t("Discount")} ({discountRate}%)</span>
+                  <span style={{ color: '#ef4444' }}>-${discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
                 <span>{t("Luxury Tax (10%)")}</span>
                 <span>${tax.toFixed(2)}</span>

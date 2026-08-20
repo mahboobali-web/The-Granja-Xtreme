@@ -68,17 +68,20 @@ export const Fleet: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('popularity');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [categories, setCategories] = useState<any[]>([]);
+  const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
     const loadFleet = async () => {
       try {
-        const [atvsData, catData] = await Promise.all([
+        const [atvsData, catData, settingsData] = await Promise.all([
           fetchAPI('/atvs'),
-          fetchAPI('/vehicle-categories')
+          fetchAPI('/vehicle-categories'),
+          fetchAPI('/settings')
         ]);
         setAtvs(atvsData || []);
         setFilteredAtvs(atvsData || []);
         setCategories(catData || []);
+        setSettings(settingsData || null);
       } catch (e) {
         console.error('Failed to load fleet.', e);
       } finally {
@@ -299,7 +302,7 @@ export const Fleet: React.FC = () => {
 
                       {/* Hourly Rate Tag */}
                       <span className="fleet-card-hourly">
-                        ${atv.hourlyRate}/{t('fleet_hr', 'hr')}
+                        ${settings?.defaultDiscountRate > 0 ? Math.round(atv.hourlyRate * (1 - settings.defaultDiscountRate / 100)) : atv.hourlyRate}/{t('fleet_hr', 'hr')}
                       </span>
                     </div>
 
@@ -339,7 +342,17 @@ export const Fleet: React.FC = () => {
                       <div className="fleet-card-footer">
                         <div className="fleet-card-price">
                           <span className="fleet-card-price-label">{t('fleet_starting_at', 'STARTING AT')}</span>
-                          <span className="fleet-card-price-value">${atv.ratePerDay} <span className="fleet-card-price-unit">/{t('fleet_day', 'day')}</span></span>
+                          <span className="fleet-card-price-value">
+                            {settings?.defaultDiscountRate > 0 ? (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '0.7em', marginRight: '6px' }}>${atv.ratePerDay}</span>
+                                <span style={{ color: '#ef4444' }}>${Math.round(atv.ratePerDay * (1 - settings.defaultDiscountRate / 100))}</span>
+                              </>
+                            ) : (
+                              `$${atv.ratePerDay}`
+                            )}
+                            <span className="fleet-card-price-unit">/{t('fleet_day', 'day')}</span>
+                          </span>
                         </div>
                         <Link to={`/atv/${atv._id}`} className="fleet-card-cta">
                           {t('fleet_view_details', 'View Details')}

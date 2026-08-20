@@ -46,6 +46,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [customDiscountRate, setCustomDiscountRate] = useState<number | ''>('');
   
   const [availabilityMap, setAvailabilityMap] = useState<Record<string, AvailabilityDetail>>({});
   const [checkingAvailability, setCheckingAvailability] = useState(false);
@@ -161,7 +162,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
 
   const calculateItemizedTotals = () => {
     const days = getDaysCount();
-    if (days <= 0 || selectedAtvIds.length === 0) return { items: [], grandTotal: 0, totalBase: 0, totalTax: 0, totalDeposit: 0 };
+    if (days <= 0 || selectedAtvIds.length === 0) return { items: [], grandTotal: 0, totalBase: 0, totalTax: 0, totalDeposit: 0, discountAmount: 0, discountRate: 0 };
 
     let totalBase = 0;
     let totalTax = 0;
@@ -189,8 +190,11 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
     }).filter(Boolean);
 
     const totalDeposit = settings.securityDeposit || 150;
-    const grandTotal = totalBase + totalTax + totalDeposit;
-    return { items, grandTotal, totalBase, totalTax, totalDeposit };
+    const discountRate = customDiscountRate !== '' ? Number(customDiscountRate) : ((settings as any).defaultDiscountRate || 0);
+    const discountAmount = Math.round(totalBase * (discountRate / 100) * 100) / 100;
+    const recalculatedTax = Math.round((totalBase - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100;
+    const grandTotal = totalBase - discountAmount + recalculatedTax + totalDeposit;
+    return { items, grandTotal, totalBase, totalTax: recalculatedTax, totalDeposit, discountAmount, discountRate };
   };
 
   const handleReviewConfirm = async () => {
@@ -252,7 +256,8 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
           atvIds: selectedAtvIds,
           startDate,
           endDate,
-          notes
+          notes,
+          customDiscountRate: customDiscountRate !== '' ? Number(customDiscountRate) : undefined
         }
       });
       setCreatedBookingId(result._id);
@@ -545,6 +550,12 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
                   <span>{t('total_base_rate', 'Total Base Rate:')}</span>
                   <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalBase.toFixed(2)}</span>
                 </div>
+                {totals.discountAmount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>{t('discount', 'Discount')} ({totals.discountRate}%):</span>
+                    <span style={{ fontWeight: 600, color: '#ef4444' }}>-${totals.discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span>{t('tax_label', `Tax (${settings.baseTaxRate}%):`)}</span>
                   <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalTax.toFixed(2)}</span>
@@ -562,13 +573,29 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
             </div>
             
             <div>
-              <label style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px', display: 'block' }}>{t('admin_notes_optional', 'Admin Notes (Optional)')}</label>
-              <textarea 
-                value={notes} 
-                onChange={e => setNotes(e.target.value)}
-                placeholder={t('walkin_phone_booking_etc', 'Walk-in, phone booking, multi-vehicle package...')}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none', minHeight: '70px' }}
-              />
+              <div style={{ display: 'flex', gap: '16px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px', display: 'block' }}>{t('custom_discount_rate', 'Custom Discount Rate (%)')}</label>
+                  <input 
+                    type="number" 
+                    value={customDiscountRate} 
+                    onChange={e => setCustomDiscountRate(e.target.value === '' ? '' : Number(e.target.value))}
+                    placeholder={`Global default: ${(settings as any).defaultDiscountRate || 0}%`}
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+                    min="0"
+                    max="100"
+                  />
+                </div>
+                <div style={{ flex: 2 }}>
+                  <label style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px', display: 'block' }}>{t('admin_notes_optional', 'Admin Notes (Optional)')}</label>
+                  <textarea 
+                    value={notes} 
+                    onChange={e => setNotes(e.target.value)}
+                    placeholder={t('walkin_phone_booking_etc', 'Walk-in, phone booking, multi-vehicle package...')}
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none', minHeight: '44px' }}
+                  />
+                </div>
+              </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px' }}>

@@ -3,6 +3,7 @@ import { Schema, model } from 'mongoose';
 export interface ISettings {
   baseTaxRate: number;
   securityDeposit: number;
+  defaultDiscountRate: number;
   operatingHours: {
     days: string;
     open: string;
@@ -23,6 +24,7 @@ const settingsSchema = new Schema<ISettings>(
   {
     baseTaxRate: { type: Number, default: 8.5 },
     securityDeposit: { type: Number, default: 500 },
+    defaultDiscountRate: { type: Number, default: 0 },
     operatingHours: {
       days: { type: String, default: 'Monday to Sunday' },
       open: { type: String, default: '08:00' },

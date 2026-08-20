@@ -21,6 +21,8 @@ export interface IBooking {
     price: number;
   }[];
   finalTotal?: number;
+  discountRate?: number;
+  discountAmount?: number;
   depositRefunded?: boolean;
   depositRefundedAmount?: number;
   status: 'Pending' | 'Pending Signature' | 'Customer Signed' | 'Upcoming' | 'Active' | 'Completed' | 'Cancelled';
@@ -58,6 +60,8 @@ const bookingSchema = new Schema<IBooking>(
       price: { type: Number, required: true }
     }],
     finalTotal: { type: Number },
+    discountRate: { type: Number, default: 0 },
+    discountAmount: { type: Number, default: 0 },
     depositRefunded: { type: Boolean, default: false },
     depositRefundedAmount: { type: Number, default: 0 },
     status: {  
