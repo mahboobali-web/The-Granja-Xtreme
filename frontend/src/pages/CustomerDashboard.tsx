@@ -495,7 +495,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
   /* ─── DOCUMENTS TAB (Receipts / Contracts) ─── */
   const renderReceiptDetail = (b: any) => {
     const diffTime = Math.abs(new Date(b.endDate).getTime() - new Date(b.startDate).getTime());
-    const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1);
+    const days = Math.max(1, Math.round(diffTime / (1000 * 60 * 60 * 24)));
     
     const atvs = b.atvIds && b.atvIds.length > 0 ? b.atvIds : (b.atvId ? [b.atvId] : []);
 
@@ -503,7 +503,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
     const discountRate = b.discountRate || 0;
     const discountAmount = b.discountAmount || 0;
     const tax = Math.round((baseRate - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100; 
-    const securityDeposit = (settings.securityDeposit || 150); 
+    const securityDeposit = (settings.securityDeposit ?? 150); 
     const accessoriesSum = b.accessories ? b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
     const extraChargesSum = b.extraCharges ? b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
     const total = baseRate - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum;
@@ -689,7 +689,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
-                <span>{t("Luxury Tax (10%)")}</span>
+                <span>{t(`Luxury Tax (${settings?.baseTaxRate ?? 10}%)`)}</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
               {b.accessories && b.accessories.length > 0 && (

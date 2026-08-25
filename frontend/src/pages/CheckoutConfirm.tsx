@@ -135,7 +135,7 @@ export const CheckoutConfirm: React.FC = () => {
     });
   };
 
-  const durationDays = booking ? Math.max(1, Math.ceil((new Date(booking.endDate).getTime() - new Date(booking.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1) : 1;
+  const durationDays = booking ? Math.max(1, Math.round((new Date(booking.endDate).getTime() - new Date(booking.startDate).getTime()) / (1000 * 60 * 60 * 24))) : 1;
 
   const calculatePricing = () => {
     if (!booking) return { baseRate: 0, tax: 0, total: 0, passesFee: 0, atvs: [], discountAmount: 0, discountRate: 0 };

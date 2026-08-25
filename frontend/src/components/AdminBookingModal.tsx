@@ -157,7 +157,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
     const e = new Date(endDate);
     const diffTime = e.getTime() - s.getTime();
     if (diffTime < 0) return 0;
-    return Math.max(1, Math.ceil(diffTime / (1000 * 3600 * 24)) + 1);
+    return Math.max(1, Math.round(diffTime / (1000 * 3600 * 24)));
   };
 
   const calculateItemizedTotals = () => {
@@ -189,7 +189,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
       };
     }).filter(Boolean);
 
-    const totalDeposit = settings.securityDeposit || 150;
+    const totalDeposit = settings.securityDeposit ?? 150;
     const discountRate = customDiscountRate !== '' ? Number(customDiscountRate) : ((settings as any).defaultDiscountRate || 0);
     const discountAmount = Math.round(totalBase * (discountRate / 100) * 100) / 100;
     const recalculatedTax = Math.round((totalBase - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100;
