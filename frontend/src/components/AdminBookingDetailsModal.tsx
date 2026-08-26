@@ -693,12 +693,12 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <Truck size={20} color="#10b981" /> {atvsList.length > 1 ? t("Vehicles Assigned") : t("Vehicle Assigned")}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#334155' }}>
-                {atvsList.map((atv: any, index: number) => (
+                {atvsList.map((atv: any, index: number) => { const snap = booking.snapshotAtvRates?.find((s: any) => s.atvId === atv._id || (s.atvId && s.atvId._id === atv._id)); const rate = snap ? snap.ratePerDay : (atv.ratePerDay || 0); return (
                   <div key={atv._id || index} style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: index < atvsList.length - 1 ? '12px' : '0', borderBottom: index < atvsList.length - 1 ? '1px dashed #e2e8f0' : 'none' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Model")}</span> <strong style={{ textAlign: 'right' }}>{atv.name} {atv.model}</strong></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Rate")}</span> <strong>${atv.ratePerDay}{t("/day")}</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Rate")}</span> <strong>${rate}{t("/day")}</strong></div>
                   </div>
-                ))}
+                )})}
                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}><span style={{ color: '#64748b' }}>{t("Schedule")}</span> 
                   <strong style={{ textAlign: 'right' }}>
                     {booking.actualCheckInTime 
@@ -721,7 +721,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#334155' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Base Rate")}</span> <span>${baseRate.toFixed(2)}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t(`Tax (${settings?.baseTaxRate ?? 10}%)`)}</span> <span>${tax.toFixed(2)}</span></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t(`Tax (${booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate : (settings?.baseTaxRate ?? 10)}%)`)}</span> <span>${tax.toFixed(2)}</span></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Security Deposit")}</span> <span>${securityDeposit.toFixed(2)}</span></div>
                 {booking.accessories && booking.accessories.length > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Accessories")}</span> <span>${booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span></div>
@@ -890,3 +890,4 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
     </>
   );
 };
+
