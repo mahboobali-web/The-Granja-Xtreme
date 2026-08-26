@@ -111,7 +111,10 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
       notes,
       finalTotal: total,
       discountRate,
-      discountAmount
+      discountAmount,
+      snapshotTaxRate: taxRate,
+      snapshotSecurityDeposit: depositPerAtv,
+      snapshotAtvRates: atvs.map(a => ({ atvId: a._id, ratePerDay: a.ratePerDay }))
     });
 
     const invoiceNumber = await getNextTgxNumber('invoice');
@@ -281,7 +284,10 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response): P
       status: 'Pending', // PENDING waiver signature and payment
       notes,
       discountRate,
-      discountAmount
+      discountAmount,
+      snapshotTaxRate: taxRate * 100, // Storing as percentage like settings.baseTaxRate
+      snapshotSecurityDeposit: securityDeposit,
+      snapshotAtvRates: [{ atvId: atv._id, ratePerDay: atv.ratePerDay }]
     });
 
     const shouldNotify = !settings || !settings.notifications || settings.notifications.newOrder !== false;
@@ -363,7 +369,11 @@ export const createCompleteBooking = async (req: AuthenticatedRequest, res: Resp
       status: 'Customer Signed', 
       customerSignature: signatureUrl,
       customerSignedAt: new Date(),
-      notes
+      notes,
+      // Temporarily store empty snapshots until discount/tax are computed below
+      snapshotTaxRate: 0,
+      snapshotSecurityDeposit: 0,
+      snapshotAtvRates: []
     });
 
     const contractNumber = await getNextTgxNumber('contract');
@@ -393,6 +403,9 @@ export const createCompleteBooking = async (req: AuthenticatedRequest, res: Resp
 
     newBooking.discountRate = discountRate;
     newBooking.discountAmount = discountAmount;
+    newBooking.snapshotTaxRate = taxRate * 100; // Storing as percentage
+    newBooking.snapshotSecurityDeposit = securityDeposit;
+    newBooking.snapshotAtvRates = [{ atvId: atv._id, ratePerDay: atv.ratePerDay }];
     await newBooking.save();
 
     const invoiceNumber = await getNextTgxNumber('invoice');

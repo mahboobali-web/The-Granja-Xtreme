@@ -158,9 +158,14 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
     
     const atvs = b.atvIds && b.atvIds.length > 0 ? b.atvIds : (b.atvId ? [b.atvId] : []);
     
-    const baseRate = days * atvs.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
-    const tax = Math.round(baseRate * (settings.baseTaxRate / 100) * 100) / 100;
-    const securityDeposit = (settings.securityDeposit ?? 150);
+    const baseRate = days * atvs.reduce((sum: number, atv: any) => {
+      const snap = b.snapshotAtvRates?.find((s: any) => s.atvId === atv._id || (s.atvId && s.atvId._id === atv._id));
+      const rate = snap ? snap.ratePerDay : (atv.ratePerDay || 0);
+      return sum + rate;
+    }, 0);
+    const taxRate = b.snapshotTaxRate !== undefined ? b.snapshotTaxRate : (settings.baseTaxRate || 10);
+    const tax = Math.round(baseRate * (taxRate / 100) * 100) / 100;
+    const securityDeposit = b.snapshotSecurityDeposit !== undefined ? b.snapshotSecurityDeposit : (settings.securityDeposit ?? 150);
     const accessoriesSum = b.accessories ? b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
     const extraChargesSum = b.extraCharges ? b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
     const refundAmount = b.depositRefunded ? (b.depositRefundedAmount || 0) : 0;
@@ -297,7 +302,9 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
               </thead>
               <tbody>
                 {atvs.map((atv: any, index: number) => {
-                  const atvBase = days * (atv.ratePerDay || 0);
+                  const snap = b.snapshotAtvRates?.find((s: any) => s.atvId === atv._id || (s.atvId && s.atvId._id === atv._id));
+                  const rate = snap ? snap.ratePerDay : (atv.ratePerDay || 0);
+                  const atvBase = days * rate;
                   return (
                     <tr key={atv._id || index}>
                       <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
@@ -305,7 +312,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                         <div style={{ fontSize: '12px', color: '#6b7280' }}>{t("Includes standard equipment and safety gear.")}</div>
                       </td>
                       <td style={{ padding: '24px', textAlign: 'center', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>{days} {days > 1 ? t('Days') : t('Day')}</td>
-                      <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(atv.ratePerDay || 0).toFixed(2)}</td>
+                      <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${rate.toFixed(2)}</td>
                       <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${atvBase.toFixed(2)}</td>
                     </tr>
                   );
@@ -344,7 +351,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <span>${baseRate.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
-                <span>{t(`Luxury Tax (${settings?.baseTaxRate ?? 10}%)`)}</span>
+                <span>{t(`Luxury Tax (${b.snapshotTaxRate !== undefined ? b.snapshotTaxRate : (settings?.baseTaxRate ?? 10)}%)`)}</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
               {b.accessories && b.accessories.length > 0 && (
@@ -553,11 +560,16 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const diffTime = Math.abs(new Date(booking.endDate).getTime() - new Date(booking.startDate).getTime());
   const days = Math.max(1, Math.round(diffTime / (1000 * 60 * 60 * 24)));
   const atvsList = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
-  const baseRate = days * atvsList.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
+  const baseRate = days * atvsList.reduce((sum: number, atv: any) => {
+    const snap = booking.snapshotAtvRates?.find((s: any) => s.atvId === atv._id || (s.atvId && s.atvId._id === atv._id));
+    const rate = snap ? snap.ratePerDay : (atv.ratePerDay || 0);
+    return sum + rate;
+  }, 0);
   const discountAmount = booking.discountAmount || 0;
   const discountRate = booking.discountRate || 0;
-  const tax = Math.round((baseRate - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100;
-  const securityDeposit = settings.securityDeposit ?? 150;
+  const taxRate = booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate : (settings.baseTaxRate || 10);
+  const tax = Math.round((baseRate - discountAmount) * (taxRate / 100) * 100) / 100;
+  const securityDeposit = booking.snapshotSecurityDeposit !== undefined ? booking.snapshotSecurityDeposit : (settings.securityDeposit ?? 150);
   const accessoriesSum = booking.accessories ? booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
   const extraChargesSum = booking.extraCharges ? booking.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
   const refundAmount = booking.depositRefunded ? (booking.depositRefundedAmount || 0) : 0;

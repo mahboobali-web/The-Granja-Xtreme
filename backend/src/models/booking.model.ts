@@ -34,6 +34,12 @@ export interface IBooking {
   customerSignedAt?: Date;
   adminSignedAt?: Date;
   notes?: string;
+  snapshotTaxRate?: number;
+  snapshotSecurityDeposit?: number;
+  snapshotAtvRates?: {
+    atvId: Types.ObjectId;
+    ratePerDay: number;
+  }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -76,7 +82,13 @@ const bookingSchema = new Schema<IBooking>(
     adminSignature: { type: String },
     customerSignedAt: { type: Date },
     adminSignedAt: { type: Date },
-    notes: { type: String }
+    notes: { type: String },
+    snapshotTaxRate: { type: Number },
+    snapshotSecurityDeposit: { type: Number },
+    snapshotAtvRates: [{
+      atvId: { type: Schema.Types.ObjectId, ref: 'Atv' },
+      ratePerDay: { type: Number }
+    }]
   },
   { timestamps: true }
 );
