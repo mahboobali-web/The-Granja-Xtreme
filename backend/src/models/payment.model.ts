@@ -3,7 +3,8 @@ import { Schema, model, Types } from 'mongoose';
 export interface IPayment {
   receiptNumber: string;
   invoiceId: Types.ObjectId;
-  bookingId: Types.ObjectId;
+  bookingId?: Types.ObjectId;
+  orderId?: Types.ObjectId;
   customerId: Types.ObjectId;
   amount: number;
   paymentMethod: 'PayPal' | 'International Card' | 'Banco Popular' | 'Banreservas' | 'Zelle' | 'Cash' | 'Apple Pay' | 'Google Pay' | 'Refund';
@@ -19,7 +20,8 @@ const paymentSchema = new Schema<IPayment>(
   {
     receiptNumber: { type: String, required: true, unique: true },
     invoiceId: { type: Schema.Types.ObjectId, ref: 'Invoice', required: true },
-    bookingId: { type: Schema.Types.ObjectId, ref: 'Booking', required: true },
+    bookingId: { type: Schema.Types.ObjectId, ref: 'Booking', required: false },
+    orderId: { type: Schema.Types.ObjectId, ref: 'Order', required: false },
     customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     amount: { type: Number, required: true },
     paymentMethod: { 

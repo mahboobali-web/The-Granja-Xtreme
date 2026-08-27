@@ -5,7 +5,7 @@ import { AuthenticatedRequest } from '../middleware/auth.middleware';
 
 export const getInvoices = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const invoices = await Invoice.find().populate('customerId').populate('atvId').populate('bookingId').sort({ createdAt: -1 });
+    const invoices = await Invoice.find().populate('customerId').populate('atvId').populate('bookingId').populate('orderId').sort({ createdAt: -1 });
     res.status(200).json(invoices);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch invoices', error: (error as Error).message });
@@ -14,7 +14,7 @@ export const getInvoices = async (_req: Request, res: Response): Promise<void> =
 
 export const getMyInvoices = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const invoices = await Invoice.find({ customerId: req.user?._id }).populate('atvId').sort({ createdAt: -1 });
+    const invoices = await Invoice.find({ customerId: req.user?._id }).populate('atvId').populate('bookingId').populate('orderId').sort({ createdAt: -1 });
     res.status(200).json(invoices);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch invoices', error: (error as Error).message });

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Booking } from '../models/booking.model';
+import { Order } from '../models/order.model';
 import { Atv } from '../models/atv.model';
 import { User } from '../models/user.model';
 import { Payment } from '../models/payment.model';
@@ -42,8 +43,9 @@ export const getDashboardMetrics = async (req: Request, res: Response) => {
     ]);
     const totalRevenue = totalRevAgg[0]?.total || 0;
 
-    // Booking Counts
+    // Booking & Order Counts
     const totalBookings = await Booking.countDocuments(bookingMatchQuery);
+    const totalOrders = await Order.countDocuments(paymentMatchQuery);
     const activeRentals = await Booking.countDocuments({ status: 'Active' });
     const completedRentals = await Booking.countDocuments({ status: 'Completed' });
     const cancelledRentals = await Booking.countDocuments({ status: 'Cancelled' });
@@ -78,6 +80,7 @@ export const getDashboardMetrics = async (req: Request, res: Response) => {
       damageCharges,
       monthlyRevenue,
       totalBookings,
+      totalOrders,
       activeRentals,
       completedRentals,
       cancelledRentals,

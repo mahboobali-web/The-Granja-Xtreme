@@ -36,6 +36,8 @@ const AdminLogs = lazy(() => import('./pages/AdminLogs').then(module => ({ defau
 const AdminMessages = lazy(() => import('./pages/AdminMessages').then(module => ({ default: module.AdminMessages })));
 const AdminPayments = lazy(() => import('./pages/AdminPayments').then(module => ({ default: module.AdminPayments })));
 const AdminAccessories = lazy(() => import('./pages/AdminAccessories').then(module => ({ default: module.AdminAccessories })));
+const AdminPOS = lazy(() => import('./pages/AdminPOS').then(module => ({ default: module.AdminPOS })));
+const AdminOrders = lazy(() => import('./pages/AdminOrders').then(module => ({ default: module.AdminOrders })));
 import { fetchAPI } from './utils/api';
 
 interface User {
@@ -197,6 +199,8 @@ function App() {
             <Route path="customers" element={<CustomersList />} />
             <Route path="customers/:id" element={<CustomerDetails />} />
             <Route path="accessories" element={<AdminAccessories />} />
+            <Route path="pos" element={<AdminPOS />} />
+            <Route path="orders" element={<AdminOrders />} />
             <Route path="upcoming-bookings" element={<AdminUpcomingBookings />} />
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="analytics" element={<AdminAnalytics />} />

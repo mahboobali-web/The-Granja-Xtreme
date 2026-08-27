@@ -3,6 +3,7 @@ import { DollarSign, FileText, Search, Filter, AlertCircle, TrendingUp, CreditCa
 import { fetchAPI } from '../utils/api';
 import { AdminCollectPaymentModal } from '../components/AdminCollectPaymentModal';
 import { AdminBookingDetailsModal } from '../components/AdminBookingDetailsModal';
+import { PosReceiptModal } from '../components/PosReceiptModal';
 import { auth } from '../config/firebase';
 import { useTranslation } from 'react-i18next';
 import { formatAtvName } from '../utils/formatAtv';
@@ -18,6 +19,7 @@ export function AdminPayments() {
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState<string | null>(null);
   const [receiptModalOpen, setReceiptModalOpen] = useState<string | null>(null);
+  const [posReceiptModalOpen, setPosReceiptModalOpen] = useState<string | null>(null);
 
   const loadData = async () => {
     try {
@@ -189,6 +191,7 @@ export function AdminPayments() {
                   if (search) {
                     const searchLower = search.toLowerCase();
                     if (!inv.invoiceNumber?.toLowerCase().includes(searchLower) &&
+                        !inv.orderId?.orderNumber?.toLowerCase().includes(searchLower) &&
                         !inv.customerId?.firstName?.toLowerCase().includes(searchLower) &&
                         !inv.customerId?.lastName?.toLowerCase().includes(searchLower) &&
                         !inv.customerId?.phone?.includes(searchLower)) {
@@ -210,30 +213,42 @@ export function AdminPayments() {
 
                 return filteredInvoices.map((inv) => (
                   <tr key={inv._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                    <td style={{ padding: '1rem', fontWeight: '500', color: 'var(--primary)' }}>{inv.invoiceNumber}</td>
+                    <td style={{ padding: '1rem', fontWeight: '500', color: 'var(--primary)' }}>
+                      <div>{inv.invoiceNumber}</div>
+                      {inv.orderId && (
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 'normal', marginTop: '2px' }}>
+                          Ref: {inv.orderId.orderNumber}
+                        </div>
+                      )}
+                    </td>
                   <td style={{ padding: '1rem' }}>
                     <div>{inv.customerId?.firstName} {inv.customerId?.lastName}</div>
                     <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{inv.customerId?.phone}</div>
                   </td>
                   <td style={{ padding: '1rem' }}>
-                    <div>{formatAtvName(inv.atvId)}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{t(inv.invoiceType || '')}</div>
+                    <div>{inv.orderId ? t('adminPayments.retailPosSale', 'Retail POS Sale') : formatAtvName(inv.atvId)}</div>
+                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{inv.orderId ? `${inv.orderId.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0} items` : t(inv.invoiceType || '')}</div>
                   </td>
                   <td style={{ padding: '1rem', fontWeight: '500' }}>${inv.amount.toFixed(2)}</td>
                   <td style={{ padding: '1rem', color: inv.balance > 0 ? '#ef4444' : '#111827', fontWeight: '500' }}>
                     ${inv.balance.toFixed(2)}
                   </td>
                   <td style={{ padding: '1rem' }}>
-                      <span style={{
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.75rem',
-                        fontWeight: 'bold',
-                        backgroundColor: inv.bookingId?.status === 'Cancelled' ? '#fee2e2' : inv.status === 'Paid' ? '#dcfce7' : '#fef3c7',
-                        color: inv.bookingId?.status === 'Cancelled' ? '#991b1b' : inv.status === 'Paid' ? '#166534' : '#b45309'
-                      }}>
-                        {inv.bookingId?.status === 'Cancelled' ? t('adminPayments.cancelled', 'Cancelled') as string : t(`adminPayments.status${inv.status.replace(/\s+/g, '')}`, inv.status) as string}
-                      </span>
+                    {(() => {
+                      const isCancelled = inv.bookingId?.status === 'Cancelled' || inv.orderId?.status === 'Cancelled';
+                      return (
+                        <span style={{
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '9999px',
+                          fontSize: '0.75rem',
+                          fontWeight: 'bold',
+                          backgroundColor: isCancelled ? '#fee2e2' : inv.status === 'Paid' ? '#dcfce7' : '#fef3c7',
+                          color: isCancelled ? '#991b1b' : inv.status === 'Paid' ? '#166534' : '#b45309'
+                        }}>
+                          {isCancelled ? t('adminPayments.cancelled', 'Cancelled') as string : t(`adminPayments.status${inv.status.replace(/\s+/g, '')}`, inv.status) as string}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td style={{ padding: '1rem', color: '#6b7280' }}>
                     {(() => {
@@ -254,13 +269,19 @@ export function AdminPayments() {
                   <td style={{ padding: '1rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button 
-                        onClick={() => setDetailsModalOpen(inv.bookingId?._id || inv.bookingId)}
+                        onClick={() => {
+                          if (inv.orderId) {
+                            setPosReceiptModalOpen(inv.orderId._id || inv.orderId);
+                          } else {
+                            setDetailsModalOpen(inv.bookingId?._id || inv.bookingId);
+                          }
+                        }}
                         style={{ padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '4px', background: 'white', cursor: 'pointer', color: '#374151' }} 
                         title={t('adminPayments.viewDetails', "View Details")}
                       >
                         <Eye size={16} />
                       </button>
-                      {inv.status !== 'Paid' && inv.bookingId?.status !== 'Cancelled' && (
+                      {inv.status !== 'Paid' && inv.bookingId?.status !== 'Cancelled' && inv.orderId?.status !== 'Cancelled' && (
                         <button 
                           onClick={() => setSelectedInvoice(inv)}
                           style={{ padding: '0.5rem', border: '1px solid var(--primary)', borderRadius: '4px', background: 'var(--primary)', cursor: 'pointer', color: 'white' }} 
@@ -270,7 +291,13 @@ export function AdminPayments() {
                         </button>
                       )}
                       <button 
-                        onClick={() => setReceiptModalOpen(inv.bookingId?._id || inv.bookingId)}
+                        onClick={() => {
+                          if (inv.orderId) {
+                            setPosReceiptModalOpen(inv.orderId._id || inv.orderId);
+                          } else {
+                            setReceiptModalOpen(inv.bookingId?._id || inv.bookingId);
+                          }
+                        }}
                         style={{ padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '4px', background: 'white', cursor: 'pointer', color: '#374151' }} 
                         title={t('adminPayments.viewPrintReceipt', "View & Print Receipt")}
                       >
@@ -306,6 +333,12 @@ export function AdminPayments() {
           onClose={() => setReceiptModalOpen(null)} 
           onUpdate={loadData}
           initialTab="receipt"
+        />
+      )}
+      {posReceiptModalOpen && (
+        <PosReceiptModal 
+          orderId={posReceiptModalOpen}
+          onClose={() => setPosReceiptModalOpen(null)}
         />
       )}
     </>

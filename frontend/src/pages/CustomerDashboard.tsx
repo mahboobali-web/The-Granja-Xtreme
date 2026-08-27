@@ -990,8 +990,17 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                 INVOICE SUMMARY
               </div>
               <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.8 }}>
-                ATV Reference: <strong style={{ color: '#111827' }}>{formatAtvName(inv.atvId) || 'N/A'}</strong><br />
-                Charge Type: <strong style={{ color: '#111827' }}>{inv.invoiceType || 'Additional Charge'}</strong><br />
+                {inv.orderId ? (
+                  <>
+                    Order Type: <strong style={{ color: '#111827' }}>{t("Retail POS Sale")}</strong><br />
+                    Total Items: <strong style={{ color: '#111827' }}>{inv.orderId.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0}</strong><br />
+                  </>
+                ) : (
+                  <>
+                    ATV Reference: <strong style={{ color: '#111827' }}>{formatAtvName(inv.atvId) || 'N/A'}</strong><br />
+                    Charge Type: <strong style={{ color: '#111827' }}>{inv.invoiceType || 'Additional Charge'}</strong><br />
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -1007,14 +1016,27 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
-                  <div style={{ fontWeight: 600, color: '#111827', fontSize: '14px', marginBottom: '4px' }}>{inv.invoiceType}</div>
-                  <div style={{ fontSize: '12px', color: '#6b7280' }}>{inv.description}</div>
-                </td>
-                <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(inv.amount || 0).toFixed(2)}</td>
-                <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${(inv.amount || 0).toFixed(2)}</td>
-              </tr>
+              {inv.orderId ? (
+                inv.orderId.items?.map((item: any, idx: number) => (
+                  <tr key={idx}>
+                    <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
+                      <div style={{ fontWeight: 600, color: '#111827', fontSize: '14px', marginBottom: '4px' }}>{item.productName || item.productId?.name || 'Retail Item'}</div>
+                      <div style={{ fontSize: '12px', color: '#6b7280' }}>Qty: {item.quantity}</div>
+                    </td>
+                    <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(item.price || 0).toFixed(2)}</td>
+                    <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td style={{ padding: '24px', borderBottom: '1px solid #f3f4f6' }}>
+                    <div style={{ fontWeight: 600, color: '#111827', fontSize: '14px', marginBottom: '4px' }}>{inv.invoiceType}</div>
+                    <div style={{ fontSize: '12px', color: '#6b7280' }}>{inv.description}</div>
+                  </td>
+                  <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#4b5563', fontSize: '14px' }}>${(inv.amount || 0).toFixed(2)}</td>
+                  <td style={{ padding: '24px', textAlign: 'right', borderBottom: '1px solid #f3f4f6', color: '#111827', fontWeight: 600, fontSize: '14px' }}>${(inv.amount || 0).toFixed(2)}</td>
+                </tr>
+              )}
             </tbody>
           </table>
 </div>
@@ -1149,8 +1171,8 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <Ticket size={20} style={{ color: '#b91c1c' }} />
                         <div>
-                          <div style={{ fontSize: '15px', fontWeight: 600, color: '#111827' }}>{inv.invoiceType || t('Invoice')}</div>
-                          <div style={{ fontSize: '12px', color: '#6b7280' }}>{t("Additional Charge")}</div>
+                          <div style={{ fontSize: '15px', fontWeight: 600, color: '#111827' }}>{inv.orderId ? t("Retail POS Sale") : (inv.invoiceType || t('Invoice'))}</div>
+                          <div style={{ fontSize: '12px', color: '#6b7280' }}>{inv.orderId ? t("Retail Purchase") : t("Additional Charge")}</div>
                         </div>
                       </div>
                     </td>

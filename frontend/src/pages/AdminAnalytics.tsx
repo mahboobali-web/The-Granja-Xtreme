@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Download, TrendingUp, CheckCircle2, Ticket, DollarSign, FileText, Truck } from 'lucide-react';
+import { Download, TrendingUp, CheckCircle2, Ticket, DollarSign, FileText, Truck, ShoppingBag } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { fetchAPI } from '../utils/api';
 import { SkeletonGrid } from '../components/Skeletons';
@@ -57,7 +57,7 @@ export const AdminAnalytics: React.FC = () => {
             if (day) dayLabel = `${new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric' })}`;
           } else {
             const [y, m, day] = r._id.split('-');
-            if (day) dayLabel = new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short' }).toUpperCase();
+            if (day) dayLabel = new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
           }
           return { day: dayLabel, value: r.total };
         });
@@ -156,6 +156,16 @@ export const AdminAnalytics: React.FC = () => {
           </div>
           <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>{dashboard.customerCount}</div>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#7c3aed' }}>{t('adminAnalytics.registeredUsers', 'Registered users')}</div>
+        </div>
+
+        {/* Total Retail Orders */}
+        <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#64748b' }}>{t('adminAnalytics.totalRetailOrders', 'Retail POS Orders')}</span>
+            <div style={{ backgroundColor: '#fff1f2', padding: '6px', borderRadius: '8px' }}><ShoppingBag size={16} color="#e11d48" /></div>
+          </div>
+          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>{dashboard.totalOrders}</div>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#e11d48' }}>{t('adminAnalytics.successfulOrders', 'Successful POS Checkouts')}</div>
         </div>
 
       </div>

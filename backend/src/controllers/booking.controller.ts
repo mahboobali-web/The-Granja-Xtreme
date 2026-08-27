@@ -463,8 +463,8 @@ export const getMyBookings = async (req: AuthenticatedRequest, res: Response): P
     const payments = await Payment.find({ bookingId: { $in: bookingIds } }).sort({ createdAt: -1 }).lean();
     
     const bookingsWithPayment = bookings.map(b => {
-      const invoice = invoices.find(inv => inv.bookingId.toString() === b._id.toString());
-      const paymentRec = payments.find(p => p.bookingId.toString() === b._id.toString() && p.paymentMethod !== 'Refund');
+      const invoice = invoices.find(inv => inv.bookingId?.toString() === b._id.toString());
+      const paymentRec = payments.find(p => p.bookingId?.toString() === b._id.toString() && p.paymentMethod !== 'Refund');
       return {
         ...b,
         finalTotal: invoice ? invoice.amount : 0,
@@ -555,8 +555,8 @@ export const getAllBookings = async (_req: Request, res: Response): Promise<void
     const payments = await Payment.find({ bookingId: { $in: bookingIds } }).sort({ createdAt: -1 }).lean();
     
     const bookingsWithPayment = bookings.map(b => {
-      const invoice = invoices.find(inv => inv.bookingId.toString() === b._id.toString());
-      const paymentRec = payments.find(p => p.bookingId.toString() === b._id.toString() && p.paymentMethod !== 'Refund');
+      const invoice = invoices.find(inv => inv.bookingId?.toString() === b._id.toString());
+      const paymentRec = payments.find(p => p.bookingId?.toString() === b._id.toString() && p.paymentMethod !== 'Refund');
       return {
         ...b,
         finalTotal: invoice ? invoice.amount : 0,

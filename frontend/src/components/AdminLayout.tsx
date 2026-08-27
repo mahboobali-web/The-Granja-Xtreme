@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CalendarDays, Truck, Package, Bell, Plus, Users, FileEdit, Settings, UserCog, ShieldAlert, MessageSquare, Globe, DollarSign, Menu, X, LogOut } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Truck, Package, Bell, Plus, Users, FileEdit, Settings, UserCog, ShieldAlert, MessageSquare, Globe, DollarSign, Menu, X, LogOut, ShoppingBag, ClipboardList } from 'lucide-react';
 import { fetchAPI } from '../utils/api';
 import { auth } from '../config/firebase';
 import { useTranslation } from 'react-i18next';
@@ -151,6 +151,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
     { name: t('Payments'), path: '/admin/payments', icon: DollarSign },
     { name: t('Fleet'), path: '/admin/fleet', icon: Truck },
     { name: t('Accessories & Other Items'), path: '/admin/accessories', icon: Package },
+    { name: t('Point of Sale'), path: '/admin/pos', icon: ShoppingBag },
+    { name: t('Orders History'), path: '/admin/orders', icon: ClipboardList },
     { name: t('Analytics'), path: '/admin/analytics', icon: LayoutDashboard },
     { name: t('Messages'), path: '/admin/messages', icon: MessageSquare }
   ];
@@ -172,6 +174,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
       case '/admin/accessories': return { title: t('Accessories & Other Items'), subtitle: t('Manage additional items and add-ons for your rentals.') };
       case '/admin/bookings': return { title: t('Booking Management'), subtitle: t('Monitor your fleet performance and handle upcoming guest expeditions from a centralized calendar view.') };
       case '/admin/upcoming-bookings': return { title: t('Check-In & Check-Out'), subtitle: t('Manage customer arrivals and returns.') };
+      case '/admin/pos': return { title: t('Point of Sale'), subtitle: t('Retail checkout system.') };
+      case '/admin/orders': return { title: t('Orders History'), subtitle: t('Track all retail POS transactions.') };
       case '/admin/analytics': return { title: t('Reports & Analytics'), subtitle: t('Real-time performance tracking and fleet intelligence.') };
       case '/admin/payments': return { title: t('Payments & Invoices'), subtitle: t('Manage collected payments and outstanding balances.') };
       case '/admin/cms': return { title: t('CMS Configuration'), subtitle: t('Manage content and landing page features.') };
@@ -217,7 +221,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
 
       {/* Sidebar */}
       <aside 
-        className={`admin-sidebar ${isMobileSidebarOpen ? 'open' : ''}`}
+        className={`admin-sidebar no-print ${isMobileSidebarOpen ? 'open' : ''}`}
         style={{
         width: '260px',
         backgroundColor: '#0f172a',
@@ -335,7 +339,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
       <main className="admin-main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         
         {/* Mobile Header (Only visible on small screens) */}
-        <div className="admin-mobile-header">
+        <div className="admin-mobile-header no-print">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button 
               onClick={() => setIsMobileSidebarOpen(true)}
@@ -348,7 +352,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
         </div>
 
         {/* Top Header */}
-        <header className="admin-top-header" style={{
+        <header className="admin-top-header no-print" style={{
           minHeight: '80px',
           padding: '16px 24px',
           display: 'flex',

@@ -1,12 +1,13 @@
 import { Counter } from '../models/counter.model';
 
-type SequenceType = 'booking' | 'invoice' | 'receipt' | 'contract';
+type SequenceType = 'booking' | 'invoice' | 'receipt' | 'contract' | 'order';
 
 const PREFIXES: Record<SequenceType, string> = {
   booking: 'TGX-B-',
   invoice: 'TGX-I-',
   receipt: 'TGX-R-',
-  contract: 'TGX-C-'
+  contract: 'TGX-C-',
+  order: 'TGX-O-'
 };
 
 export const getNextTgxNumber = async (sequenceName: SequenceType): Promise<string> => {

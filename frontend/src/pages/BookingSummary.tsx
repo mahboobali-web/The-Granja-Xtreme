@@ -31,6 +31,8 @@ interface Booking {
   atvIds?: any[];
   discountRate?: number;
   discountAmount?: number;
+  snapshotAtvRates?: { atvId: any; ratePerDay: number }[];
+  snapshotTaxRate?: number;
 }
 
 export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
@@ -142,11 +144,19 @@ export const BookingSummary: React.FC<{ user?: any }> = ({ user }) => {
     const end = new Date(booking.endDate);
     const days = Math.max(1, Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
     const atvs = booking.atvIds && booking.atvIds.length > 0 ? booking.atvIds : (booking.atvId ? [booking.atvId] : []);
-    const baseRate = days * atvs.reduce((sum: number, atv: any) => sum + (atv.ratePerDay || 0), 0);
+    const baseRate = days * atvs.reduce((sum: number, atv: any) => {
+      const snap = booking.snapshotAtvRates?.find((s: any) => s.atvId === atv._id || (s.atvId && s.atvId._id === atv._id));
+      const rate = snap ? snap.ratePerDay : (atv.ratePerDay || 0);
+      return sum + rate;
+    }, 0);
     const discountRate = booking.discountRate || 0;
     const discountAmount = booking.discountAmount || 0;
     const passesFee = 45 * atvs.length;
-    const tax = Math.round((baseRate - discountAmount + passesFee) * (settings.baseTaxRate / 100) * 100) / 100;
+    
+    // Use snapshotTaxRate if available (divide by 100 since it's stored as a percentage), otherwise fallback to live settings
+    const taxRate = booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate / 100 : settings.baseTaxRate / 100;
+    const tax = Math.round((baseRate - discountAmount + passesFee) * taxRate * 100) / 100;
+    
     const total = baseRate - discountAmount + passesFee + tax;
     return { baseRate, passesFee, tax, total, atvs, days, discountRate, discountAmount };
   };

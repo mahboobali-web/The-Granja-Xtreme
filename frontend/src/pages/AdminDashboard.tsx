@@ -33,7 +33,7 @@ export const AdminDashboard: React.FC = () => {
         
         // Map revenue data to Recharts format
         const formattedRev = revRes.map((r: any) => ({
-          name: new Date(r._id).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short' }).toUpperCase(),
+          name: new Date(r._id).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase(),
           value: r.total
         }));
         

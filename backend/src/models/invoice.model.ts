@@ -2,9 +2,10 @@ import { Schema, model, Types } from 'mongoose';
 
 export interface IInvoice {
   invoiceNumber: string; // e.g. TGX-0001
-  bookingId: Types.ObjectId;
+  bookingId?: Types.ObjectId;
+  orderId?: Types.ObjectId;
   customerId: Types.ObjectId;
-  atvId: Types.ObjectId;
+  atvId?: Types.ObjectId;
   invoiceType: 'Rental Charge' | 'Damage Charge' | 'Extra Charge';
   description: string;
   amount: number;
@@ -20,9 +21,10 @@ export interface IInvoice {
 const invoiceSchema = new Schema<IInvoice>(
   {
     invoiceNumber: { type: String, required: true, unique: true },
-    bookingId: { type: Schema.Types.ObjectId, ref: 'Booking', required: true },
+    bookingId: { type: Schema.Types.ObjectId, ref: 'Booking', required: false },
+    orderId: { type: Schema.Types.ObjectId, ref: 'Order', required: false },
     customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    atvId: { type: Schema.Types.ObjectId, ref: 'Atv', required: true },
+    atvId: { type: Schema.Types.ObjectId, ref: 'Atv', required: false },
     invoiceType: { 
       type: String, 
       enum: ['Rental Charge', 'Damage Charge', 'Extra Charge'], 
