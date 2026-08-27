@@ -16,7 +16,8 @@ import { getNextTgxNumber } from '../utils/counter.utils';
 import { Accessory } from '../models/accessory.model';
 export const adminCreateBooking = async (req: Request, res: Response): Promise<void> => {
   try {
-    let { atvId, atvIds, customerId, startDate, endDate, notes, customDiscountRate } = req.body;
+    let { atvId, atvIds, customerId, startDate, endDate, notes, customDiscountRate, bookingType } = req.body;
+    bookingType = bookingType || 'Rental';
     
     // Normalize to array of ATV IDs
     let selectedAtvIds: string[] = [];
@@ -26,7 +27,7 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
       selectedAtvIds = [atvId];
     }
 
-    if (selectedAtvIds.length === 0) {
+    if (bookingType !== 'Retail' && selectedAtvIds.length === 0) {
       res.status(400).json({ message: 'At least one ATV must be selected.' });
       return;
     }
@@ -52,33 +53,35 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     }
 
     const atvs = await Atv.find({ _id: { $in: selectedAtvIds } });
-    if (atvs.length !== selectedAtvIds.length) {
+    if (bookingType !== 'Retail' && atvs.length !== selectedAtvIds.length) {
       res.status(404).json({ message: 'One or more selected ATVs were not found.' });
       return;
     }
 
     // Check availability for all selected ATVs
     const conflictingAtvNames: string[] = [];
-    for (const atv of atvs) {
-      if (atv.status === 'MAINTENANCE' || atv.status === 'DECOMMISSIONED') {
-        const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
-        conflictingAtvNames.push(`${label} (Under ${atv.status.toLowerCase()})`);
-        continue;
+    if (bookingType !== 'Retail') {
+      for (const atv of atvs) {
+        if (atv.status === 'MAINTENANCE' || atv.status === 'DECOMMISSIONED') {
+          const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
+          conflictingAtvNames.push(`${label} (Under ${atv.status.toLowerCase()})`);
+          continue;
+        }
+
+        const overlapping = await isAtvBooked(atv._id.toString(), startDate, endDate);
+        if (overlapping) {
+          const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
+          conflictingAtvNames.push(label);
+        }
       }
 
-      const overlapping = await isAtvBooked(atv._id.toString(), startDate, endDate);
-      if (overlapping) {
-        const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
-        conflictingAtvNames.push(label);
+      if (conflictingAtvNames.length > 0) {
+        res.status(400).json({ 
+          message: `Double booking conflict: The following vehicle(s) are already booked or unavailable for the selected dates: ${conflictingAtvNames.join(', ')}`,
+          conflictingAtvs: conflictingAtvNames
+        });
+        return;
       }
-    }
-
-    if (conflictingAtvNames.length > 0) {
-      res.status(400).json({ 
-        message: `Double booking conflict: The following vehicle(s) are already booked or unavailable for the selected dates: ${conflictingAtvNames.join(', ')}`,
-        conflictingAtvs: conflictingAtvNames
-      });
-      return;
     }
 
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
@@ -112,18 +115,16 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
       finalTotal: total,
       discountRate,
       discountAmount,
-      snapshotTaxRate: taxRate,
-      snapshotSecurityDeposit: depositPerAtv,
-      snapshotAtvRates: atvs.map(a => ({ atvId: a._id, ratePerDay: a.ratePerDay }))
+      snapshotTaxRate: taxRate, snapshotSecurityDeposit: depositPerAtv, snapshotAtvRates: atvs.map(a => ({ atvId: a._id, ratePerDay: a.ratePerDay }))
     });
 
     const invoiceNumber = await getNextTgxNumber('invoice');
     const invoice = await Invoice.create({
-      invoiceNumber,
+      invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
       bookingId: booking._id,
       customerId,
-      atvId: atvs[0]._id,
-      invoiceType: 'Rental Charge',
+      atvId: selectedAtvIds[0] || null, // Keep for backward compatibility or handle multiple
+      invoiceType: bookingType === 'Retail' ? 'Retail' : 'Rental Charge',
       description: `Admin created reservation for ${atvs.length} vehicle(s)`,
       amount: total,
       discountRate,
@@ -360,10 +361,12 @@ export const createCompleteBooking = async (req: AuthenticatedRequest, res: Resp
     }
 
     const bookingNumber = await getNextTgxNumber('booking');
-    const newBooking = await Booking.create({
+    const newBooking = new Booking({
       bookingNumber,
+      bookingType: 'Rental',
       customerId: req.user._id,
       atvId: new Types.ObjectId(atvId),
+      atvIds: [new Types.ObjectId(atvId)],
       startDate,
       endDate,
       status: 'Customer Signed', 
@@ -1180,3 +1183,4 @@ export const checkoutBooking = async (req: AuthenticatedRequest, res: Response):
     res.status(500).json({ message: 'Failed to check out.', error: (error as Error).message });
   }
 };
+

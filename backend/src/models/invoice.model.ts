@@ -4,8 +4,8 @@ export interface IInvoice {
   invoiceNumber: string; // e.g. TGX-0001
   bookingId: Types.ObjectId;
   customerId: Types.ObjectId;
-  atvId: Types.ObjectId;
-  invoiceType: 'Rental Charge' | 'Damage Charge' | 'Extra Charge';
+  atvId?: Types.ObjectId;
+  invoiceType: 'Rental Charge' | 'Damage Charge' | 'Extra Charge' | 'Retail';
   description: string;
   amount: number;
   discountRate?: number;
@@ -22,10 +22,10 @@ const invoiceSchema = new Schema<IInvoice>(
     invoiceNumber: { type: String, required: true, unique: true },
     bookingId: { type: Schema.Types.ObjectId, ref: 'Booking', required: true },
     customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    atvId: { type: Schema.Types.ObjectId, ref: 'Atv', required: true },
+    atvId: { type: Schema.Types.ObjectId, ref: 'Atv' },
     invoiceType: { 
       type: String, 
-      enum: ['Rental Charge', 'Damage Charge', 'Extra Charge'], 
+      enum: ['Rental Charge', 'Damage Charge', 'Extra Charge', 'Retail'], 
       required: true 
     },
     description: { type: String, required: true },
