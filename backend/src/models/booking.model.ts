@@ -2,7 +2,6 @@ import { Schema, model, Types } from 'mongoose';
 
 export interface IBooking {
   bookingNumber: string;
-  bookingType?: 'Rental' | 'Retail';
   customerId: Types.ObjectId;
   atvId?: Types.ObjectId;
   atvIds?: Types.ObjectId[];
@@ -48,7 +47,6 @@ export interface IBooking {
 const bookingSchema = new Schema<IBooking>(
   {
     bookingNumber: { type: String, required: true, unique: true },
-    bookingType: { type: String, enum: ['Rental', 'Retail'], default: 'Rental' },
     customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     atvId: { type: Schema.Types.ObjectId, ref: 'Atv' },
     atvIds: [{ type: Schema.Types.ObjectId, ref: 'Atv' }],

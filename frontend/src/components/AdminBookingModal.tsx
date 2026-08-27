@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar as CalendarIcon, User, Truck, PenTool, Package, AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
+import { X, Calendar as CalendarIcon, User, Truck, PenTool, AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
 import { fetchAPI } from '../utils/api';
 import { SignatureModal } from './SignatureModal';
 import DatePicker from 'react-datepicker';
@@ -40,10 +40,6 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [atvs, setAtvs] = useState<ATV[]>([]);
   const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
-  const [bookingType, setBookingType] = useState<'Rental' | 'Retail'>('Rental');
-  const [availableAccessories, setAvailableAccessories] = useState<any[]>([]);
-  const [selectedAccessories, setSelectedAccessories] = useState<any[]>([]);
-
   
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [selectedAtvIds, setSelectedAtvIds] = useState<string[]>([]);
@@ -63,16 +59,14 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [cData, aData, sData, accData] = await Promise.all([
+        const [cData, aData, sData] = await Promise.all([
           fetchAPI('/auth/customers'),
           fetchAPI('/atvs'),
-          fetchAPI('/settings').catch(() => null),
-          fetchAPI('/accessories').catch(() => [])
+          fetchAPI('/settings').catch(() => null)
         ]);
         setCustomers(cData);
         setAtvs(aData);
         if (sData) setSettings(sData);
-        if (accData) setAvailableAccessories(accData);
       } catch (e) {
         console.error(e);
       }
@@ -142,7 +136,6 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
 
   // Find any selected vehicle that has a double-booking conflict
   const getConflictingSelectedAtvs = () => {
-    if (bookingType === 'Retail') return [];
     if (!startDate || !endDate) return [];
     return selectedAtvIds
       .map(id => {
@@ -168,14 +161,6 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
   };
 
   const calculateItemizedTotals = () => {
-    const accessoriesSum = selectedAccessories.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    
-    if (bookingType === 'Retail') {
-      const discountRate = customDiscountRate !== '' ? Number(customDiscountRate) : 0;
-      const discountAmount = Math.round(accessoriesSum * (discountRate / 100) * 100) / 100;
-      return { items: [], grandTotal: accessoriesSum - discountAmount, totalBase: accessoriesSum, totalTax: 0, totalDeposit: 0, discountAmount, discountRate, accessoriesSum };
-    }
-
     const days = getDaysCount();
     if (days <= 0 || selectedAtvIds.length === 0) return { items: [], grandTotal: 0, totalBase: 0, totalTax: 0, totalDeposit: 0, discountAmount: 0, discountRate: 0 };
 
@@ -208,30 +193,13 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
     const discountRate = customDiscountRate !== '' ? Number(customDiscountRate) : ((settings as any).defaultDiscountRate || 0);
     const discountAmount = Math.round(totalBase * (discountRate / 100) * 100) / 100;
     const recalculatedTax = Math.round((totalBase - discountAmount) * (settings.baseTaxRate / 100) * 100) / 100;
-    const grandTotal = totalBase - discountAmount + recalculatedTax + totalDeposit + accessoriesSum;
-    return { items, grandTotal, totalBase, totalTax: recalculatedTax, totalDeposit, discountAmount, discountRate, accessoriesSum };
+    const grandTotal = totalBase - discountAmount + recalculatedTax + totalDeposit;
+    return { items, grandTotal, totalBase, totalTax: recalculatedTax, totalDeposit, discountAmount, discountRate };
   };
 
   const handleReviewConfirm = async () => {
     setLoading(true);
     setError('');
-
-    if (bookingType === 'Retail') {
-      if (selectedAccessories.length === 0) {
-        setError('Please select at least one accessory for Retail checkout.');
-        setLoading(false);
-        return;
-      }
-      if (!selectedCustomerId) {
-        setError('Please select a customer or create a new one first.');
-        setLoading(false);
-        return;
-      }
-      setStep(3);
-      setLoading(false);
-      return;
-    }
-
 
     if (selectedAtvIds.length === 0) {
       setError('Please select at least one vehicle.');
@@ -281,16 +249,14 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
     setLoading(true);
     setError('');
     try {
-            const result = await fetchAPI('/bookings/admin-create', {
+      const result = await fetchAPI('/bookings/admin-create', {
         method: 'POST',
         body: {
-          bookingType,
           customerId: selectedCustomerId,
-          atvIds: bookingType === 'Retail' ? [] : selectedAtvIds,
-          startDate: bookingType === 'Retail' ? new Date().toISOString() : startDate,
-          endDate: bookingType === 'Retail' ? new Date().toISOString() : endDate,
+          atvIds: selectedAtvIds,
+          startDate,
+          endDate,
           notes,
-          accessories: selectedAccessories,
           customDiscountRate: customDiscountRate !== '' ? Number(customDiscountRate) : undefined
         }
       });
@@ -343,17 +309,6 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
 
         {step === 1 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div style={{ display: 'flex', gap: '20px', marginBottom: '10px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 700, color: bookingType === 'Rental' ? '#4d7c0f' : '#64748b' }}>
-                <input type="radio" checked={bookingType === 'Rental'} onChange={() => setBookingType('Rental')} style={{ accentColor: '#4d7c0f' }} />
-                ATV Rental
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 700, color: bookingType === 'Retail' ? '#4d7c0f' : '#64748b' }}>
-                <input type="radio" checked={bookingType === 'Retail'} onChange={() => setBookingType('Retail')} style={{ accentColor: '#4d7c0f' }} />
-                Retail / Accessories Only
-              </label>
-            </div>
-
             <div>
               <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px' }}><User size={16} /> {t('select_customer', 'Select Customer')}</label>
               <select 
@@ -572,87 +527,44 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
 
         {step === 3 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-
-            {/* Accessories Section for Retail or Rental */}
             <div style={{ backgroundColor: '#f8fafc', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Package size={16} /> {t("Accessories")}
+              <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>
+                {t('itemized_summary', 'Itemized Summary')} ({selectedAtvIds.length} {selectedAtvIds.length === 1 ? t('vehicle', 'Vehicle') : t('vehicles', 'Vehicles')}, {getDaysCount()} {getDaysCount() === 1 ? t('day_label', 'Day') : t('days_plural', 'Days')})
               </h3>
               
-              {selectedAccessories.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
-                  {selectedAccessories.map((acc, index) => (
-                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: '8px 12px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 600 }}>{acc.name} - ${acc.price.toFixed(2)}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 700 }}>{t("Qty")}:</span>
-                          <input 
-                            type="number" 
-                            min="1" 
-                            value={acc.quantity} 
-                            onChange={(e) => {
-                              const newQty = Math.max(1, parseInt(e.target.value) || 1);
-                              setSelectedAccessories(selectedAccessories.map((a, i) => i === index ? { ...a, quantity: newQty } : a));
-                            }}
-                            style={{ width: '50px', padding: '4px 8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '12px' }}
-                          />
-                        </div>
-                        <span style={{ fontSize: '13px', fontWeight: 700, minWidth: '50px', textAlign: 'right' }}>${(acc.price * acc.quantity).toFixed(2)}</span>
-                        <button onClick={() => setSelectedAccessories(selectedAccessories.filter((_, i) => i !== index))} style={{ border: 'none', background: 'none', color: '#ef4444', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>{t("Remove")}</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              <select 
-                onChange={(e) => {
-                  if (!e.target.value) return;
-                  const accessory = availableAccessories.find(a => a._id === e.target.value);
-                  if (accessory) {
-                    const exists = selectedAccessories.find(a => a.accessoryId === accessory._id);
-                    if (exists) {
-                      setSelectedAccessories(selectedAccessories.map(a => a.accessoryId === accessory._id ? { ...a, quantity: a.quantity + 1 } : a));
-                    } else {
-                      const accName = i18n.language?.startsWith('es') ? (accessory.nameEs || accessory.name) : accessory.name;
-                      setSelectedAccessories([...selectedAccessories, { accessoryId: accessory._id, name: accName, price: accessory.price, quantity: 1 }]);
-                    }
-                  }
-                  e.target.value = "";
-                }}
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px' }}
-              >
-                <option value="">{t("-- Select Accessory to Add --")}</option>
-                {availableAccessories.map(a => {
-                  const accName = i18n.language?.startsWith('es') ? (a.nameEs || a.name) : a.name;
-                  return <option key={a._id} value={a._id}>{accName} (${a.price.toFixed(2)})</option>;
-                })}
-              </select>
-            </div>
-
-            <div style={{ backgroundColor: '#f8fafc', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                            {bookingType === 'Rental' && (
-                <>
-                  <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>
-                    {t('itemized_summary', 'Itemized Summary')} ({selectedAtvIds.length} {selectedAtvIds.length === 1 ? t('vehicle', 'Vehicle') : t('vehicles', 'Vehicles')}, {getDaysCount()} {getDaysCount() === 1 ? t('day_label', 'Day') : t('days_plural', 'Days')})
-                  </h3>
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px', borderBottom: '1px solid #cbd5e1', paddingBottom: '12px' }}>
-                    {totals.items.map(item => (
-                      <div key={item!.atv._id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-                        <span style={{ color: '#334155', fontWeight: 600 }}>
-                          {formatAtvName({...item!.atv, name: i18n.language?.startsWith('es') ? (item!.atv.nameEs || item!.atv.name) : item!.atv.name})} ({item!.days} {t('days', 'days')} @ ${item!.atv.ratePerDay}/{t('d', 'd')})
-                        </span>
-                        <span style={{ color: '#0f172a', fontWeight: 700 }}>
-                          ${item!.baseRate.toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px', borderBottom: '1px solid #cbd5e1', paddingBottom: '12px' }}>
+                {totals.items.map(item => (
+                  <div key={item!.atv._id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+                    <span style={{ color: '#334155', fontWeight: 600 }}>
+                      {formatAtvName({...item!.atv, name: i18n.language?.startsWith('es') ? (item!.atv.nameEs || item!.atv.name) : item!.atv.name})} ({item!.days} {t('days', 'days')} @ ${item!.atv.ratePerDay}/{t('d', 'd')})
+                    </span>
+                    <span style={{ color: '#0f172a', fontWeight: 700 }}>
+                      ${item!.baseRate.toFixed(2)}
+                    </span>
                   </div>
-                </>
-              )}
+                ))}
+              </div>
 
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px', color: '#64748b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{t('total_base_rate', 'Total Base Rate:')}</span>
+                  <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalBase.toFixed(2)}</span>
+                </div>
+                {totals.discountAmount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>{t('discount', 'Discount')} ({totals.discountRate}%):</span>
+                    <span style={{ fontWeight: 600, color: '#ef4444' }}>-${totals.discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{t('tax_label', `Tax (${settings.baseTaxRate}%):`)}</span>
+                  <span style={{ fontWeight: 600, color: '#334155' }}>${totals.totalTax.toFixed(2)}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{t('refundable_security_deposit', 'Refundable Security Deposit')}:</span>
+                  <span style={{ fontWeight: 600 }}>${totals.totalDeposit.toFixed(2)}</span>
+                </div>
+              </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', paddingTop: '12px', borderTop: '2px solid #cbd5e1', fontSize: '16px' }}>
                 <span style={{ color: '#0f172a', fontWeight: 800 }}>{t('grand_total', 'Grand Total')}</span>
@@ -687,7 +599,7 @@ export const AdminBookingModal: React.FC<{ onClose: () => void; onSuccess: () =>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px' }}>
-              <button onClick={() => setStep(bookingType === 'Retail' ? 1 : 2)} style={{ background: 'none', border: 'none', color: '#64748b', fontWeight: 600, cursor: 'pointer' }}>{t('back', 'Back')}</button>
+              <button onClick={() => setStep(2)} style={{ background: 'none', border: 'none', color: '#64748b', fontWeight: 600, cursor: 'pointer' }}>{t('back', 'Back')}</button>
               <button 
                 onClick={handleSubmit}
                 disabled={loading}

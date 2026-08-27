@@ -276,29 +276,17 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 })()}</strong>
               </div>
             </div>
-            {b.bookingType !== 'Retail' ? (
-              <div>
-                <div style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '1px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid #e5e7eb' }}>
-                  {t("RENTAL SUMMARY")}
-                </div>
-                <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.8 }}>
-                  {t("ATV Assigned:")} <strong style={{ color: '#111827' }}>{atvs.map((a: any) => a.name).join(', ')}</strong><br />
-                  {t("Pickup:")} <strong style={{ color: '#111827' }}>{pickupText}</strong><br />
-                  {t("Return:")} <strong style={{ color: '#111827' }}>{returnText}</strong><br />
-                  {t("Rental Duration:")} <strong style={{ color: '#111827' }}>{t(durationText)}</strong>
-                </div>
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '1px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid #e5e7eb' }}>
+                {t("RENTAL SUMMARY")}
               </div>
-            ) : (
-              <div>
-                <div style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '1px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid #e5e7eb' }}>
-                  {t("PURCHASE DETAILS")}
-                </div>
-                <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.8 }}>
-                  {t("Type:")} <strong style={{ color: '#111827' }}>{t("Retail / Accessories")}</strong><br />
-                  {t("Date:")} <strong style={{ color: '#111827' }}>{pickupText}</strong><br />
-                </div>
+              <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: 1.8 }}>
+                {t("ATV Assigned:")} <strong style={{ color: '#111827' }}>{atvs.map((a: any) => a.name).join(', ')}</strong><br />
+                {t("Pickup:")} <strong style={{ color: '#111827' }}>{pickupText}</strong><br />
+                {t("Return:")} <strong style={{ color: '#111827' }}>{returnText}</strong><br />
+                {t("Rental Duration:")} <strong style={{ color: '#111827' }}>{t(durationText)}</strong>
               </div>
-            )}
+            </div>
           </div>
 
           {/* Table */}
@@ -358,18 +346,14 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
           {/* Totals */}
           <div className="reduce-print-margin" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '48px' }}>
             <div style={{ width: '360px' }}>
-              {b.bookingType !== 'Retail' && (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
-                    <span>{t("ATV Rental - ")} ({days} {days > 1 ? t('Days') : t('Day')})</span>
-                    <span>${baseRate.toFixed(2)}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
-                    <span>{t(`Luxury Tax (${b.snapshotTaxRate !== undefined ? b.snapshotTaxRate : (settings?.baseTaxRate ?? 10)}%)`)}</span>
-                    <span>${tax.toFixed(2)}</span>
-                  </div>
-                </>
-              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
+                <span>{t("ATV Rental - ")} ({days} {days > 1 ? t('Days') : t('Day')})</span>
+                <span>${baseRate.toFixed(2)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
+                <span>{t(`Luxury Tax (${b.snapshotTaxRate !== undefined ? b.snapshotTaxRate : (settings?.baseTaxRate ?? 10)}%)`)}</span>
+                <span>${tax.toFixed(2)}</span>
+              </div>
               {b.accessories && b.accessories.length > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563' }}>
                   <span>{t("Accessories")}</span>
@@ -382,12 +366,10 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                   <span>${b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0).toFixed(2)}</span>
                 </div>
               )}
-              {b.bookingType !== 'Retail' && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563', borderBottom: '1px solid #e5e7eb' }}>
-                  <span>{t("Security Deposit (Refundable)")}</span>
-                  <span>${securityDeposit.toFixed(2)}</span>
-                </div>
-              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#4b5563', borderBottom: '1px solid #e5e7eb' }}>
+                <span>{t("Security Deposit (Refundable)")}</span>
+                <span>${securityDeposit.toFixed(2)}</span>
+              </div>
               {b.depositRefunded && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#059669', fontWeight: 600 }}>
                   <span>{t("Security Deposit Refunded")}</span>
@@ -682,11 +664,9 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
               <button onClick={handleDownloadReceipt} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: 'white', border: '1px solid #cbd5e1', borderRadius: '8px', color: '#334155', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', whiteSpace: 'nowrap' }}>
                 <FileText size={18} /> {t("View Receipt / Invoice")}
               </button>
-              {booking.bookingType !== 'Retail' && (
-                <button onClick={handleDownloadContract} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: 'white', border: '1px solid #cbd5e1', borderRadius: '8px', color: '#334155', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', whiteSpace: 'nowrap' }}>
-                  <FileText size={18} /> {t("View Contract/Waiver")}
-                </button>
-              )}
+              <button onClick={handleDownloadContract} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: 'white', border: '1px solid #cbd5e1', borderRadius: '8px', color: '#334155', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', whiteSpace: 'nowrap' }}>
+                <FileText size={18} /> {t("View Contract/Waiver")}
+              </button>
             {booking.status !== 'Cancelled' && booking.status !== 'Completed' && (
               <button onClick={handleCancel} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '8px', color: '#b91c1c', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
                 <Ban size={18} /> {t("Cancel Booking")}
@@ -740,13 +720,9 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <FileText size={20} color="#8b5cf6" /> {t("Financial Breakdown")}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#334155' }}>
-                {booking.bookingType !== 'Retail' && (
-                  <>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Base Rate")}</span> <span>${baseRate.toFixed(2)}</span></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t(`Tax (${booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate : (settings?.baseTaxRate ?? 10)}%)`)}</span> <span>${tax.toFixed(2)}</span></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Security Deposit")}</span> <span>${securityDeposit.toFixed(2)}</span></div>
-                  </>
-                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Base Rate")}</span> <span>${baseRate.toFixed(2)}</span></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t(`Tax (${booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate : (settings?.baseTaxRate ?? 10)}%)`)}</span> <span>${tax.toFixed(2)}</span></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Security Deposit")}</span> <span>${securityDeposit.toFixed(2)}</span></div>
                 {booking.accessories && booking.accessories.length > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Accessories")}</span> <span>${booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span></div>
                 )}

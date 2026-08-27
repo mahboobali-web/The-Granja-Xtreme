@@ -67,10 +67,8 @@ export const AdminUpcomingBookings: React.FC = () => {
   const loadBookings = async () => {
     try {
       const data = await fetchAPI('/bookings');
-      // Show only operational statuses, exclude Retail which has no scheduling
-      setBookings(data.filter((b: any) => 
-        ['Pending', 'Reserved', 'Upcoming', 'Active', 'Completed'].includes(b.status) && b.bookingType !== 'Retail'
-      ));
+      // Show only operational statuses
+      setBookings(data.filter((b: any) => ['Pending', 'Reserved', 'Upcoming', 'Active', 'Completed'].includes(b.status)));
     } catch (e) {
       console.error(e);
     } finally {
