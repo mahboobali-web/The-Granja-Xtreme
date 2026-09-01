@@ -1327,5 +1327,9 @@
   "Phone:": "Teléfono:",
   "Description": "Descripción",
   "Qty": "Cant.",
-  "Unit Price": "Precio Unitario"
+  "Unit Price": "Precio Unitario",
+  "Cash Tendered & Change Due (Vuelto)": "Efectivo Recibido y Cambio (Vuelto)",
+  "Cash Received": "Efectivo Recibido",
+  "Change to Return": "Cambio a Devolver",
+  "Equivalent:": "Equivalente:"
 }

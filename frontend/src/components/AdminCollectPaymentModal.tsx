@@ -153,7 +153,7 @@ export const AdminCollectPaymentModal: React.FC<AdminCollectPaymentModalProps> =
             </div>
             <div>
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', margin: 0 }}>{t('adminPayments.collectPaymentTitle', 'Collect Payment')}</h2>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>Rate: <strong>1 USD = {exchangeRate} DOP</strong></div>
+              <div style={{ fontSize: '12px', color: '#64748b' }}>{t("Rate:")} <strong>1 USD = {exchangeRate} DOP</strong></div>
             </div>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}>
@@ -222,7 +222,7 @@ export const AdminCollectPaymentModal: React.FC<AdminCollectPaymentModalProps> =
                   boxShadow: currency === 'DOP' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
                 }}
               >
-                🇩🇴 DOP (RD$)
+                RD$ DOP (Pesos)
               </button>
             </div>
           </div>
@@ -255,14 +255,22 @@ export const AdminCollectPaymentModal: React.FC<AdminCollectPaymentModalProps> =
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 style={{
-                  width: '100%', padding: '12px 16px 12px 54px', border: '1px solid #cbd5e1', borderRadius: '12px', fontSize: '16px', fontWeight: 700, color: '#0f172a', outline: 'none'
+                  width: '100%',
+                  padding: '12px 16px 12px 48px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  color: '#0f172a',
+                  outline: 'none',
+                  boxSizing: 'border-box'
                 }}
                 required
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
               <ArrowRightLeft size={13} />
-              <span>Equivalent: <strong style={{ color: '#0f172a' }}>{convertedEquivalent}</strong></span>
+              <span>{t("Equivalent:")} <strong style={{ color: '#0f172a' }}>{convertedEquivalent}</strong></span>
             </div>
           </div>
 
@@ -289,12 +297,12 @@ export const AdminCollectPaymentModal: React.FC<AdminCollectPaymentModalProps> =
           {method === 'Cash' && (
             <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '12px', padding: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#166534', fontWeight: 700, fontSize: '13px' }}>
-                <Banknote size={16} /> Cash Tendered & Change Due (Vuelto)
+                <Banknote size={16} /> {t("Cash Tendered & Change Due (Vuelto)")}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', alignItems: 'center' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#15803d', marginBottom: '4px' }}>
-                    Cash Received ({currency})
+                    {t("Cash Received")} ({currency})
                   </label>
                   <input
                     type="number"
@@ -309,7 +317,7 @@ export const AdminCollectPaymentModal: React.FC<AdminCollectPaymentModalProps> =
                 </div>
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: 600, color: '#15803d', marginBottom: '4px' }}>
-                    Change to Return
+                    {t("Change to Return")}
                   </div>
                   <div style={{ fontSize: '16px', fontWeight: 800, color: changeDue > 0 ? '#15803d' : '#64748b' }}>
                     {currency === 'DOP' ? `RD$ ${changeDue.toFixed(2)}` : `$${changeDue.toFixed(2)}`}
