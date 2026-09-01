@@ -950,7 +950,7 @@ export const getReceiptPDF = async (req: AuthenticatedRequest, res: Response): P
 export const collectPayment = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params; // booking id
-    const { amount, method, invoiceId } = req.body;
+    let { amount, method, invoiceId, currency, originalAmount, exchangeRate, tenderedAmount, changeGiven } = req.body;
 
     const invoiceQuery: any = { status: { $ne: 'Paid' } };
     if (invoiceId) {
@@ -968,12 +968,37 @@ export const collectPayment = async (req: AuthenticatedRequest, res: Response): 
       return;
     }
 
-    if (amount <= 0 || amount > invoice.balance) {
+    // Default currency to USD if not provided
+    const finalCurrency = currency === 'DOP' ? 'DOP' : 'USD';
+    const activeRate = exchangeRate && Number(exchangeRate) > 0 ? Number(exchangeRate) : 58.80;
+
+    let finalUsdAmount = Number(amount);
+    let finalOriginalAmount = originalAmount !== undefined ? Number(originalAmount) : finalUsdAmount;
+
+    if (finalCurrency === 'DOP') {
+      // If payment was entered in DOP, ensure USD amount is computed accurately
+      if (!finalUsdAmount || isNaN(finalUsdAmount)) {
+        finalUsdAmount = Math.round((finalOriginalAmount / activeRate) * 100) / 100;
+      }
+    }
+
+    if (isNaN(finalUsdAmount) || finalUsdAmount <= 0) {
       res.status(400).json({ message: 'Invalid payment amount.' });
       return;
     }
 
-    invoice.balance -= amount;
+    // Ensure we don't overcharge due to slight rounding (allow 0.01 tolerance)
+    if (finalUsdAmount > invoice.balance + 0.01) {
+      res.status(400).json({ message: `Payment amount ($${finalUsdAmount.toFixed(2)}) exceeds remaining balance ($${invoice.balance.toFixed(2)}).` });
+      return;
+    }
+
+    // Cap at exact invoice balance if within rounding tolerance
+    if (finalUsdAmount > invoice.balance) {
+      finalUsdAmount = invoice.balance;
+    }
+
+    invoice.balance = Math.max(0, Math.round((invoice.balance - finalUsdAmount) * 100) / 100);
     if (invoice.balance <= 0) {
       invoice.status = 'Paid';
     } else {
@@ -987,13 +1012,22 @@ export const collectPayment = async (req: AuthenticatedRequest, res: Response): 
       invoiceId: invoice._id,
       bookingId: id,
       customerId: invoice.customerId,
-      amount,
+      amount: finalUsdAmount,
       paymentMethod: method || 'Cash',
+      currency: finalCurrency,
+      originalAmount: finalOriginalAmount,
+      exchangeRate: activeRate,
+      tenderedAmount: tenderedAmount !== undefined ? Number(tenderedAmount) : undefined,
+      changeGiven: changeGiven !== undefined ? Number(changeGiven) : undefined,
       status: 'Paid',
       collectedBy: req.user?._id
     });
 
-    await logActivity(`Collected payment $${amount} for booking ${id}`, req.user?.email || 'admin', req.ip || '', 'success');
+    const currencyDesc = finalCurrency === 'DOP' 
+      ? `RD$ ${finalOriginalAmount.toFixed(2)} DOP ($${finalUsdAmount.toFixed(2)} USD @ ${activeRate})`
+      : `$${finalUsdAmount.toFixed(2)} USD`;
+
+    await logActivity(`Collected payment ${currencyDesc} via ${method || 'Cash'} for booking ${id}`, req.user?.email || 'admin', req.ip || '', 'success');
 
     res.status(200).json({ message: 'Payment collected successfully.', invoice });
   } catch (error) {
@@ -1139,32 +1173,37 @@ export const checkoutBooking = async (req: AuthenticatedRequest, res: Response):
     }
 
     if (processRefund) {
-      const settings = await Settings.findOne();
-      const securityDeposit = settings?.securityDeposit || 150;
-      const refundAmount = Math.max(0, securityDeposit - extrasSum);
-      booking.depositRefunded = true;
-      booking.depositRefundedAmount = refundAmount;
+      const depositCharged = booking.snapshotSecurityDeposit !== undefined ? Number(booking.snapshotSecurityDeposit) : 0;
+      
+      if (depositCharged > 0) {
+        const refundAmount = Math.max(0, depositCharged - extrasSum);
+        booking.depositRefunded = refundAmount > 0;
+        booking.depositRefundedAmount = refundAmount;
 
-      if (refundAmount > 0) {
-        const mainInvoice = await Invoice.findOne({ bookingId: booking._id, invoiceType: 'Rental Charge' });
-        if (mainInvoice) {
-          mainInvoice.amount -= refundAmount;
-          mainInvoice.balance = Math.max(0, mainInvoice.balance - refundAmount);
-          mainInvoice.description = `${mainInvoice.description}\n- Deposit Refund: $${refundAmount.toFixed(2)}`;
-          await mainInvoice.save();
-          
-          const receiptNumber = await getNextTgxNumber('receipt');
-          await Payment.create({
-            receiptNumber,
-            invoiceId: mainInvoice._id,
-            bookingId: booking._id,
-            customerId: booking.customerId,
-            amount: -refundAmount,
-            paymentMethod: 'Refund',
-            status: 'Refunded',
-            collectedBy: req.user?._id
-          });
+        if (refundAmount > 0) {
+          const mainInvoice = await Invoice.findOne({ bookingId: booking._id, invoiceType: 'Rental Charge' });
+          if (mainInvoice) {
+            mainInvoice.amount -= refundAmount;
+            mainInvoice.balance = Math.max(0, mainInvoice.balance - refundAmount);
+            mainInvoice.description = `${mainInvoice.description}\n- Deposit Refund: $${refundAmount.toFixed(2)}`;
+            await mainInvoice.save();
+            
+            const receiptNumber = await getNextTgxNumber('receipt');
+            await Payment.create({
+              receiptNumber,
+              invoiceId: mainInvoice._id,
+              bookingId: booking._id,
+              customerId: booking.customerId,
+              amount: -refundAmount,
+              paymentMethod: 'Refund',
+              status: 'Refunded',
+              collectedBy: req.user?._id
+            });
+          }
         }
+      } else {
+        booking.depositRefunded = false;
+        booking.depositRefundedAmount = 0;
       }
     }
 

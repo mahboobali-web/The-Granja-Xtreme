@@ -23,6 +23,7 @@ export const AdminSettings: React.FC = () => {
     defaultDiscountRate: 0,
     operatingHours: { days: 'Monday to Sunday', open: '08:00', close: '18:00' },
     currency: 'USD',
+    exchangeRateDOP: 58.80,
     businessEmail: '',
     businessPhone: '',
     cancellationPolicy: 'Full refund 48 hours prior. No refund within 24 hours.',
@@ -137,8 +138,19 @@ export const AdminSettings: React.FC = () => {
     setSaving(true);
     setSuccessMsg('');
     setErrorMsg('');
+
+    const payload = {
+      ...settings,
+      baseTaxRate: isNaN(Number(settings.baseTaxRate)) ? 0 : Number(settings.baseTaxRate),
+      defaultDiscountRate: isNaN(Number(settings.defaultDiscountRate)) ? 0 : Number(settings.defaultDiscountRate),
+      securityDeposit: isNaN(Number(settings.securityDeposit)) ? 0 : Number(settings.securityDeposit),
+      exchangeRateDOP: !Number(settings.exchangeRateDOP) || Number(settings.exchangeRateDOP) <= 0 ? 58.80 : Number(settings.exchangeRateDOP),
+      sessionTimeoutMinutes: isNaN(Number(settings.sessionTimeoutMinutes)) ? 30 : Number(settings.sessionTimeoutMinutes)
+    };
+
     try {
-      await fetchAPI('/settings', { method: 'PUT', body: settings });
+      await fetchAPI('/settings', { method: 'PUT', body: payload });
+      setSettings(payload);
       setSuccessMsg(t('adminSettings.saveSuccess', 'System configuration saved successfully.'));
       setTimeout(() => setSuccessMsg(''), 4000);
     } catch (err: any) {
@@ -319,29 +331,68 @@ export const AdminSettings: React.FC = () => {
               <>
                 <div>
                   <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-                    {t('adminSettings.rentalParams', 'Rental Parameters')}
+                    {t('adminSettings.rentalParams', 'Rental Parameters & Currency')}
                   </h3>
-                  <div className="checkout-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
+                  <div className="checkout-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                     <div className="form-group">
                       <label className="form-label">{t('adminSettings.taxRateLabel', 'Base Tax Rate (%)')}</label>
-                      <input type="number" value={settings.baseTaxRate} onChange={(e) => setSettings({ ...settings, baseTaxRate: parseFloat(e.target.value) })} step="0.1" className="form-input" required />
+                      <input 
+                        type="number" 
+                        value={settings.baseTaxRate ?? ''} 
+                        onChange={(e) => setSettings({ ...settings, baseTaxRate: e.target.value === '' ? ('' as any) : e.target.value })} 
+                        step="0.1" 
+                        className="form-input" 
+                        required 
+                      />
                     </div>
                     <div className="form-group">
                       <label className="form-label">{t('adminSettings.discountLabel', 'Default Discount Rate (%)')}</label>
-                      <input type="number" value={settings.defaultDiscountRate} onChange={(e) => setSettings({ ...settings, defaultDiscountRate: parseFloat(e.target.value) })} step="0.1" className="form-input" required />
+                      <input 
+                        type="number" 
+                        value={settings.defaultDiscountRate ?? ''} 
+                        onChange={(e) => setSettings({ ...settings, defaultDiscountRate: e.target.value === '' ? ('' as any) : e.target.value })} 
+                        step="0.1" 
+                        className="form-input" 
+                        required 
+                      />
                     </div>
                     <div className="form-group">
                       <label className="form-label">{t('adminSettings.depositLabel', 'Default Security Deposit ($)')}</label>
-                      <input type="number" value={settings.securityDeposit} onChange={(e) => setSettings({ ...settings, securityDeposit: parseFloat(e.target.value) })} className="form-input" required />
+                      <input 
+                        type="number" 
+                        value={settings.securityDeposit ?? ''} 
+                        onChange={(e) => setSettings({ ...settings, securityDeposit: e.target.value === '' ? ('' as any) : e.target.value })} 
+                        className="form-input" 
+                        required 
+                      />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">{t('adminSettings.currencyLabel', 'Currency')}</label>
+                      <label className="form-label">{t('adminSettings.currencyLabel', 'Base Currency')}</label>
                       <select value={settings.currency} onChange={(e) => setSettings({ ...settings, currency: e.target.value })} className="form-input">
                         <option value="USD">USD ($)</option>
                         <option value="EUR">EUR (€)</option>
                         <option value="GBP">GBP (£)</option>
                         <option value="CAD">CAD ($)</option>
                       </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>{t('adminSettings.exchangeRateLabel', 'USD to DOP Rate (RD$)')}</span>
+                        <span style={{ fontSize: '11px', color: 'var(--primary)', fontWeight: 600 }}>1 USD = {settings.exchangeRateDOP || 58.80} DOP</span>
+                      </label>
+                      <input 
+                        type="number" 
+                        step="0.01" 
+                        min="0.01" 
+                        value={settings.exchangeRateDOP ?? ''} 
+                        onChange={(e) => setSettings({ ...settings, exchangeRateDOP: e.target.value === '' ? ('' as any) : e.target.value })} 
+                        className="form-input" 
+                        placeholder="e.g. 58.80"
+                        required 
+                      />
+                      <span style={{ fontSize: '11px', color: 'var(--on-surface-variant)', marginTop: '4px', display: 'block' }}>
+                        {t('adminSettings.exchangeRateDesc', 'Daily exchange rate used for Dominican Peso cash & bank transfers.')}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -438,8 +489,8 @@ export const AdminSettings: React.FC = () => {
                     min="5"
                     max="1440"
                     className="form-input"
-                    value={settings.sessionTimeoutMinutes || 30}
-                    onChange={(e) => setSettings({ ...settings, sessionTimeoutMinutes: parseInt(e.target.value) || 30 })}
+                    value={settings.sessionTimeoutMinutes ?? ''}
+                    onChange={(e) => setSettings({ ...settings, sessionTimeoutMinutes: e.target.value === '' ? ('' as any) : e.target.value })}
                     style={{ maxWidth: '200px' }}
                   />
                 </div>

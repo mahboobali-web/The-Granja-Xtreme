@@ -22,7 +22,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const [invoiceData, setInvoiceData] = useState<any>(null);
   const [showAdminSignatureModal, setShowAdminSignatureModal] = useState(false);
   const [showCustomerSignatureModal, setShowCustomerSignatureModal] = useState(false);
-  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150 });
+  const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150, exchangeRateDOP: 58.80 });
 
 
 
@@ -165,10 +165,10 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
     }, 0);
     const taxRate = b.snapshotTaxRate !== undefined ? b.snapshotTaxRate : (settings.baseTaxRate || 10);
     const tax = Math.round(baseRate * (taxRate / 100) * 100) / 100;
-    const securityDeposit = b.snapshotSecurityDeposit !== undefined ? b.snapshotSecurityDeposit : (settings.securityDeposit ?? 150);
+    const securityDeposit = b.snapshotSecurityDeposit !== undefined ? b.snapshotSecurityDeposit : (settings.securityDeposit ?? 0);
     const accessoriesSum = b.accessories ? b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
     const extraChargesSum = b.extraCharges ? b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
-    const refundAmount = b.depositRefunded ? (b.depositRefundedAmount || 0) : 0;
+    const refundAmount = b.depositRefunded && securityDeposit > 0 ? Math.min(securityDeposit, (b.depositRefundedAmount || 0)) : 0;
     const total = baseRate + tax + securityDeposit + accessoriesSum + extraChargesSum - refundAmount;
 
     const isPaid = b.payment?.status === 'Paid' || b.invoice?.status === 'Paid';
@@ -370,15 +370,18 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <span>{t("Security Deposit (Refundable)")}</span>
                 <span>${securityDeposit.toFixed(2)}</span>
               </div>
-              {b.depositRefunded && (
+              {refundAmount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', color: '#059669', fontWeight: 600 }}>
                   <span>{t("Security Deposit Refunded")}</span>
-                  <span>-${(b.depositRefundedAmount || 0).toFixed(2)}</span>
+                  <span>-${refundAmount.toFixed(2)}</span>
                 </div>
               )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0 8px', fontSize: '18px', fontWeight: 800, color: '#111827' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0 4px', fontSize: '18px', fontWeight: 800, color: '#111827' }}>
                 <span>{t("Grand Total")}</span>
                 <span>${total.toFixed(2)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '8px', fontSize: '12px', fontWeight: 700, color: '#059669' }}>
+                <span>RD$ {(total * (settings.exchangeRateDOP || 58.80)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} DOP</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '14px', color: '#4b5563' }}>
                 <span>{t("Amount Paid")} ({t(b.payment?.method || 'Card/Cash')})</span>
@@ -388,6 +391,11 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 <span>{t("REMAINING BALANCE")}</span>
                 <span>${remainingBalance.toFixed(2)}</span>
               </div>
+              {remainingBalance > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '4px', fontSize: '13px', fontWeight: 700, color: '#b91c1c' }}>
+                  <span>RD$ {(remainingBalance * (settings.exchangeRateDOP || 58.80)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} DOP</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -569,10 +577,10 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const discountRate = booking.discountRate || 0;
   const taxRate = booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate : (settings.baseTaxRate || 10);
   const tax = Math.round((baseRate - discountAmount) * (taxRate / 100) * 100) / 100;
-  const securityDeposit = booking.snapshotSecurityDeposit !== undefined ? booking.snapshotSecurityDeposit : (settings.securityDeposit ?? 150);
+  const securityDeposit = booking.snapshotSecurityDeposit !== undefined ? booking.snapshotSecurityDeposit : (settings.securityDeposit ?? 0);
   const accessoriesSum = booking.accessories ? booking.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
   const extraChargesSum = booking.extraCharges ? booking.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
-  const refundAmount = booking.depositRefunded ? (booking.depositRefundedAmount || 0) : 0;
+  const refundAmount = booking.depositRefunded && securityDeposit > 0 ? Math.min(securityDeposit, (booking.depositRefundedAmount || 0)) : 0;
   const total = baseRate - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum - refundAmount;
 
   const getStatusColor = (status: string) => {
@@ -732,8 +740,8 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
                 {discountAmount > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Discount")}</span> <span style={{ color: '#10b981' }}>-${discountAmount.toFixed(2)}</span></div>
                 )}
-                {booking.depositRefunded && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#059669', fontWeight: 600 }}>{t("Deposit Refunded")}</span> <span style={{ color: '#059669', fontWeight: 600 }}>-${(booking.depositRefundedAmount || 0).toFixed(2)}</span></div>
+                {refundAmount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#059669', fontWeight: 600 }}>{t("Deposit Refunded")}</span> <span style={{ color: '#059669', fontWeight: 600 }}>-${refundAmount.toFixed(2)}</span></div>
                 )}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', paddingTop: '12px', borderTop: '1px dashed #cbd5e1', fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
                   <span>{t("Total Cost")}</span> <span>${total.toFixed(2)}</span>
@@ -760,7 +768,17 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#334155' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Method")}</span> <strong>{t(booking.payment?.method || 'Pending')}</strong></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Amount Paid")}</span> <strong style={{ color: '#10b981' }}>${(booking.payment?.amountPaid || 0).toFixed(2)}</strong></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>{t("Balance Remaining")}</span> <strong style={{ color: '#ef4444' }}>${(booking.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total).toFixed(2)}</strong></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748b' }}>{t("Balance Remaining")}</span> 
+                  <div style={{ textAlign: 'right' }}>
+                    <strong style={{ color: '#ef4444' }}>${(booking.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total).toFixed(2)} USD</strong>
+                    {(booking.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total) > 0 && (
+                      <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600 }}>
+                        RD$ {(((booking.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total)) * (settings.exchangeRateDOP || 58.80)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} DOP
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {booking.status !== 'Cancelled' && booking.payment?.status !== 'Paid' && (

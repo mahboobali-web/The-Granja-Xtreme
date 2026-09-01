@@ -246,12 +246,10 @@ export const generateReceiptPDF = async (booking: any): Promise<Buffer> => {
       startY += 20;
     }
        
-    if (booking.depositRefunded) {
+    if (booking.depositRefunded && booking.depositRefundedAmount && booking.depositRefundedAmount > 0) {
       doc.font('Helvetica-Bold')
          .text(`Security Deposit Refunded`, 50, startY + 5)
-         .text(`+$${(booking.depositRefundedAmount || 0).toFixed(2)}`, 460, startY + 5);
-      // Not subtracting from totalDue here anymore because the invoice amount was already reduced during checkout
-      // totalDue -= (booking.depositRefundedAmount || 0);
+         .text(`+$${booking.depositRefundedAmount.toFixed(2)}`, 460, startY + 5);
       startY += 20;
       doc.font('Helvetica');
     }
@@ -279,7 +277,10 @@ export const generateReceiptPDF = async (booking: any): Promise<Buffer> => {
     doc.font('Helvetica');
     if (payments.length > 0) {
       for (const p of payments) {
-        doc.text(`- ${p.receiptNumber}: $${p.amount.toFixed(2)} via ${p.paymentMethod} on ${formatTZDateTime(p.collectionDate)}`, 50, doc.y);
+        const dopInfo = (p as any).currency === 'DOP' && (p as any).originalAmount 
+          ? ` (RD$ ${(p as any).originalAmount.toFixed(2)} DOP @ ${(p as any).exchangeRate || 58.80})` 
+          : '';
+        doc.text(`- ${p.receiptNumber}: $${p.amount.toFixed(2)}${dopInfo} via ${p.paymentMethod} on ${formatTZDateTime(p.collectionDate)}`, 50, doc.y);
       }
     } else {
       doc.text('No payments recorded.', 50, doc.y);

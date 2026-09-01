@@ -17,6 +17,7 @@ const settingsUpdateSchema = z.object({
     close: z.string()
   }).optional(),
   currency: z.string().optional(),
+  exchangeRateDOP: z.number().min(0.01).optional(),
   businessEmail: z.string().email().optional(),
   businessPhone: z.string().optional(),
   cancellationPolicy: z.string().optional(),

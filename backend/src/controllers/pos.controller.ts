@@ -18,7 +18,12 @@ export const checkoutPOS = async (req: AuthenticatedRequest, res: Response): Pro
       items, // Array of { accessoryId, quantity, price, name }
       customerId, 
       guestInfo, // { firstName, lastName, email, phone }
-      paymentMethod // Cash, Card, etc.
+      paymentMethod, // Cash, Card, etc.
+      currency,
+      originalAmount,
+      exchangeRate,
+      tenderedAmount,
+      changeGiven
     } = req.body;
 
     if (!items || items.length === 0) {
@@ -120,6 +125,10 @@ export const checkoutPOS = async (req: AuthenticatedRequest, res: Response): Pro
     const newInvoice = invoice[0];
 
     // 5. Create Payment Record
+    const finalCurrency = currency === 'DOP' ? 'DOP' : 'USD';
+    const activeRate = exchangeRate && Number(exchangeRate) > 0 ? Number(exchangeRate) : 58.80;
+    const finalOriginalAmount = originalAmount !== undefined ? Number(originalAmount) : (finalCurrency === 'DOP' ? Math.round(grandTotal * activeRate * 100) / 100 : grandTotal);
+
     const receiptNumber = await getNextTgxNumber('receipt');
     const payment = await Payment.create([{
       receiptNumber,
@@ -129,6 +138,11 @@ export const checkoutPOS = async (req: AuthenticatedRequest, res: Response): Pro
       collectedBy: req.user?._id,
       amount: grandTotal,
       paymentMethod: paymentMethod || 'Cash',
+      currency: finalCurrency,
+      originalAmount: finalOriginalAmount,
+      exchangeRate: activeRate,
+      tenderedAmount: tenderedAmount !== undefined ? Number(tenderedAmount) : undefined,
+      changeGiven: changeGiven !== undefined ? Number(changeGiven) : undefined,
       status: 'Paid'
     }], { session });
 
@@ -136,7 +150,11 @@ export const checkoutPOS = async (req: AuthenticatedRequest, res: Response): Pro
     newOrder.invoiceId = newInvoice._id;
     await newOrder.save({ session });
 
-    await logActivity(`Completed POS Sale for $${grandTotal.toFixed(2)}`, req.user?.email || 'admin', req.ip || '', 'success');
+    const currencyDesc = finalCurrency === 'DOP' 
+      ? `RD$ ${finalOriginalAmount.toFixed(2)} DOP ($${grandTotal.toFixed(2)} USD @ ${activeRate})`
+      : `$${grandTotal.toFixed(2)} USD`;
+
+    await logActivity(`Completed POS Sale for ${currencyDesc}`, req.user?.email || 'admin', req.ip || '', 'success');
 
     await session.commitTransaction();
     session.endSession();

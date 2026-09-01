@@ -10,6 +10,7 @@ export interface ISettings {
     close: string;
   };
   currency: string;
+  exchangeRateDOP: number;
   businessEmail: string;
   businessPhone: string;
   cancellationPolicy: string;
@@ -31,6 +32,7 @@ const settingsSchema = new Schema<ISettings>(
       close: { type: String, default: '18:00' }
     },
     currency: { type: String, default: 'USD' },
+    exchangeRateDOP: { type: Number, default: 58.80 },
     businessEmail: { type: String, default: 'hello@granjax.com' },
     businessPhone: { type: String, default: '+1 (555) 0123-4567' },
     cancellationPolicy: { type: String, default: 'Full refund 48 hours prior. No refund within 24 hours.' },

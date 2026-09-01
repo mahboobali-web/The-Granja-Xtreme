@@ -506,11 +506,12 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user }) =>
     const discountRate = b.discountRate || 0;
     const discountAmount = b.discountAmount || 0;
     const taxRate = b.snapshotTaxRate !== undefined ? b.snapshotTaxRate : (settings.baseTaxRate || 10);
-    const tax = Math.round((baseRate - discountAmount) * (taxRate / 100) * 100) / 100; 
-    const securityDeposit = b.snapshotSecurityDeposit !== undefined ? b.snapshotSecurityDeposit : (settings.securityDeposit ?? 150); 
+    const tax = Math.round((baseRate - discountAmount) * (taxRate / 100) * 100) / 100;
+    const securityDeposit = b.snapshotSecurityDeposit !== undefined ? b.snapshotSecurityDeposit : (settings.securityDeposit ?? 0); 
     const accessoriesSum = b.accessories ? b.accessories.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0) : 0;
     const extraChargesSum = b.extraCharges ? b.extraCharges.reduce((acc: number, item: any) => acc + Number(item.amount), 0) : 0;
-    const total = baseRate - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum;
+    const refundAmount = b.depositRefunded && securityDeposit > 0 ? Math.min(securityDeposit, (b.depositRefundedAmount || 0)) : 0;
+    const total = baseRate - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum - refundAmount;
 
     const isPaid = b.payment?.status === 'Paid';
     const amountPaid = b.payment?.amountPaid !== undefined ? b.payment.amountPaid : (isPaid ? total : 0);

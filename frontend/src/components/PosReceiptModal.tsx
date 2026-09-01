@@ -15,6 +15,7 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({ orderId, onClo
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language === 'es';
   const [order, setOrder] = useState<any>(null);
+  const [exchangeRate, setExchangeRate] = useState<number>(58.80);
   const [loading, setLoading] = useState(true);
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -24,9 +25,15 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({ orderId, onClo
 
   const loadOrder = async () => {
     try {
-      const orders = await fetchAPI('/orders');
+      const [orders, settings] = await Promise.all([
+        fetchAPI('/orders'),
+        fetchAPI('/settings').catch(() => null)
+      ]);
       const found = orders.find((o: any) => o._id === orderId);
       setOrder(found);
+      if (settings && settings.exchangeRateDOP) {
+        setExchangeRate(Number(settings.exchangeRateDOP));
+      }
     } catch (err) {
       console.error('Failed to load order', err);
     } finally {
@@ -223,9 +230,18 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({ orderId, onClo
                 <span>{t("Tax")}</span>
                 <span style={{ fontWeight: 600, color: '#111827' }}>$0.00</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', alignItems: 'center' }}>
-                <span style={{ fontSize: '15px', fontWeight: 700, color: '#111827' }}>{t("Total Paid")}</span>
-                <span style={{ fontSize: '24px', fontWeight: 800, color: '#396759' }}>${order.totalAmount.toFixed(2)}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ fontSize: '15px', fontWeight: 700, color: '#111827' }}>{t("Total Paid (USD)")}</span>
+                <span style={{ fontSize: '22px', fontWeight: 800, color: '#396759' }}>${order.totalAmount.toFixed(2)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 16px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', alignItems: 'center' }}>
+                <div>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>{t("DOP Equivalent")}</span>
+                  <span style={{ fontSize: '10px', color: '#15803d', display: 'block' }}>{t("Rate:")} 1 USD = {exchangeRate} DOP</span>
+                </div>
+                <span style={{ fontSize: '16px', fontWeight: 800, color: '#166534' }}>
+                  RD$ {(order.totalAmount * exchangeRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
               </div>
             </div>
           </div>

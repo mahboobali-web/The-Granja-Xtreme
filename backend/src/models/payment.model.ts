@@ -8,6 +8,11 @@ export interface IPayment {
   customerId: Types.ObjectId;
   amount: number;
   paymentMethod: 'PayPal' | 'International Card' | 'Banco Popular' | 'Banreservas' | 'Zelle' | 'Cash' | 'Apple Pay' | 'Google Pay' | 'Refund';
+  currency?: 'USD' | 'DOP';
+  originalAmount?: number;
+  exchangeRate?: number;
+  tenderedAmount?: number;
+  changeGiven?: number;
   collectedBy: Types.ObjectId;
   collectionDate: Date;
   status: 'Pending' | 'Paid' | 'Cancelled' | 'Refunded';
@@ -29,6 +34,11 @@ const paymentSchema = new Schema<IPayment>(
       enum: ['PayPal', 'International Card', 'Banco Popular', 'Banreservas', 'Zelle', 'Cash', 'Apple Pay', 'Google Pay', 'Refund'], 
       required: true 
     },
+    currency: { type: String, enum: ['USD', 'DOP'], default: 'USD' },
+    originalAmount: { type: Number },
+    exchangeRate: { type: Number, default: 58.80 },
+    tenderedAmount: { type: Number },
+    changeGiven: { type: Number },
     collectedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     collectionDate: { type: Date, required: true, default: Date.now },
     status: { 
