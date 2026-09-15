@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Types } from 'mongoose';
 import { Atv } from '../models/atv.model';
 import { Booking } from '../models/booking.model';
 import { z } from 'zod';
@@ -48,15 +49,22 @@ export const isAtvBooked = async (
   endDate: Date,
   excludeBookingId?: string
 ): Promise<boolean> => {
+  const atvObjId = Types.ObjectId.isValid(atvId) ? new Types.ObjectId(atvId) : atvId;
   const query: any = {
-    $or: [{ atvId }, { atvIds: atvId }],
+    $or: [
+      { atvId: atvObjId }, 
+      { atvIds: atvObjId },
+      { atvId: String(atvId) },
+      { atvIds: String(atvId) }
+    ],
     status: { $in: ['Pending', 'Pending Signature', 'Customer Signed', 'Upcoming', 'Active'] },
     startDate: { $lte: endDate },
     endDate: { $gte: startDate }
   };
 
   if (excludeBookingId) {
-    query._id = { $ne: excludeBookingId };
+    const excludeObjId = Types.ObjectId.isValid(excludeBookingId) ? new Types.ObjectId(excludeBookingId) : excludeBookingId;
+    query._id = { $ne: excludeObjId };
   }
 
   const overlappingBooking = await Booking.findOne(query);
@@ -201,7 +209,7 @@ export const checkAtvAvailability = async (req: Request, res: Response): Promise
 
 export const checkBatchAvailability = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { atvIds, start, end } = req.body;
+    const { atvIds, start, end, excludeBookingId } = req.body;
     if (!start || !end) {
       res.status(400).json({ message: 'Start and end dates are required.' });
       return;
@@ -249,7 +257,7 @@ export const checkBatchAvailability = async (req: Request, res: Response): Promi
           };
         }
 
-        const booked = await isAtvBooked(atv._id.toString(), startDate, endDate);
+        const booked = await isAtvBooked(atv._id.toString(), startDate, endDate, excludeBookingId);
         return {
           atvId: atv._id.toString(),
           atvName: atv.name,

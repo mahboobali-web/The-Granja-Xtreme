@@ -82,7 +82,7 @@ export const adminCreateBooking = async (req: Request, res: Response): Promise<v
     }
 
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
-    const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 3600 * 24)) + 1);
+    const durationDays = Math.max(1, Math.round(durationMs / (1000 * 3600 * 24)));
 
     let totalBase = 0;
     for (const atv of atvs) {
@@ -262,7 +262,7 @@ export const createBooking = async (req: AuthenticatedRequest, res: Response): P
 
     // Pricing calculation
     const durationMs = endDate.getTime() - startDate.getTime();
-    const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 60 * 60 * 24)) + 1);
+    const durationDays = Math.max(1, Math.round(durationMs / (1000 * 3600 * 24)));
 
     const settings = await Settings.findOne();
     const taxRate = settings?.baseTaxRate ? settings.baseTaxRate / 100 : 0.1;
@@ -390,7 +390,7 @@ export const createCompleteBooking = async (req: AuthenticatedRequest, res: Resp
     await newBooking.save();
 
     const durationMs = endDate.getTime() - startDate.getTime();
-    const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 60 * 60 * 24)) + 1);
+    const durationDays = Math.max(1, Math.round(durationMs / (1000 * 3600 * 24)));
     const settings = await Settings.findOne();
     const taxRate = settings?.baseTaxRate ? settings.baseTaxRate / 100 : 0.1;
     const securityDeposit = settings?.securityDeposit || 150;
@@ -628,7 +628,7 @@ export const signWaiver = async (req: AuthenticatedRequest, res: Response): Prom
 
     // Create Invoice when waiver is signed and booking becomes Upcoming
     const durationMs = booking.endDate.getTime() - booking.startDate.getTime();
-    const durationDays = Math.max(1, Math.ceil(durationMs / (1000 * 60 * 60 * 24)) + 1);
+    const durationDays = Math.max(1, Math.round(durationMs / (1000 * 3600 * 24)));
     const atv: any = booking.atvId;
     const settings = await Settings.findOne();
     const taxRate = settings?.baseTaxRate ? settings.baseTaxRate / 100 : 0.1;
@@ -1217,5 +1217,267 @@ export const checkoutBooking = async (req: AuthenticatedRequest, res: Response):
     res.status(200).json({ message: 'Checked out successfully.', booking });
   } catch (error) {
     res.status(500).json({ message: 'Failed to check out.', error: (error as Error).message });
+  }
+};
+
+export const getBookingInvoice = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const invoice = await Invoice.findOne({ bookingId: id }).sort({ createdAt: -1 });
+    if (!invoice) {
+      res.status(404).json({ message: 'Invoice not found for this booking.' });
+      return;
+    }
+    res.status(200).json(invoice);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch invoice.', error: (error as Error).message });
+  }
+};
+
+export const updateBooking = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    let { atvId, atvIds, snapshotAtvRates, startDate, endDate, accessories, extraCharges, discountRate, customDiscountRate, notes } = req.body;
+
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      res.status(404).json({ message: 'Booking not found.' });
+      return;
+    }
+
+    const invoice = await Invoice.findOne({ bookingId: booking._id, invoiceType: 'Rental Charge' }) || await Invoice.findOne({ bookingId: booking._id });
+
+    // Guard Check: Only allow editing if not completed and not fully paid
+    if (booking.status === 'Completed' || (invoice && invoice.status === 'Paid')) {
+      res.status(400).json({ message: 'Cannot edit reservation after payment has been completed and finalized.' });
+      return;
+    }
+
+    // 1. Resolve and Validate Dates
+    let parsedStartDate = booking.startDate;
+    let parsedEndDate = booking.endDate;
+
+    if (startDate) {
+      const datePart = typeof startDate === 'string' ? startDate.split('T')[0] : startDate.toISOString().split('T')[0];
+      parsedStartDate = new Date(`${datePart}T12:00:00-04:00`);
+    }
+
+    if (endDate) {
+      const datePart = typeof endDate === 'string' ? endDate.split('T')[0] : endDate.toISOString().split('T')[0];
+      parsedEndDate = new Date(`${datePart}T12:00:00-04:00`);
+    }
+
+    if (parsedStartDate > parsedEndDate) {
+      res.status(400).json({ message: 'Start date must be on or before end date.' });
+      return;
+    }
+
+    // 2. Resolve and Validate ATVs
+    let selectedAtvIds: string[] = [];
+    if (Array.isArray(atvIds) && atvIds.length > 0) {
+      selectedAtvIds = atvIds.map(String);
+    } else if (atvId) {
+      selectedAtvIds = [String(atvId)];
+    } else if (booking.atvIds && booking.atvIds.length > 0) {
+      selectedAtvIds = booking.atvIds.map((a: any) => (a._id || a).toString());
+    } else if (booking.atvId) {
+      selectedAtvIds = [(booking.atvId as any)._id ? (booking.atvId as any)._id.toString() : booking.atvId.toString()];
+    }
+
+    if (selectedAtvIds.length === 0) {
+      res.status(400).json({ message: 'At least one vehicle must be selected for the booking.' });
+      return;
+    }
+
+    const atvs = await Atv.find({ _id: { $in: selectedAtvIds } });
+    if (atvs.length !== selectedAtvIds.length) {
+      res.status(404).json({ message: 'One or more selected ATVs were not found.' });
+      return;
+    }
+
+    // Check availability for all selected ATVs (exclude current booking from collision check)
+    const conflictingAtvNames: string[] = [];
+    for (const atv of atvs) {
+      if (atv.status === 'MAINTENANCE' || atv.status === 'DECOMMISSIONED') {
+        const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
+        conflictingAtvNames.push(`${label} (Under ${atv.status.toLowerCase()})`);
+        continue;
+      }
+
+      const overlapping = await isAtvBooked(atv._id.toString(), parsedStartDate, parsedEndDate, booking._id.toString());
+      if (overlapping) {
+        const label = atv.unitNumber ? `${atv.unitNumber} - ${atv.name}` : atv.name;
+        conflictingAtvNames.push(label);
+      }
+    }
+
+    if (conflictingAtvNames.length > 0) {
+      res.status(400).json({
+        message: `Conflict: The following vehicle(s) are unavailable for the chosen dates: ${conflictingAtvNames.join(', ')}`,
+        conflictingAtvs: conflictingAtvNames
+      });
+      return;
+    }
+
+    // 3. Accessory Stock Delta Management
+    if (accessories !== undefined && Array.isArray(accessories)) {
+      const oldQtyMap = new Map<string, number>();
+      if (booking.accessories && Array.isArray(booking.accessories)) {
+        for (const item of booking.accessories) {
+          const accId = String(item.accessoryId || (item as any)._id);
+          oldQtyMap.set(accId, (oldQtyMap.get(accId) || 0) + Number(item.quantity || 0));
+        }
+      }
+
+      const newQtyMap = new Map<string, number>();
+      for (const item of accessories) {
+        const accId = String(item.accessoryId || item._id);
+        newQtyMap.set(accId, (newQtyMap.get(accId) || 0) + Number(item.quantity || 0));
+      }
+
+      const allAccessoryIds = Array.from(new Set([...oldQtyMap.keys(), ...newQtyMap.keys()]));
+
+      // Verify stock for any net increase
+      for (const accId of allAccessoryIds) {
+        const oldQty = oldQtyMap.get(accId) || 0;
+        const newQty = newQtyMap.get(accId) || 0;
+        const delta = newQty - oldQty;
+
+        if (delta > 0) {
+          const accDoc = await Accessory.findById(accId);
+          if (!accDoc) {
+            res.status(404).json({ message: `Accessory with ID ${accId} not found.` });
+            return;
+          }
+          if (accDoc.quantity < delta) {
+            res.status(400).json({
+              message: `Insufficient stock for ${accDoc.name}. Available: ${accDoc.quantity}, Additional requested: ${delta}`
+            });
+            return;
+          }
+        }
+      }
+
+      // Apply inventory updates
+      for (const accId of allAccessoryIds) {
+        const oldQty = oldQtyMap.get(accId) || 0;
+        const newQty = newQtyMap.get(accId) || 0;
+        const delta = newQty - oldQty;
+
+        if (delta !== 0) {
+          await Accessory.findByIdAndUpdate(accId, {
+            $inc: { quantity: -delta }
+          });
+        }
+      }
+    }
+
+    // 4. Financial Recalculations
+    const durationMs = parsedEndDate.getTime() - parsedStartDate.getTime();
+    const durationDays = Math.max(1, Math.round(durationMs / (1000 * 3600 * 24)));
+
+    let totalBase = 0;
+    const newSnapshotRates: { atvId: Types.ObjectId; ratePerDay: number }[] = [];
+
+    for (const atv of atvs) {
+      let rate = atv.ratePerDay;
+      if (Array.isArray(snapshotAtvRates)) {
+        const custom = snapshotAtvRates.find((s: any) => String(s.atvId) === String(atv._id));
+        if (custom && typeof custom.ratePerDay === 'number' && custom.ratePerDay >= 0) {
+          rate = custom.ratePerDay;
+        }
+      } else if (booking.snapshotAtvRates) {
+        const existing = booking.snapshotAtvRates.find((s: any) => String(s.atvId?._id || s.atvId) === String(atv._id));
+        if (existing && typeof existing.ratePerDay === 'number' && existing.ratePerDay >= 0) {
+          rate = existing.ratePerDay;
+        }
+      }
+      totalBase += durationDays * rate;
+      newSnapshotRates.push({ atvId: atv._id as Types.ObjectId, ratePerDay: rate });
+    }
+
+    const settings = await Settings.findOne();
+    const taxRate = booking.snapshotTaxRate !== undefined ? booking.snapshotTaxRate : (settings ? settings.baseTaxRate : 10);
+    const depositPerAtv = booking.snapshotSecurityDeposit !== undefined ? booking.snapshotSecurityDeposit : (settings ? settings.securityDeposit : 150);
+    const activeDiscountRate = customDiscountRate !== undefined ? Number(customDiscountRate) : (discountRate !== undefined ? Number(discountRate) : (booking.discountRate || 0));
+
+    const discountAmount = Math.round(totalBase * (activeDiscountRate / 100) * 100) / 100;
+    const tax = Math.round((totalBase - discountAmount) * (taxRate / 100) * 100) / 100;
+    const securityDeposit = depositPerAtv;
+
+    let finalAccessories: any = booking.accessories;
+    if (accessories !== undefined && Array.isArray(accessories)) {
+      finalAccessories = accessories.map((a: any) => ({
+        accessoryId: new Types.ObjectId(a.accessoryId || a._id),
+        name: a.name,
+        quantity: Number(a.quantity || 1),
+        price: Number(a.price || 0)
+      }));
+    }
+    const accessoriesSum = (finalAccessories || []).reduce((sum: number, a: any) => sum + (Number(a.price) * Number(a.quantity)), 0);
+
+    let finalExtraCharges: any = booking.extraCharges;
+    if (extraCharges !== undefined && Array.isArray(extraCharges)) {
+      finalExtraCharges = extraCharges.map((c: any) => ({
+        reason: c.reason,
+        description: c.description,
+        amount: Number(c.amount || 0)
+      }));
+    }
+    const extraChargesSum = (finalExtraCharges || []).reduce((sum: number, c: any) => sum + Number(c.amount), 0);
+
+    const grandTotal = totalBase - discountAmount + tax + securityDeposit + accessoriesSum + extraChargesSum;
+
+    // 5. Update Booking Record
+    booking.atvId = atvs[0]._id as Types.ObjectId;
+    booking.atvIds = atvs.map(a => a._id as Types.ObjectId);
+    booking.snapshotAtvRates = newSnapshotRates;
+    booking.startDate = parsedStartDate;
+    booking.endDate = parsedEndDate;
+    booking.accessories = finalAccessories;
+    booking.extraCharges = finalExtraCharges;
+    booking.discountRate = activeDiscountRate;
+    booking.discountAmount = discountAmount;
+    booking.snapshotTaxRate = taxRate;
+    booking.snapshotSecurityDeposit = securityDeposit;
+    booking.finalTotal = grandTotal;
+    if (notes !== undefined) booking.notes = notes;
+    await booking.save();
+
+    // 6. Update Corresponding Invoice Record
+    if (invoice) {
+      const existingPayments = await Payment.find({ bookingId: booking._id, paymentMethod: { $ne: 'Refund' } });
+      const totalPaidSoFar = existingPayments.reduce((sum, p) => sum + p.amount, 0);
+      const newBalance = Math.max(0, Math.round((grandTotal - totalPaidSoFar) * 100) / 100);
+
+      invoice.amount = grandTotal;
+      invoice.balance = newBalance;
+      invoice.discountRate = activeDiscountRate;
+      invoice.discountAmount = discountAmount;
+      invoice.atvId = atvs[0]._id as Types.ObjectId;
+      invoice.status = newBalance <= 0 ? 'Paid' : (totalPaidSoFar > 0 ? 'Partially Paid' : 'Unpaid');
+
+      const vehicleNames = atvs.map(a => a.unitNumber ? `[${a.unitNumber}] ${a.name}` : a.name).join(', ');
+      let desc = `Reservation for ${atvs.length} vehicle(s): ${vehicleNames} (${durationDays} days)`;
+      if (finalAccessories && finalAccessories.length > 0) {
+        desc += `\n+ Accessories: ` + finalAccessories.map((a: any) => `${a.quantity}x ${a.name} ($${(a.price * a.quantity).toFixed(2)})`).join(', ');
+      }
+      if (finalExtraCharges && finalExtraCharges.length > 0) {
+        desc += `\n+ Extra Charges: ` + finalExtraCharges.map((c: any) => `[${c.reason}] ${c.description} ($${c.amount.toFixed(2)})`).join(', ');
+      }
+      invoice.description = desc;
+      await invoice.save();
+    }
+
+    await logActivity(`Updated reservation #${booking.bookingNumber || booking._id} details prior to payment completion`, (req as any).user?.email || 'staff', req.ip || '', 'info');
+
+    res.status(200).json({
+      message: 'Reservation updated successfully.',
+      booking,
+      invoice
+    });
+  } catch (error) {
+    console.error('updateBooking error:', error);
+    res.status(500).json({ message: 'Failed to update reservation.', error: (error as Error).message });
   }
 };

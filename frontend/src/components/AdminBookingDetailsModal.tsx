@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Ban, FileText, User, Truck, CreditCard, Clock, CheckCircle, ArrowLeft, Printer, PenTool } from 'lucide-react';
+import { X, Ban, FileText, User, Truck, CreditCard, Clock, CheckCircle, ArrowLeft, Printer, PenTool, Edit3 } from 'lucide-react';
 import { auth } from '../config/firebase';
 import { fetchAPI } from '../utils/api';
 import { AdminCollectPaymentModal } from './AdminCollectPaymentModal';
@@ -19,20 +19,40 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'details' | 'receipt' | 'contract'>(initialTab || 'details');
   const [collectPaymentModalOpen, setCollectPaymentModalOpen] = useState(false);
+  const [editModeOpen, setEditModeOpen] = useState(false);
   const [invoiceData, setInvoiceData] = useState<any>(null);
   const [showAdminSignatureModal, setShowAdminSignatureModal] = useState(false);
   const [showCustomerSignatureModal, setShowCustomerSignatureModal] = useState(false);
   const [settings, setSettings] = useState({ baseTaxRate: 10, securityDeposit: 150, exchangeRateDOP: 58.80 });
 
-
-
-  const handleCollectPayment = async () => {
+  const handleCollectPayment = async (openInEditMode = false) => {
     try {
-      const data = await fetchAPI(`/bookings/${bookingId}/invoice`);
-      setInvoiceData(data);
+      const inv = await fetchAPI(`/bookings/${bookingId}/invoice`).catch(async () => {
+        const invData = await fetchAPI('/invoices');
+        return invData.find((i: any) => (i.bookingId?._id || i.bookingId) === bookingId);
+      });
+      if (inv) {
+        setInvoiceData(inv);
+      } else {
+        setInvoiceData({
+          _id: '',
+          bookingId: bookingId,
+          balance: booking?.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total,
+          amount: total
+        });
+      }
+      setEditModeOpen(openInEditMode);
       setCollectPaymentModalOpen(true);
     } catch (err) {
-      alert(t('Failed to fetch invoice details'));
+      console.error('Failed to fetch invoice', err);
+      setInvoiceData({
+        _id: '',
+        bookingId: bookingId,
+        balance: booking?.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total,
+        amount: total
+      });
+      setEditModeOpen(openInEditMode);
+      setCollectPaymentModalOpen(true);
     }
   };
 
@@ -669,6 +689,18 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
             
             {/* Action Bar */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+              {booking.status !== 'Cancelled' && booking.payment?.status !== 'Paid' && booking.status !== 'Completed' ? (
+                <button 
+                  onClick={() => handleCollectPayment(true)} 
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '8px', color: '#4338ca', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', whiteSpace: 'nowrap' }}
+                >
+                  <Edit3 size={18} /> {t("✏️ Edit Reservation")}
+                </button>
+              ) : (
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', color: '#166534', fontSize: '14px', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                  <CheckCircle size={18} /> {t("Transaction Finalized & Paid")}
+                </div>
+              )}
               <button onClick={handleDownloadReceipt} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', backgroundColor: 'white', border: '1px solid #cbd5e1', borderRadius: '8px', color: '#334155', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', whiteSpace: 'nowrap' }}>
                 <FileText size={18} /> {t("View Receipt / Invoice")}
               </button>
@@ -783,28 +815,7 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
 
               {booking.status !== 'Cancelled' && booking.payment?.status !== 'Paid' && (
                 <button 
-                  onClick={async () => {
-                    try {
-                      // Fetch invoices to find the one for this booking
-                      const invData = await fetchAPI('/invoices');
-                      const unpaid = invData.find((inv: any) => inv.bookingId === bookingId && inv.status !== 'Paid');
-                      if (unpaid) {
-                        setInvoiceData(unpaid);
-                        setCollectPaymentModalOpen(true);
-                      } else {
-                        // Fallback invoice data based on booking totals if not directly linked
-                        setInvoiceData({
-                          _id: '',
-                          bookingId: bookingId,
-                          balance: booking.payment?.remainingAmount !== undefined ? booking.payment.remainingAmount : total,
-                          amount: total
-                        });
-                        setCollectPaymentModalOpen(true);
-                      }
-                    } catch (e) {
-                      console.error("Failed to load invoice", e);
-                    }
-                  }}
+                  onClick={() => handleCollectPayment(false)}
                   style={{ width: '100%', padding: '12px', marginTop: '16px', backgroundColor: '#4f46e5', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}
                 >
                   {t("Collect Payment Manually")}
@@ -897,6 +908,8 @@ export const AdminBookingDetailsModal: React.FC<BookingDetailsProps> = ({ bookin
       {collectPaymentModalOpen && invoiceData && (
         <AdminCollectPaymentModal
           invoice={invoiceData}
+          bookingId={bookingId}
+          initialEditMode={editModeOpen}
           onClose={() => setCollectPaymentModalOpen(false)}
           onSuccess={() => {
             loadBooking();
