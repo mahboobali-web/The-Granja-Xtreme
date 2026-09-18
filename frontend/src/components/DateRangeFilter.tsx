@@ -14,7 +14,6 @@ interface DateRangeFilterProps {
   mode?: 'analytics' | 'table';
   align?: 'left' | 'right';
   showBadge?: boolean;
-  showPresetsBar?: boolean;
 }
 
 export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
@@ -22,8 +21,7 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
   onChange,
   mode = 'analytics',
   align = 'right',
-  showBadge = true,
-  showPresetsBar = false
+  showBadge = true
 }) => {
   const { t, i18n } = useTranslation();
   const isEs = i18n.language?.startsWith('es');
@@ -184,91 +182,49 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
   ];
 
   return (
-    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: align === 'right' ? 'flex-end' : 'flex-start' }} ref={popoverRef}>
+    <div style={{ position: 'relative', display: 'inline-block', zIndex: 50 }} ref={popoverRef}>
       
-      {/* Top Controls Row */}
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-        
-        {/* Optional Presets Segmented Control (only when showPresetsBar is true) */}
-        {showPresetsBar && (
-          <div style={{
+      {/* Date Range Badge Button */}
+      {showBadge && (
+        <button
+          onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+          style={{
             display: 'flex',
-            backgroundColor: 'white',
-            border: '1px solid #e2e8f0',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 14px',
+            backgroundColor: isPopoverOpen ? '#f1f5f9' : 'white',
+            border: `1px solid ${isPopoverOpen ? '#4d7c0f' : '#cbd5e1'}`,
             borderRadius: '8px',
-            overflow: 'hidden',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-            flexWrap: 'wrap'
-          }}>
-            {popoverPresets.map((p) => {
-              const isActive = value.period === p.period;
-              return (
-                <button
-                  key={p.period}
-                  onClick={() => handlePresetSelect(p.period)}
-                  style={{
-                    padding: '6px 14px',
-                    fontSize: '12px',
-                    fontWeight: isActive ? 700 : 600,
-                    color: isActive ? 'white' : '#64748b',
-                    border: 'none',
-                    backgroundColor: isActive ? '#4d7c0f' : 'transparent',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.15s ease',
-                    outline: 'none'
-                  }}
-                >
-                  {p.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Date Range Badge / Popover Trigger Button */}
-        {showBadge && (
-          <button
-            onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 14px',
-              backgroundColor: isPopoverOpen ? '#f1f5f9' : 'white',
-              border: `1px solid ${isPopoverOpen ? '#4d7c0f' : '#e2e8f0'}`,
-              borderRadius: '8px',
-              fontSize: '13px',
-              fontWeight: 700,
-              color: '#0f172a',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            <CalendarDays size={16} color="#4d7c0f" />
-            <span>{getDateRangeLabel()}</span>
-            <ChevronDown size={14} color="#64748b" style={{ transform: isPopoverOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-          </button>
-        )}
-      </div>
+            fontSize: '13px',
+            fontWeight: 700,
+            color: '#0f172a',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <CalendarDays size={16} color="#4d7c0f" />
+          <span>{getDateRangeLabel()}</span>
+          <ChevronDown size={14} color="#64748b" style={{ transform: isPopoverOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+        </button>
+      )}
 
       {/* Popover Card */}
       {isPopoverOpen && (
         <div style={{
           position: 'absolute',
-          top: '100%',
+          top: 'calc(100% + 8px)',
           right: align === 'right' ? 0 : 'auto',
           left: align === 'left' ? 0 : 'auto',
-          marginTop: '8px',
           width: '320px',
           backgroundColor: 'white',
           borderRadius: '12px',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+          border: '1px solid #cbd5e1',
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.08)',
           padding: '16px',
-          zIndex: 100,
+          zIndex: 9999,
           display: 'flex',
           flexDirection: 'column',
           gap: '14px'

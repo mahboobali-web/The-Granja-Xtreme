@@ -58,18 +58,17 @@ export const AdminOrders: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-      <div className="no-print" style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-        
-        {/* Search & Date Filter Bar */}
-        <div style={{ padding: '20px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+      {/* Search & Date Filter Card */}
+      <div className="no-print" style={{ backgroundColor: 'white', padding: '20px 24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', position: 'relative', zIndex: 30 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div style={{ flex: 1, minWidth: '260px', position: 'relative' }}>
-            <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <Search size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
             <input 
               type="text" 
               placeholder={t("Search by order number or customer name...")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '100%', padding: '10px 10px 10px 40px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', outline: 'none' }}
+              style={{ width: '100%', padding: '10px 14px 10px 42px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none' }}
             />
           </div>
 
@@ -80,9 +79,11 @@ export const AdminOrders: React.FC = () => {
             align="right"
           />
         </div>
+      </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse' }}>
+      {/* Orders Table Card */}
+      <div style={{ backgroundColor: 'white', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', overflowX: 'auto', minHeight: '180px' }}>
+        <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
               <th style={{ padding: '16px', textAlign: 'left', fontSize: '13px', fontWeight: 600, color: '#475569' }}>{t("Order")}</th>
@@ -96,13 +97,13 @@ export const AdminOrders: React.FC = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} style={{ padding: '32px', textAlign: 'center', color: '#64748b' }}>
+                <td colSpan={6} style={{ padding: '48px 16px', textAlign: 'center', color: '#64748b' }}>
                   {t("Loading orders for selected period...")}
                 </td>
               </tr>
             ) : filteredOrders.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
+                <td colSpan={6} style={{ padding: '48px 16px', textAlign: 'center', color: '#94a3b8' }}>
                   {t("No orders found for this period.")}
                 </td>
               </tr>
@@ -149,7 +150,6 @@ export const AdminOrders: React.FC = () => {
             )}
           </tbody>
         </table>
-        </div>
       </div>
 
       {selectedOrderId && (
