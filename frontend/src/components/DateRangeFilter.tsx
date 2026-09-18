@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, ChevronDown, Check, X, CalendarDays, Filter } from 'lucide-react';
+import { ChevronDown, Check, X, CalendarDays } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export interface DateFilterValue {
@@ -14,6 +14,7 @@ interface DateRangeFilterProps {
   mode?: 'analytics' | 'table';
   align?: 'left' | 'right';
   showBadge?: boolean;
+  showPresetsBar?: boolean;
 }
 
 export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
@@ -21,7 +22,8 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
   onChange,
   mode = 'analytics',
   align = 'right',
-  showBadge = true
+  showBadge = true,
+  showPresetsBar = false
 }) => {
   const { t, i18n } = useTranslation();
   const isEs = i18n.language?.startsWith('es');
@@ -165,25 +167,21 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
     setIsPopoverOpen(false);
   };
 
-  const analyticsPresets: Array<{ label: string; period: DateFilterValue['period'] }> = [
-    { label: t('adminFilters.daily', 'Daily'), period: 'Daily' },
-    { label: t('adminFilters.weekly', 'Weekly'), period: 'Weekly' },
-    { label: t('adminFilters.monthly', 'Monthly'), period: 'Monthly' },
-    { label: t('adminFilters.previousMonth', 'Previous Month'), period: 'PreviousMonth' },
-    { label: t('adminFilters.prevMonthToDate', 'Prev Month to Date'), period: 'PrevMonthToDate' },
-    { label: t('adminFilters.yearly', 'Yearly'), period: 'Yearly' },
-    { label: t('adminFilters.custom', 'Custom'), period: 'Custom' }
+  const popoverPresets = mode === 'table' ? [
+    { label: t('adminFilters.thisMonth', 'This Month'), period: 'Monthly' as const },
+    { label: t('adminFilters.previousMonth', 'Previous Month'), period: 'PreviousMonth' as const },
+    { label: t('adminFilters.prevMonthToDate', 'Prev Month to Date'), period: 'PrevMonthToDate' as const },
+    { label: t('adminFilters.thisWeek', 'Last 7 Days'), period: 'Weekly' as const },
+    { label: t('adminFilters.today', 'Today'), period: 'Daily' as const },
+    { label: t('adminFilters.allTime', 'All Time'), period: 'All' as const }
+  ] : [
+    { label: t('adminFilters.thisMonth', 'This Month'), period: 'Monthly' as const },
+    { label: t('adminFilters.previousMonth', 'Previous Month'), period: 'PreviousMonth' as const },
+    { label: t('adminFilters.prevMonthToDate', 'Prev Month to Date'), period: 'PrevMonthToDate' as const },
+    { label: t('adminFilters.thisWeek', 'Last 7 Days'), period: 'Weekly' as const },
+    { label: t('adminFilters.today', 'Today'), period: 'Daily' as const },
+    { label: t('adminFilters.thisYear', 'This Year'), period: 'Yearly' as const }
   ];
-
-  const tablePresets: Array<{ label: string; period: DateFilterValue['period'] }> = [
-    { label: t('adminFilters.thisMonth', 'This Month'), period: 'Monthly' },
-    { label: t('adminFilters.previousMonth', 'Previous Month'), period: 'PreviousMonth' },
-    { label: t('adminFilters.prevMonthToDate', 'Prev Month to Date'), period: 'PrevMonthToDate' },
-    { label: t('adminFilters.allTime', 'All Time'), period: 'All' },
-    { label: t('adminFilters.custom', 'Custom'), period: 'Custom' }
-  ];
-
-  const presets = mode === 'analytics' ? analyticsPresets : tablePresets;
 
   return (
     <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: align === 'right' ? 'flex-end' : 'flex-start' }} ref={popoverRef}>
@@ -191,54 +189,44 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
       {/* Top Controls Row */}
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
         
-        {/* Presets Segmented Control */}
-        <div style={{
-          display: 'flex',
-          backgroundColor: 'white',
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          overflow: 'hidden',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-          flexWrap: 'wrap'
-        }}>
-          {presets.map((p) => {
-            const isActive = value.period === p.period;
-            return (
-              <button
-                key={p.period}
-                onClick={() => {
-                  if (p.period === 'Custom') {
-                    setIsPopoverOpen(true);
-                  } else {
-                    handlePresetSelect(p.period);
-                  }
-                }}
-                style={{
-                  padding: '6px 14px',
-                  fontSize: '12px',
-                  fontWeight: isActive ? 700 : 600,
-                  color: isActive ? 'white' : '#64748b',
-                  border: 'none',
-                  backgroundColor: isActive ? '#4d7c0f' : 'transparent',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.15s ease',
-                  outline: 'none'
-                }}
-                onMouseOver={(e) => {
-                  if (!isActive) e.currentTarget.style.backgroundColor = '#f8fafc';
-                }}
-                onMouseOut={(e) => {
-                  if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                {p.label}
-              </button>
-            );
-          })}
-        </div>
+        {/* Optional Presets Segmented Control (only when showPresetsBar is true) */}
+        {showPresetsBar && (
+          <div style={{
+            display: 'flex',
+            backgroundColor: 'white',
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            flexWrap: 'wrap'
+          }}>
+            {popoverPresets.map((p) => {
+              const isActive = value.period === p.period;
+              return (
+                <button
+                  key={p.period}
+                  onClick={() => handlePresetSelect(p.period)}
+                  style={{
+                    padding: '6px 14px',
+                    fontSize: '12px',
+                    fontWeight: isActive ? 700 : 600,
+                    color: isActive ? 'white' : '#64748b',
+                    border: 'none',
+                    backgroundColor: isActive ? '#4d7c0f' : 'transparent',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.15s ease',
+                    outline: 'none'
+                  }}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Date Range Badge / Popover Trigger */}
+        {/* Date Range Badge / Popover Trigger Button */}
         {showBadge && (
           <button
             onClick={() => setIsPopoverOpen(!isPopoverOpen)}
@@ -246,20 +234,20 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '6px 14px',
+              padding: '8px 14px',
               backgroundColor: isPopoverOpen ? '#f1f5f9' : 'white',
               border: `1px solid ${isPopoverOpen ? '#4d7c0f' : '#e2e8f0'}`,
               borderRadius: '8px',
-              fontSize: '12px',
-              fontWeight: 600,
-              color: '#334155',
+              fontSize: '13px',
+              fontWeight: 700,
+              color: '#0f172a',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
               transition: 'all 0.15s ease'
             }}
           >
-            <CalendarDays size={14} color="#64748b" />
+            <CalendarDays size={16} color="#4d7c0f" />
             <span>{getDateRangeLabel()}</span>
             <ChevronDown size={14} color="#64748b" style={{ transform: isPopoverOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
           </button>
@@ -300,19 +288,12 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
 
           {/* Quick Presets Grid in Popover */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-            {[
-              { label: t('adminFilters.today', 'Today'), period: 'Daily' as const },
-              { label: t('adminFilters.thisWeek', 'Last 7 Days'), period: 'Weekly' as const },
-              { label: t('adminFilters.thisMonth', 'This Month'), period: 'Monthly' as const },
-              { label: t('adminFilters.previousMonth', 'Previous Month'), period: 'PreviousMonth' as const },
-              { label: t('adminFilters.prevMonthToDate', 'Prev Month to Date'), period: 'PrevMonthToDate' as const },
-              { label: t('adminFilters.thisYear', 'This Year'), period: 'Yearly' as const }
-            ].map((qp) => (
+            {popoverPresets.map((qp) => (
               <button
                 key={qp.period}
                 onClick={() => handlePresetSelect(qp.period)}
                 style={{
-                  padding: '6px 8px',
+                  padding: '7px 8px',
                   backgroundColor: value.period === qp.period ? '#f0fdf4' : '#f8fafc',
                   border: `1px solid ${value.period === qp.period ? '#4d7c0f' : '#e2e8f0'}`,
                   borderRadius: '6px',
