@@ -5,6 +5,8 @@ import { fetchAPI } from '../utils/api';
 import { auth } from '../config/firebase';
 import { useTranslation } from 'react-i18next';
 
+import { DateRangeFilter, type DateFilterValue } from './DateRangeFilter';
+
 interface AdminLayoutProps {
   user: any;
 }
@@ -25,22 +27,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
   const notifRef = useRef<HTMLDivElement>(null);
   
   // Analytics Filter State
-  const [analyticsFilter, setAnalyticsFilter] = useState('Monthly');
-
-  const getFilterDateString = () => {
-    const now = new Date();
-    const format = (d: Date) => d.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    
-    if (analyticsFilter === 'Daily') return format(now);
-    if (analyticsFilter === 'Weekly') {
-      const past = new Date();
-      past.setDate(past.getDate() - 7);
-      return `${format(past)} - ${format(now)}`;
-    }
-    if (analyticsFilter === 'Monthly') return now.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'long', year: 'numeric' });
-    if (analyticsFilter === 'Yearly') return now.getFullYear().toString();
-    return format(now);
-  };
+  const [analyticsFilter, setAnalyticsFilter] = useState<DateFilterValue>({
+    period: 'Monthly'
+  });
 
   useEffect(() => {
     const loadNotifs = async () => {
@@ -461,17 +450,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ user }) => {
                 </button>
               </div>
             ) : location.pathname === '/admin/analytics' ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
-                  <button onClick={() => setAnalyticsFilter('Daily')} style={{ padding: '6px 16px', fontSize: '12px', fontWeight: analyticsFilter === 'Daily' ? 700 : 600, color: analyticsFilter === 'Daily' ? 'white' : '#64748b', border: 'none', backgroundColor: analyticsFilter === 'Daily' ? '#4d7c0f' : 'transparent', cursor: 'pointer', whiteSpace: 'nowrap', flex: 1 }}>{t("Daily")}</button>
-                  <button onClick={() => setAnalyticsFilter('Weekly')} style={{ padding: '6px 16px', fontSize: '12px', fontWeight: analyticsFilter === 'Weekly' ? 700 : 600, color: analyticsFilter === 'Weekly' ? 'white' : '#64748b', border: 'none', backgroundColor: analyticsFilter === 'Weekly' ? '#4d7c0f' : 'transparent', cursor: 'pointer', whiteSpace: 'nowrap', flex: 1 }}>{t("Weekly")}</button>
-                  <button onClick={() => setAnalyticsFilter('Monthly')} style={{ padding: '6px 16px', fontSize: '12px', fontWeight: analyticsFilter === 'Monthly' ? 700 : 600, color: analyticsFilter === 'Monthly' ? 'white' : '#64748b', border: 'none', backgroundColor: analyticsFilter === 'Monthly' ? '#4d7c0f' : 'transparent', cursor: 'pointer', whiteSpace: 'nowrap', flex: 1 }}>{t("Monthly")}</button>
-                  <button onClick={() => setAnalyticsFilter('Yearly')} style={{ padding: '6px 16px', fontSize: '12px', fontWeight: analyticsFilter === 'Yearly' ? 700 : 600, color: analyticsFilter === 'Yearly' ? 'white' : '#64748b', border: 'none', backgroundColor: analyticsFilter === 'Yearly' ? '#4d7c0f' : 'transparent', cursor: 'pointer', whiteSpace: 'nowrap', flex: 1 }}>{t("Yearly")}</button>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 16px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', fontWeight: 600, color: '#334155', whiteSpace: 'nowrap' }}>
-                  <CalendarDays size={14} color="#64748b" /> {getFilterDateString()}
-                </div>
-              </div>
+              <DateRangeFilter 
+                value={analyticsFilter} 
+                onChange={setAnalyticsFilter} 
+                mode="analytics" 
+                align="right" 
+              />
             ) : location.pathname === '/admin/bookings' ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <button 

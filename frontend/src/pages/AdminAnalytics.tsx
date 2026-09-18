@@ -7,9 +7,11 @@ import { fetchAPI } from '../utils/api';
 import { SkeletonGrid } from '../components/Skeletons';
 import { AdminRevenueReport } from '../components/AdminRevenueReport';
 import { AdminFleetReport } from '../components/AdminFleetReport';
+import type { DateFilterValue } from '../components/DateRangeFilter';
 
 export const AdminAnalytics: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const isEs = i18n.language?.startsWith('es');
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   
@@ -27,42 +29,52 @@ export const AdminAnalytics: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const { analyticsFilter } = useOutletContext<{ analyticsFilter: string }>();
+  const { analyticsFilter } = useOutletContext<{ analyticsFilter: DateFilterValue }>();
 
   useEffect(() => {
     const loadAnalytics = async () => {
       setLoading(true);
       try {
+        const queryParams = new URLSearchParams();
+        if (analyticsFilter?.period) queryParams.set('period', analyticsFilter.period);
+        if (analyticsFilter?.startDate) queryParams.set('startDate', analyticsFilter.startDate);
+        if (analyticsFilter?.endDate) queryParams.set('endDate', analyticsFilter.endDate);
+        const qs = queryParams.toString();
+
         const [dashRes, revRes, fleetRes, bookRes] = await Promise.all([
-          fetchAPI(`/analytics/dashboard?period=${analyticsFilter}`),
-          fetchAPI(`/analytics/revenue?period=${analyticsFilter}`),
-          fetchAPI('/analytics/fleet'),
-          fetchAPI('/analytics/bookings')
+          fetchAPI(`/analytics/dashboard?${qs}`),
+          fetchAPI(`/analytics/revenue?${qs}`),
+          fetchAPI(`/analytics/fleet?${qs}`),
+          fetchAPI(`/analytics/bookings?${qs}`)
         ]);
         
         setDashboard(dashRes);
         
         const formattedRev = revRes.map((r: any) => {
           let dayLabel = r._id;
-          if (analyticsFilter === 'Yearly') {
-            const [y, m] = r._id.split('-');
-            const d = new Date(parseInt(y), parseInt(m) - 1, 1);
-            dayLabel = d.toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short' });
-          } else if (analyticsFilter === 'Daily') {
+
+          // Hourly format: "YYYY-MM-DD HH:00"
+          if (r._id && r._id.includes(':')) {
             const parts = r._id.split(' ');
             if (parts.length > 1) dayLabel = parts[1];
-          } else if (analyticsFilter === 'Monthly') {
-            // To prevent off-by-one errors with UTC timezone, we can extract from YYYY-MM-DD
+          } 
+          // Monthly format: "YYYY-MM"
+          else if (r._id && r._id.length === 7 && r._id.includes('-')) {
+            const [y, m] = r._id.split('-');
+            const d = new Date(parseInt(y, 10), parseInt(m, 10) - 1, 1);
+            dayLabel = d.toLocaleDateString(isEs ? 'es-ES' : 'en-US', { month: 'short', year: 'numeric' });
+          } 
+          // Daily format: "YYYY-MM-DD"
+          else if (r._id && r._id.length === 10 && r._id.includes('-')) {
             const [y, m, day] = r._id.split('-');
-            if (day) dayLabel = `${new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric' })}`;
-          } else {
-            const [y, m, day] = r._id.split('-');
-            if (day) dayLabel = new Date(parseInt(y), parseInt(m) - 1, parseInt(day)).toLocaleDateString(i18n.language?.startsWith('es') ? 'es-ES' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
+            const d = new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(day, 10));
+            dayLabel = d.toLocaleDateString(isEs ? 'es-ES' : 'en-US', { month: 'short', day: 'numeric' });
           }
+
           return { day: dayLabel, value: r.total };
         });
+
         setRevenueData(formattedRev.length ? formattedRev : [{ day: '-', value: 0 }]);
-        
         setFleetData(fleetRes);
         setBookingData(bookRes);
       } catch (err: any) {
@@ -73,14 +85,24 @@ export const AdminAnalytics: React.FC = () => {
       }
     };
     loadAnalytics();
-  }, [analyticsFilter]);
+  }, [analyticsFilter, i18n.language]);
 
   if (loading) return <div style={{ padding: '24px' }}><SkeletonGrid count={4} /></div>;
   if (errorMsg) return <div style={{ padding: '20px', backgroundColor: '#fee2e2', color: '#b91c1c', borderRadius: '12px' }}>{errorMsg}</div>;
 
-  const activeFleetCount = dashboard.fleet.rented + dashboard.fleet.available;
-  const totalFleetCount = activeFleetCount + dashboard.fleet.maintenance;
-  const activeFleetPct = totalFleetCount > 0 ? Math.round((activeFleetCount / totalFleetCount) * 100) : 0;
+  const getFilterLabel = () => {
+    if (!analyticsFilter) return t('adminFilters.thisMonth', 'This Month');
+    switch (analyticsFilter.period) {
+      case 'Daily': return t('adminFilters.daily', 'Daily');
+      case 'Weekly': return t('adminFilters.weekly', 'Weekly');
+      case 'Monthly': return t('adminFilters.thisMonth', 'This Month');
+      case 'PreviousMonth': return t('adminFilters.previousMonth', 'Previous Month');
+      case 'PrevMonthToDate': return t('adminFilters.prevMonthToDate', 'Prev Month to Date');
+      case 'Yearly': return t('adminFilters.yearly', 'Yearly');
+      case 'Custom': return t('adminFilters.custom', 'Custom Range');
+      default: return analyticsFilter.period;
+    }
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -94,8 +116,8 @@ export const AdminAnalytics: React.FC = () => {
             <span style={{ fontSize: '13px', fontWeight: 600, color: '#64748b' }}>{t('adminAnalytics.revenueCollected', 'Revenue Collected')}</span>
             <div style={{ backgroundColor: '#f0fdf4', padding: '6px', borderRadius: '8px' }}><DollarSign size={16} color="#16a34a" /></div>
           </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.totalRevenue?.toLocaleString()}</div>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>{t('adminAnalytics.totalPayments', 'Total payments received')}</div>
+          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.totalRevenue?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>{t('adminAnalytics.totalPayments', 'Total payments in selected period')}</div>
         </div>
 
         {/* Outstanding Revenue */}
@@ -104,18 +126,18 @@ export const AdminAnalytics: React.FC = () => {
             <span style={{ fontSize: '13px', fontWeight: 600, color: '#64748b' }}>{t('adminAnalytics.outstandingRevenue', 'Outstanding Revenue')}</span>
             <div style={{ backgroundColor: '#fef2f2', padding: '6px', borderRadius: '8px' }}><DollarSign size={16} color="#dc2626" /></div>
           </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.outstandingRevenue?.toLocaleString()}</div>
+          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.outstandingRevenue?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#dc2626' }}>{t('adminAnalytics.pendingInvoices', 'Pending unpaid invoices')}</div>
         </div>
 
-        {/* Monthly Revenue */}
+        {/* Current Month / Reference Revenue */}
         <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#64748b' }}>{t('adminAnalytics.monthlyRevenue', 'Monthly Revenue')}</span>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#64748b' }}>{t('adminAnalytics.monthlyRevenue', 'Current Month Revenue')}</span>
             <div style={{ backgroundColor: '#f0f9ff', padding: '6px', borderRadius: '8px' }}><TrendingUp size={16} color="#0284c7" /></div>
           </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.monthlyRevenue?.toLocaleString()}</div>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: '#0284c7' }}>{t('adminAnalytics.collectedMonth', 'Collected this month')}</div>
+          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.monthlyRevenue?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: '#0284c7' }}>{t('adminAnalytics.collectedMonth', 'Current calendar month total')}</div>
         </div>
 
         {/* Damage Charges */}
@@ -124,7 +146,7 @@ export const AdminAnalytics: React.FC = () => {
             <span style={{ fontSize: '13px', fontWeight: 600, color: '#64748b' }}>{t('adminAnalytics.damageCharges', 'Damage Charges')}</span>
             <div style={{ backgroundColor: '#fff7ed', padding: '6px', borderRadius: '8px' }}><FileText size={16} color="#ea580c" /></div>
           </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.damageCharges?.toLocaleString()}</div>
+          <div style={{ fontSize: '28px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>${dashboard.damageCharges?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           <div style={{ fontSize: '12px', fontWeight: 700, color: '#ea580c' }}>{t('adminAnalytics.assessedDamages', 'Total assessed damages')}</div>
         </div>
 
@@ -178,7 +200,7 @@ export const AdminAnalytics: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
             <div>
               <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0, marginBottom: '4px' }}>{t('adminAnalytics.revenueReport', 'Revenue Report')}</h3>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{t('adminAnalytics.earningsBookings', 'Earnings from all bookings')} ({t(`adminBookings.${analyticsFilter.toLowerCase()}`, analyticsFilter)})</p>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{t('adminAnalytics.earningsBookings', 'Earnings from all bookings')} ({getFilterLabel()})</p>
             </div>
             <button 
               onClick={() => setShowRevenueReport(true)}
@@ -199,7 +221,7 @@ export const AdminAnalytics: React.FC = () => {
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                   itemStyle={{ color: '#0f172a', fontWeight: 800 }}
                   cursor={{ fill: '#f8fafc' }}
-                  formatter={(value: any) => [`$${value}`, 'Revenue']}
+                  formatter={(value: any) => [`$${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, t('adminAnalytics.revenue', 'Revenue')]}
                 />
                 <Bar dataKey="value" fill="#4d7c0f" radius={[4, 4, 0, 0]} barSize={24} />
               </BarChart>
@@ -213,8 +235,9 @@ export const AdminAnalytics: React.FC = () => {
           <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0, marginBottom: '24px' }}>{t('adminAnalytics.bookingTrends', 'Booking Status Trends')}</h3>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', flex: 1 }}>
-            {bookingData.length === 0 ? <div style={{ fontSize: '13px', color: '#64748b' }}>{t('adminAnalytics.noBookingData', 'No booking data available.')}</div> : bookingData.map((b) => {
-              const pct = Math.round((b.count / dashboard.totalBookings) * 100);
+            {bookingData.length === 0 ? <div style={{ fontSize: '13px', color: '#64748b' }}>{t('adminAnalytics.noBookingData', 'No booking data available for this period.')}</div> : bookingData.map((b) => {
+              const totalInPeriod = bookingData.reduce((acc, curr) => acc + curr.count, 0) || 1;
+              const pct = Math.round((b.count / totalInPeriod) * 100);
               const colors: Record<string, string> = {
                 'Completed': '#4d7c0f',
                 'Active': '#0284c7',
@@ -225,7 +248,7 @@ export const AdminAnalytics: React.FC = () => {
               return (
                 <div key={b._id}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '8px' }}>
-                    <span>{t(`adminBookings.status.${b._id.toLowerCase().replace(' ', '')}`, b._id) as string}</span>
+                    <span>{t(`adminBookings.status.${b._id.toLowerCase().replace(' ', '')}`, b._id) as string} ({b.count})</span>
                     <span>{pct}%</span>
                   </div>
                   <div style={{ width: '100%', height: '6px', backgroundColor: '#e2e8f0', borderRadius: '4px' }}>
@@ -244,7 +267,7 @@ export const AdminAnalytics: React.FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
           <div>
             <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0, marginBottom: '4px' }}>{t('adminAnalytics.mostRented', 'Most Rented Vehicles')}</h3>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{t('adminAnalytics.trackingDesc', 'Detailed tracking of vehicle performance.')}</p>
+            <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{t('adminAnalytics.trackingDesc', 'Detailed tracking of vehicle performance in selected period.')}</p>
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
             <button 
@@ -257,37 +280,42 @@ export const AdminAnalytics: React.FC = () => {
         </div>
 
         <div className="admin-table-container">
-<table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-              <th style={{ padding: '16px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t('adminAnalytics.vehicleModel', 'Vehicle Model')}</th>
-              <th style={{ padding: '16px', fontSize: '13px', fontWeight: 700, color: '#475569', textAlign: 'center' }}>{t('adminAnalytics.totalRentals', 'Total Rentals')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fleetData?.mostRented?.length === 0 ? (
-              <tr><td colSpan={2} style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>{t('adminAnalytics.noData', 'No data available')}</td></tr>
-            ) : fleetData?.mostRented?.map((row: any, idx: number) => (
-              <tr key={idx} style={{ borderBottom: idx === fleetData.mostRented.length - 1 ? 'none' : '1px solid #f1f5f9' }}>
-                <td style={{ padding: '20px 16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ backgroundColor: '#f1f5f9', padding: '8px', borderRadius: '8px' }}>
-                      <Truck size={16} color="#64748b" />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a' }}>{row.name} {row.model}</div>
-                    </div>
-                  </div>
-                </td>
-                <td style={{ padding: '20px 16px', textAlign: 'center', fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>{row.count} {t('adminAnalytics.times', 'times')}</td>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                <th style={{ padding: '16px', fontSize: '13px', fontWeight: 700, color: '#475569' }}>{t('adminAnalytics.vehicleModel', 'Vehicle Model')}</th>
+                <th style={{ padding: '16px', fontSize: '13px', fontWeight: 700, color: '#475569', textAlign: 'center' }}>{t('adminAnalytics.totalRentals', 'Total Rentals')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-</div>
+            </thead>
+            <tbody>
+              {fleetData?.mostRented?.length === 0 ? (
+                <tr><td colSpan={2} style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>{t('adminAnalytics.noData', 'No data available for this period')}</td></tr>
+              ) : fleetData?.mostRented?.map((row: any, idx: number) => (
+                <tr key={idx} style={{ borderBottom: idx === fleetData.mostRented.length - 1 ? 'none' : '1px solid #f1f5f9' }}>
+                  <td style={{ padding: '20px 16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ backgroundColor: '#f1f5f9', padding: '8px', borderRadius: '8px' }}>
+                        <Truck size={16} color="#64748b" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a' }}>{row.name} {row.model}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '20px 16px', textAlign: 'center', fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>{row.count} {t('adminAnalytics.times', 'times')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {showRevenueReport && <AdminRevenueReport onClose={() => setShowRevenueReport(false)} />}
+      {showRevenueReport && (
+        <AdminRevenueReport 
+          initialFilter={analyticsFilter} 
+          onClose={() => setShowRevenueReport(false)} 
+        />
+      )}
       {showFleetReport && <AdminFleetReport onClose={() => setShowFleetReport(false)} />}
     </div>
   );
